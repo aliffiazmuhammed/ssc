@@ -46,3 +46,6 @@ Thumbs.db
 .cache
 coverage
 build
+
+# Ignore package-lock to avoid Vercel NPM cross-platform bug
+package-lock.json
