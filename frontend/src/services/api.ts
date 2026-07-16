@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create a global Axios instance
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api', // Backend port is 5000
+  baseURL: import.meta.env.VITE_API_BASE_URL || (import.meta.env.PROD ? '/api' : 'http://localhost:5000/api'),
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
