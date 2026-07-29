@@ -1,14 +1,27 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuiz } from '../store/QuizContext';
 import { ProgressBar, Timer } from '../components/quiz/QuizHeader';
 import { QuestionCard } from '../components/quiz/QuestionCard';
 import { SessionSummary } from '../components/quiz/SessionSummary';
-import { ArrowRight, ArrowLeft, XCircle, CheckCircle } from 'lucide-react';
+import { ArrowRight, ArrowLeft, XCircle, CheckCircle, AlertTriangle } from 'lucide-react';
 
 const QuizSession: React.FC = () => {
   const { state, submitAnswer, nextQuestion, prevQuestion, resetQuiz, tickTimer, finishQuiz } = useQuiz();
   const navigate = useNavigate();
+  const [showQuitModal, setShowQuitModal] = useState(false);
+
+  // Prevent accidental reload/leave
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (state.status === 'playing') {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [state.status]);
 
   // If accessed directly without starting, redirect home
   useEffect(() => {
@@ -52,9 +65,18 @@ const QuizSession: React.FC = () => {
     prevQuestion();
   };
 
-  const handleQuit = () => {
+  const handleQuitRequest = () => {
+    setShowQuitModal(true);
+  };
+
+  const confirmQuit = () => {
+    setShowQuitModal(false);
     resetQuiz();
     navigate('/');
+  };
+
+  const cancelQuit = () => {
+    setShowQuitModal(false);
   };
 
   return (
@@ -65,7 +87,7 @@ const QuizSession: React.FC = () => {
         
         <div className="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
           <button 
-            onClick={handleQuit}
+            onClick={handleQuitRequest}
             className="text-secondary-light hover:text-error dark:text-secondary-dark dark:hover:text-error transition-colors flex items-center gap-1"
           >
             <XCircle size={20} />
@@ -129,6 +151,42 @@ const QuizSession: React.FC = () => {
           )}
         </div>
       </footer>
+
+      {/* Quit Warning Modal */}
+      {showQuitModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="bg-surface-light dark:bg-surface-dark rounded-2xl shadow-xl max-w-md w-full overflow-hidden border border-divider-light dark:border-divider-dark animate-in fade-in zoom-in-95 duration-200">
+            <div className="p-6 sm:p-8 space-y-6">
+              <div className="w-12 h-12 rounded-full bg-error-tint flex items-center justify-center mx-auto mb-4">
+                <AlertTriangle className="text-error w-6 h-6" />
+              </div>
+              <div className="text-center space-y-2">
+                <h3 className="text-xl font-bold text-primary-light dark:text-primary-dark">
+                  Exit Quiz?
+                </h3>
+                <p className="text-secondary-light dark:text-secondary-dark">
+                  Are you sure you want to exit? The quiz will be terminated without valuation. Your progress will be lost.
+                </p>
+              </div>
+              
+              <div className="flex flex-col-reverse sm:flex-row gap-3 sm:gap-4 mt-8">
+                <button
+                  onClick={cancelQuit}
+                  className="flex-1 py-3 px-4 rounded-xl text-primary-light dark:text-primary-dark font-medium border border-divider-light dark:border-divider-dark hover:bg-surface-hover-light dark:hover:bg-surface-hover-dark transition-colors"
+                >
+                  Continue Quiz
+                </button>
+                <button
+                  onClick={confirmQuit}
+                  className="flex-1 py-3 px-4 rounded-xl text-white font-medium bg-error hover:bg-error/90 transition-colors"
+                >
+                  Yes, Exit
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
