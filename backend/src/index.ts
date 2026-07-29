@@ -6,6 +6,7 @@ import authRoutes from './routes/authRoutes';
 import questionRoutes from './routes/questionRoutes';
 import sessionRoutes from './routes/sessionRoutes';
 import analyticsRoutes from './routes/analyticsRoutes';
+import userRoutes from './routes/userRoutes';
 import { errorHandler, notFound } from './middlewares/errorMiddleware';
 
 // Load environment variables
@@ -33,6 +34,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/questions', questionRoutes);
 app.use('/api/sessions', sessionRoutes);
 app.use('/api/analytics', analyticsRoutes);
+app.use('/api/users', userRoutes);
 
 // Error handling
 app.use(notFound);

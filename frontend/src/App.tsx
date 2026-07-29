@@ -3,7 +3,9 @@ import { AuthProvider } from './store/AuthContext';
 import { AuthGate } from './components/layout/AuthGate';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import AdminLayout from './components/layout/AdminLayout';
 import AdminUpload from './pages/AdminUpload';
+import AdminUsers from './pages/AdminUsers';
 import History from './pages/History';
 import SessionReview from './pages/SessionReview';
 import Analytics from './pages/Analytics';
@@ -22,7 +24,10 @@ function App() {
           
           {/* Admin Routes */}
           <Route element={<AuthGate requiredRole="admin" />}>
-            <Route path="/admin" element={<AdminUpload />} />
+            <Route element={<AdminLayout />}>
+              <Route path="/admin" element={<AdminUpload />} />
+              <Route path="/admin/users" element={<AdminUsers />} />
+            </Route>
           </Route>
 
           {/* Student Routes */}

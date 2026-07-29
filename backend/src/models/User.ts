@@ -7,6 +7,7 @@ export interface IUser extends Document {
   email: string;
   password: string;
   role: Role;
+  isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
   stats: {
@@ -44,6 +45,10 @@ const userSchema = new Schema<IUser>(
       type: String,
       enum: ROLES,
       default: 'student',
+    },
+    isActive: {
+      type: Boolean,
+      default: true,
     },
     stats: {
       totalQuizzes: { type: Number, default: 0 },

@@ -42,6 +42,11 @@ export const protect = async (
       return;
     }
 
+    if (user.isActive === false) {
+      res.status(403).json({ status: 'error', message: 'Account has been deactivated. Please contact support.' });
+      return;
+    }
+
     req.user = user;
     next();
   } catch (error) {

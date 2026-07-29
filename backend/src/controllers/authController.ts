@@ -73,6 +73,11 @@ export const login = async (req: AuthRequest, res: Response): Promise<void> => {
       return;
     }
 
+    if (user.isActive === false) {
+      res.status(403).json({ status: 'error', message: 'Account has been deactivated. Please contact support.' });
+      return;
+    }
+
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
       res.status(401).json({ status: 'error', message: 'Invalid email or password' });

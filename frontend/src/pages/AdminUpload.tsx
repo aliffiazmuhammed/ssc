@@ -1,7 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { Upload, CheckCircle2, AlertCircle, Loader2, LogOut } from 'lucide-react';
+import { Upload, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
 import api from '../services/api';
-import { useAuth } from '../store/AuthContext';
 
 const SUBJECTS = [
   'Quantitative Aptitude',
@@ -17,7 +16,6 @@ const AdminUpload: React.FC = () => {
   const [message, setMessage] = useState<string>('');
   const [stats, setStats] = useState<{ total: number; inserted: number; skipped: number } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { logout, user } = useAuth();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -66,22 +64,8 @@ const AdminUpload: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-base-light dark:bg-base-dark py-12 px-4 sm:px-6 lg:px-8">
+    <div className="py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl mx-auto space-y-8">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-primary-light dark:text-primary-dark tracking-tight">Admin Dashboard</h1>
-            <p className="mt-2 text-secondary-light dark:text-secondary-dark">Logged in as {user?.email}</p>
-          </div>
-          <button
-            onClick={logout}
-            className="flex items-center space-x-2 text-secondary-light hover:text-error dark:text-secondary-dark dark:hover:text-error transition-colors"
-          >
-            <LogOut size={20} />
-            <span className="font-medium">Logout</span>
-          </button>
-        </div>
-
         <div className="bg-surface-light dark:bg-surface-dark rounded-2xl shadow-card p-8">
           <h2 className="text-xl font-semibold text-primary-light dark:text-primary-dark mb-6">Upload Questions</h2>
           
