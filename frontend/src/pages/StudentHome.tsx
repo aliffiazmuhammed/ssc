@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../store/AuthContext';
 import { useQuiz } from '../store/QuizContext';
 import api from '../services/api';
-import { LogOut, Loader2, CheckSquare, Target, Zap, GraduationCap } from 'lucide-react';
+import { LogOut, Loader2, CheckSquare, Target, Zap, GraduationCap, Calculator } from 'lucide-react';
 import clsx from 'clsx';
 
 interface TopicCount {
@@ -197,7 +197,7 @@ const StudentHome: React.FC = () => {
           <h2 className="text-xl font-bold text-primary-light dark:text-primary-dark flex items-center gap-2">
             Select Practice Mode
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Practice Card */}
             <button
               onClick={() => setSelectedMode('practice')}
@@ -218,6 +218,21 @@ const StudentHome: React.FC = () => {
                   <Target size={100} />
                 </div>
               )}
+            </button>
+
+            {/* Math Practice Card */}
+            <button
+              onClick={() => navigate('/math-practice')}
+              className="relative flex flex-col items-start p-6 rounded-2xl border-2 border-divider-light dark:border-divider-dark bg-surface-light dark:bg-surface-dark text-primary-light dark:text-primary-dark hover:border-accent/50 transition-all text-left overflow-hidden h-40 group"
+            >
+              <Calculator size={28} className="mb-3 text-accent" />
+              <h3 className="font-bold text-lg mb-1">Math Practice</h3>
+              <p className="text-sm font-medium text-secondary-light dark:text-secondary-dark">
+                Squares, cubes, tables &amp; arithmetic.
+              </p>
+              <span className="absolute top-4 right-4 bg-accent/10 text-accent text-xs px-2 py-1 rounded-md font-bold">
+                New
+              </span>
             </button>
 
             {/* Mock Card */}

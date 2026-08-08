@@ -13,6 +13,7 @@ import Analytics from './pages/Analytics';
 import { QuizProvider } from './store/QuizContext';
 import StudentHome from './pages/StudentHome';
 import QuizSession from './pages/QuizSession';
+import MathPractice from './pages/MathPractice';
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
 
           {/* Student Routes */}
           <Route element={<AuthGate requiredRole="student" />}>
+            <Route path="/math-practice" element={<MathPractice />} />
             <Route element={<QuizProvider><Outlet /></QuizProvider>}>
               <Route path="/" element={<StudentHome />} />
               <Route path="/quiz" element={<QuizSession />} />
