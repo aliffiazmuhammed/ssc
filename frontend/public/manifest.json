@@ -1,0 +1,16 @@
+{
+  "name": "SSC Practice",
+  "short_name": "SSC",
+  "description": "Best SSC practice site",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/logo.jpg",
+      "sizes": "192x192 512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}
