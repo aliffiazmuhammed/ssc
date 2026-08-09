@@ -14,6 +14,7 @@ import { QuizProvider } from './store/QuizContext';
 import StudentHome from './pages/StudentHome';
 import QuizSession from './pages/QuizSession';
 import MathPractice from './pages/MathPractice';
+import CustomPractice from './pages/CustomPractice';
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
             <Route path="/math-practice" element={<MathPractice />} />
             <Route element={<QuizProvider><Outlet /></QuizProvider>}>
               <Route path="/" element={<StudentHome />} />
+              <Route path="/custom-practice" element={<CustomPractice />} />
               <Route path="/quiz" element={<QuizSession />} />
               <Route path="/history" element={<History />} />
               <Route path="/history/:id" element={<SessionReview />} />
