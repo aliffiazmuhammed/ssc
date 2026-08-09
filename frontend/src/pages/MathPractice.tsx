@@ -317,7 +317,7 @@ const MathPractice: React.FC = () => {
                     </p>
                     {selectedType === pt.key && (
                       <div className="absolute top-0 right-0 p-3 opacity-10">
-                        <div className="text-white">{React.cloneElement(pt.icon as React.ReactElement, { size: 80 })}</div>
+                        <div className="text-white">{React.cloneElement(pt.icon as React.ReactElement, { size: 80 } as any)}</div>
                       </div>
                     )}
                   </button>
