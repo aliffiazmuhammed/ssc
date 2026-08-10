@@ -545,13 +545,14 @@ export const toggleVocabBookmark = async (req: AuthRequest, res: Response): Prom
       return;
     }
 
-    const existing = await VocabBookmark.findOne({ userId, wordId });
+    const objectIdWordId = new mongoose.Types.ObjectId(wordId as string);
+    const existing = await VocabBookmark.findOne({ userId, wordId: objectIdWordId });
 
     if (existing) {
       await VocabBookmark.deleteOne({ _id: existing._id });
       res.status(200).json({ status: 'success', data: { isBookmarked: false } });
     } else {
-      await VocabBookmark.create({ userId, wordId });
+      await VocabBookmark.create({ userId, wordId: objectIdWordId });
       res.status(200).json({ status: 'success', data: { isBookmarked: true } });
     }
   } catch (error: any) {
