@@ -71,7 +71,7 @@ const QuestionBank: React.FC = () => {
         const res = await api.get(url);
         const fetchedQuestions = res.data.data.questions || [];
         setQuestions(fetchedQuestions);
-        setTotalCount(res.data.data.total || 0);
+        setTotalCount(res.data.data.pagination?.total || 0);
 
         // Fetch bookmarks for these questions
         const ids = fetchedQuestions.map((q: Question) => q._id).join(',');
@@ -128,7 +128,7 @@ const QuestionBank: React.FC = () => {
 
   const totalPages = Math.ceil(totalCount / limit) || 1;
 
-  const paginationControls = !loading && totalPages > 1 && (
+  const paginationControls = !loading && (
     <div className="flex items-center justify-between bg-surface-light dark:bg-surface-dark p-4 rounded-2xl shadow-sm border border-divider-light dark:border-divider-dark mt-4">
       <button
         onClick={() => setPage(p => Math.max(1, p - 1))}
