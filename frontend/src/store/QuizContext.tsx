@@ -26,11 +26,13 @@ interface QuizState {
   answers: Record<string, string>; // questionId -> selectedOption
   timeLimit: number; // total time in seconds (0 = untimed)
   timeRemaining: number; // countdown in seconds
+  timerMode: 'total' | 'per-question';
+  perQuestionTime: number; // seconds per question (only used when timerMode === 'per-question')
 }
 
 interface QuizContextType {
   state: QuizState;
-  startQuiz: (sessionId: string, questions: Question[], timeLimitSeconds: number) => void;
+  startQuiz: (sessionId: string, questions: Question[], timeLimitSeconds: number, timerMode?: 'total' | 'per-question', perQuestionTime?: number) => void;
   submitAnswer: (questionId: string, selectedOption: string, timeTaken: number) => Promise<boolean>;
   nextQuestion: () => void;
   prevQuestion: () => void;
@@ -50,6 +52,8 @@ const initialState: QuizState = {
   answers: {},
   timeLimit: 0,
   timeRemaining: 0,
+  timerMode: 'total',
+  perQuestionTime: 0,
 };
 
 const QuizContext = createContext<QuizContextType | undefined>(undefined);
@@ -57,13 +61,16 @@ const QuizContext = createContext<QuizContextType | undefined>(undefined);
 export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [state, setState] = useState<QuizState>(initialState);
 
-  const startQuiz = useCallback((sessionId: string, questions: Question[], timeLimitSeconds: number) => {
+  const startQuiz = useCallback((sessionId: string, questions: Question[], timeLimitSeconds: number, timerMode: 'total' | 'per-question' = 'total', perQuestionTime: number = 0) => {
+    const isPerQuestion = timerMode === 'per-question';
     setState({
       ...initialState,
       sessionId,
       questions,
       timeLimit: timeLimitSeconds,
-      timeRemaining: timeLimitSeconds,
+      timeRemaining: isPerQuestion ? perQuestionTime : timeLimitSeconds,
+      timerMode,
+      perQuestionTime,
       status: 'playing',
     });
   }, []);
@@ -116,7 +123,12 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (nextIndex >= prev.questions.length) {
         return prev; // Do nothing if at the end
       }
-      return { ...prev, currentIndex: nextIndex };
+      return {
+        ...prev,
+        currentIndex: nextIndex,
+        // Reset timer for per-question mode
+        timeRemaining: prev.timerMode === 'per-question' ? prev.perQuestionTime : prev.timeRemaining,
+      };
     });
   }, []);
 
@@ -126,7 +138,12 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (prevIndex < 0) {
         return prev;
       }
-      return { ...prev, currentIndex: prevIndex };
+      return {
+        ...prev,
+        currentIndex: prevIndex,
+        // Reset timer for per-question mode
+        timeRemaining: prev.timerMode === 'per-question' ? prev.perQuestionTime : prev.timeRemaining,
+      };
     });
   }, []);
 
@@ -155,7 +172,21 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setState((prev) => {
       if (prev.status !== 'playing' || prev.timeLimit === 0) return prev;
       if (prev.timeRemaining <= 1) {
-        // Auto-complete the quiz
+        // Per-question mode: auto-advance to next question, or finish if last
+        if (prev.timerMode === 'per-question') {
+          const nextIndex = prev.currentIndex + 1;
+          if (nextIndex < prev.questions.length) {
+            // Move to next question with reset timer
+            return {
+              ...prev,
+              currentIndex: nextIndex,
+              timeRemaining: prev.perQuestionTime,
+            };
+          }
+          // Last question — fall through to finish quiz
+        }
+
+        // Auto-complete the quiz (total mode timeout OR last question in per-question mode)
         if (prev.sessionId) {
           const timeTaken = prev.timeLimit;
           

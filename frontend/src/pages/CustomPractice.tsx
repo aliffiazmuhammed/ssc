@@ -139,7 +139,13 @@ const CustomPractice: React.FC = () => {
         return;
       }
       
-      startQuiz(session._id, fetchedQuestions, session.config.timeLimit);
+      startQuiz(
+        session._id,
+        fetchedQuestions,
+        session.config.timeLimit,
+        timerMode,
+        timerMode === 'per-question' ? timeValue : 0
+      );
       navigate('/quiz');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to start session.');

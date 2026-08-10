@@ -96,7 +96,14 @@ const QuizSession: React.FC = () => {
           
           <div className="flex items-center space-x-6 sm:space-x-8">
             {state.timeLimit > 0 && (
-              <Timer timeRemaining={state.timeRemaining} />
+              <div className="flex items-center gap-2">
+                <Timer timeRemaining={state.timeRemaining} />
+                {state.timerMode === 'per-question' && (
+                  <span className="text-xs font-medium text-secondary-light dark:text-secondary-dark bg-base-light dark:bg-base-dark px-2 py-1 rounded-lg">
+                    per Q
+                  </span>
+                )}
+              </div>
             )}
           </div>
           
@@ -118,6 +125,19 @@ const QuizSession: React.FC = () => {
           onSelect={handleSelect}
           isRevealed={false}
         />
+
+        {/* Submit button below question on last question */}
+        {state.currentIndex === state.questions.length - 1 && (
+          <div className="max-w-2xl mx-auto w-full px-4 mt-6">
+            <button
+              onClick={finishQuiz}
+              className="w-full flex items-center justify-center gap-3 py-4 px-6 rounded-2xl text-white bg-success-DEFAULT hover:bg-success-DEFAULT/90 transition-all font-bold text-lg shadow-lg hover:-translate-y-0.5 active:translate-y-0"
+            >
+              <CheckCircle size={22} />
+              Submit Quiz
+            </button>
+          </div>
+        )}
       </main>
 
       {/* Bottom fixed action bar */}
