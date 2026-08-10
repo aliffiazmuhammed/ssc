@@ -227,7 +227,7 @@ const Bookmarks: React.FC = () => {
         {activeTab === 'questions' && (
           loading ? (
             <div className="flex justify-center py-12"><Loader2 className="animate-spin text-pink-500 w-10 h-10" /></div>
-        ) : questions.length === 0 ? (
+          ) : questions.length === 0 ? (
           <div className="bg-surface-light dark:bg-surface-dark rounded-2xl p-12 text-center border border-divider-light dark:border-divider-dark">
             <Bookmark className="mx-auto w-12 h-12 text-secondary-light dark:text-secondary-dark mb-4 opacity-50" />
             <h3 className="text-xl font-bold text-primary-light dark:text-primary-dark mb-2">No bookmarks found</h3>

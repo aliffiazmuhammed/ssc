@@ -14,7 +14,6 @@ interface WordProps {
     antonyms?: string[];
     isStudied: boolean;
   };
-  };
   onToggleStudy: (id: string) => void;
   isBookmarked?: boolean;
   onToggleBookmark?: (id: string) => void;
