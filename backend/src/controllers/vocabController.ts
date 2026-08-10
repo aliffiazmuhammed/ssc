@@ -375,6 +375,10 @@ export const generateQuiz = async (req: AuthRequest, res: Response): Promise<voi
       const progress = await VocabProgress.find({ userId, isStudied: true }).select('wordId').lean();
       const studiedWordIds = progress.map(p => p.wordId);
       query._id = { $in: studiedWordIds };
+    } else if (source === 'unstudied') {
+      const progress = await VocabProgress.find({ userId, isStudied: true }).select('wordId').lean();
+      const studiedWordIds = progress.map(p => p.wordId);
+      query._id = { $nin: studiedWordIds };
     }
 
     const words = await VocabWord.aggregate([

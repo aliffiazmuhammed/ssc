@@ -79,7 +79,7 @@ const VocabBrowser: React.FC = () => {
       // Optimistic update
       setWords(prev => prev.map(w => w._id === id ? { ...w, isStudied: !w.isStudied } : w));
       
-      const res = await api.post(`/vocab/words/${id}/toggle-study`);
+      const res = await api.post(`/vocab/words/${id}/study`);
       
       // Update with actual response just in case
       setWords(prev => prev.map(w => w._id === id ? { ...w, isStudied: res.data.data.isStudied } : w));

@@ -20,7 +20,7 @@ const VocabQuiz: React.FC = () => {
   
   // Config state
   const [count, setCount] = useState<number>(10);
-  const [source, setSource] = useState<'all' | 'top200' | 'studied'>('all');
+  const [source, setSource] = useState<'all' | 'top200' | 'studied' | 'unstudied'>('all');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -120,11 +120,12 @@ const VocabQuiz: React.FC = () => {
               <label className="block text-sm font-bold text-secondary-light dark:text-secondary-dark uppercase tracking-wider mb-4">
                 Question Source
               </label>
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {[
                   { id: 'all', label: 'All Words' },
                   { id: 'top200', label: 'Top 200 Only' },
-                  { id: 'studied', label: 'Studied Words' }
+                  { id: 'studied', label: 'Studied Words' },
+                  { id: 'unstudied', label: 'Unstudied Words' }
                 ].map(s => (
                   <button
                     key={s.id}
