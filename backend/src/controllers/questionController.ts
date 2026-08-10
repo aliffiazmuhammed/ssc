@@ -444,18 +444,18 @@ export const getAttemptedStats = async (req: AuthRequest, res: Response): Promis
 
     // Step 2: Get attempted (distinct) questions per topic for this user
     const attemptedCounts = await QuestionAttempt.aggregate([
-      { $match: { userId: new mongoose.Types.ObjectId(userId as unknown as string), subject: subject as string } },
+      { $match: { userId: new mongoose.Types.ObjectId(userId.toString()), subject: subject as string } },
       { $group: { _id: { topic: '$topic', questionId: '$questionId' } } },
       { $group: { _id: '$_id.topic', attemptedCount: { $sum: 1 } } },
     ]);
 
     // Step 3: Merge
-    const attemptedMap = Object.fromEntries(attemptedCounts.map(a => [a._id, a.attemptedCount]));
+    const attemptedMap = Object.fromEntries(attemptedCounts.map(a => [String(a._id).toLowerCase(), a.attemptedCount]));
     const stats = topicTotals.map(t => ({
       topic: t._id,
       totalQuestions: t.totalQuestions,
-      attemptedCount: attemptedMap[t._id] || 0,
-      unattemptedCount: t.totalQuestions - (attemptedMap[t._id] || 0),
+      attemptedCount: attemptedMap[String(t._id).toLowerCase()] || 0,
+      unattemptedCount: t.totalQuestions - (attemptedMap[String(t._id).toLowerCase()] || 0),
     }));
 
     res.status(200).json({
