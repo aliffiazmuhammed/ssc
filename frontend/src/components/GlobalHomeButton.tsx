@@ -25,10 +25,11 @@ const GlobalHomeButton: React.FC = () => {
   return (
     <button
       onClick={goHome}
-      className="fixed bottom-24 right-6 lg:bottom-10 lg:right-10 z-[100] p-3 sm:p-4 rounded-full bg-accent/90 hover:bg-accent backdrop-blur-md text-white shadow-xl shadow-accent/20 transition-all hover:scale-105 active:scale-95 group flex items-center justify-center"
+      className="fixed top-4 left-1/2 -translate-x-1/2 z-[100] px-4 py-2 sm:px-5 sm:py-2.5 rounded-full bg-accent/90 hover:bg-accent backdrop-blur-md text-white shadow-xl shadow-accent/20 transition-all hover:scale-105 active:scale-95 group flex items-center justify-center gap-2"
       title="Go Home"
     >
-      <Home size={22} className="group-hover:animate-pulse" />
+      <Home size={18} className="group-hover:animate-pulse" />
+      <span className="font-bold text-sm hidden sm:inline">Home</span>
     </button>
   );
 };

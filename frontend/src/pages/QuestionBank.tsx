@@ -305,7 +305,7 @@ const QuestionBank: React.FC = () => {
                             className={clsx(
                               "w-full text-left px-5 py-4 rounded-xl border flex items-center justify-between transition-all",
                               showAsCorrect 
-                                ? "bg-success-tint border-success-DEFAULT border-2 shadow-sm text-success-DEFAULT font-bold" 
+                                ? "bg-success-DEFAULT/10 border-success-DEFAULT border-2 shadow-sm text-success-DEFAULT font-bold" 
                                 : "bg-transparent border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark",
                               dimOther && "opacity-50"
                             )}
@@ -365,7 +365,7 @@ const QuestionBank: React.FC = () => {
                                 key={i}
                                 className={clsx(
                                   "flex items-start gap-2 py-1 px-2 rounded",
-                                  showAsCorrect ? "bg-success-tint text-success-DEFAULT font-bold" : "text-secondary-light dark:text-secondary-dark"
+                                  showAsCorrect ? "bg-success-DEFAULT/10 text-success-DEFAULT font-bold" : "text-secondary-light dark:text-secondary-dark"
                                 )}
                               >
                                 <span className="font-semibold">{label})</span>
