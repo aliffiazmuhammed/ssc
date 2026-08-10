@@ -43,7 +43,7 @@ const Bookmarks: React.FC = () => {
   const [vocabWords, setVocabWords] = useState<any[]>([]);
   const [vocabPage, setVocabPage] = useState(1);
   const [vocabTotalPages, setVocabTotalPages] = useState(1);
-  const [vocabTotalCount, setVocabTotalCount] = useState(0);
+  const [, setVocabTotalCount] = useState(0);
   const vocabLimit = 20;
   const [loadingVocab, setLoadingVocab] = useState(false);
 
@@ -323,6 +323,7 @@ const Bookmarks: React.FC = () => {
               </div>
             )}
           </div>
+          )
         )}
 
         {/* Vocabulary List */}
