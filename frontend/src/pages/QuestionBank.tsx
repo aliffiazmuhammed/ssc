@@ -128,6 +128,28 @@ const QuestionBank: React.FC = () => {
 
   const totalPages = Math.ceil(totalCount / limit) || 1;
 
+  const paginationControls = !loading && totalPages > 1 && (
+    <div className="flex items-center justify-between bg-surface-light dark:bg-surface-dark p-4 rounded-2xl shadow-sm border border-divider-light dark:border-divider-dark mt-4">
+      <button
+        onClick={() => setPage(p => Math.max(1, p - 1))}
+        disabled={page === 1}
+        className="px-4 py-2 rounded-xl text-sm font-bold disabled:opacity-50 disabled:cursor-not-allowed bg-base-light dark:bg-base-dark border border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark hover:bg-accent hover:text-white hover:border-accent transition-colors"
+      >
+        Previous
+      </button>
+      <span className="text-sm font-bold text-secondary-light dark:text-secondary-dark">
+        Page {page} of {totalPages}
+      </span>
+      <button
+        onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+        disabled={page === totalPages}
+        className="px-4 py-2 rounded-xl text-sm font-bold disabled:opacity-50 disabled:cursor-not-allowed bg-base-light dark:bg-base-dark border border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark hover:bg-accent hover:text-white hover:border-accent transition-colors"
+      >
+        Next
+      </button>
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-base-light dark:bg-base-dark py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto space-y-6">
@@ -171,8 +193,8 @@ const QuestionBank: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-2 border-t border-divider-light dark:border-divider-dark">
-            <div className="flex items-center gap-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-4 border-t border-divider-light dark:border-divider-dark">
+            <div className="flex flex-wrap items-center gap-4 w-full sm:w-auto">
               <div className="flex items-center gap-2">
                 <span className="text-sm font-semibold text-secondary-light dark:text-secondary-dark">Per page:</span>
                 <select
@@ -207,12 +229,15 @@ const QuestionBank: React.FC = () => {
 
             <button
               onClick={() => setGlobalShowAnswer(!globalShowAnswer)}
-              className="px-4 py-2 bg-base-light dark:bg-base-dark border border-divider-light dark:border-divider-dark rounded-xl text-sm font-bold text-accent hover:bg-accent/10 transition-colors"
+              className="w-full sm:w-auto px-4 py-2 bg-base-light dark:bg-base-dark border border-divider-light dark:border-divider-dark rounded-xl text-sm font-bold text-accent hover:bg-accent/10 transition-colors"
             >
               {globalShowAnswer ? 'Hide All Answers' : 'Show All Answers'}
             </button>
           </div>
         </div>
+
+        {/* Top Pagination */}
+        {paginationControls}
 
         {/* Questions List */}
         {loading ? (
@@ -366,27 +391,7 @@ const QuestionBank: React.FC = () => {
         )}
 
         {/* Pagination */}
-        {!loading && totalPages > 1 && (
-          <div className="flex items-center justify-between bg-surface-light dark:bg-surface-dark p-4 rounded-2xl shadow-sm border border-divider-light dark:border-divider-dark">
-            <button
-              onClick={() => setPage(p => Math.max(1, p - 1))}
-              disabled={page === 1}
-              className="px-4 py-2 rounded-xl text-sm font-bold disabled:opacity-50 disabled:cursor-not-allowed bg-base-light dark:bg-base-dark border border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark hover:bg-accent hover:text-white hover:border-accent transition-colors"
-            >
-              Previous
-            </button>
-            <span className="text-sm font-bold text-secondary-light dark:text-secondary-dark">
-              Page {page} of {totalPages}
-            </span>
-            <button
-              onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-              disabled={page === totalPages}
-              className="px-4 py-2 rounded-xl text-sm font-bold disabled:opacity-50 disabled:cursor-not-allowed bg-base-light dark:bg-base-dark border border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark hover:bg-accent hover:text-white hover:border-accent transition-colors"
-            >
-              Next
-            </button>
-          </div>
-        )}
+        {paginationControls}
 
       </div>
     </div>
