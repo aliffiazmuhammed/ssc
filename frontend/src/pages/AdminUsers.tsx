@@ -70,28 +70,36 @@ const AdminUsers: React.FC = () => {
     <div className="py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto space-y-6">
         
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
-          <div>
-            <h1 className="text-2xl font-bold text-primary-light dark:text-primary-dark flex items-center gap-2">
-              <UserCog className="text-accent" />
-              Manage Users
-            </h1>
-            <p className="text-sm text-secondary-light dark:text-secondary-dark mt-1">
-              View and manage user accounts and their access
-            </p>
-          </div>
+        <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-cyan-500 to-blue-600 p-8 sm:p-10 shadow-lg shadow-cyan-500/20">
+          <div className="absolute -top-24 -right-24 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+          
+          <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+            <div className="flex items-center gap-4">
+              <div className="p-3 rounded-2xl bg-white/20 backdrop-blur-md border border-white/20 text-white shadow-sm flex items-center justify-center">
+                <UserCog size={28} />
+              </div>
+              <div>
+                <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-1">
+                  Manage Users
+                </h1>
+                <p className="text-white/90 font-medium">
+                  View and manage user accounts and their access
+                </p>
+              </div>
+            </div>
 
-          <div className="flex items-center space-x-2 bg-surface-light dark:bg-surface-dark p-1 rounded-lg border border-divider-light dark:border-divider-dark">
-            <span className="text-sm text-secondary-light dark:text-secondary-dark px-2">Sort by:</span>
-            <select
-              value={sort}
-              onChange={(e) => { setSort(e.target.value as any); setPage(1); }}
-              className="bg-transparent text-sm text-primary-light dark:text-primary-dark border-none focus:ring-0 outline-none pr-4"
-            >
-              <option value="latest">Latest First</option>
-              <option value="oldest">Oldest First</option>
-              <option value="name">Name (A-Z)</option>
-            </select>
+            <div className="flex items-center space-x-2 bg-white/20 backdrop-blur-md p-2 rounded-xl border border-white/20 text-white shadow-sm">
+              <span className="text-sm font-semibold px-2">Sort by:</span>
+              <select
+                value={sort}
+                onChange={(e) => { setSort(e.target.value as any); setPage(1); }}
+                className="bg-transparent text-sm font-bold border-none focus:ring-0 outline-none pr-4 [&>option]:text-primary-light"
+              >
+                <option value="latest">Latest First</option>
+                <option value="oldest">Oldest First</option>
+                <option value="name">Name (A-Z)</option>
+              </select>
+            </div>
           </div>
         </div>
 
@@ -102,7 +110,7 @@ const AdminUsers: React.FC = () => {
           </div>
         )}
 
-        <div className="bg-surface-light dark:bg-surface-dark shadow-card rounded-2xl overflow-hidden border border-divider-light dark:border-divider-dark">
+        <div className="bg-surface-light dark:bg-surface-dark shadow-sm rounded-[2rem] overflow-hidden border border-divider-light dark:border-divider-dark">
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-divider-light dark:divide-divider-dark">
               <thead className="bg-base-light/50 dark:bg-base-dark/50">
@@ -128,7 +136,7 @@ const AdminUsers: React.FC = () => {
                 {loading ? (
                   <tr>
                     <td colSpan={5} className="px-6 py-12 text-center">
-                      <Loader2 className="animate-spin h-8 w-8 text-accent mx-auto" />
+                      <Loader2 className="animate-spin h-8 w-8 text-cyan-500 mx-auto" />
                       <p className="mt-2 text-secondary-light dark:text-secondary-dark">Loading users...</p>
                     </td>
                   </tr>
@@ -143,14 +151,14 @@ const AdminUsers: React.FC = () => {
                     <tr key={u._id} className="hover:bg-base-light/50 dark:hover:bg-base-dark/50 transition-colors">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
-                          <div className="flex-shrink-0 h-10 w-10 bg-accent/10 rounded-full flex items-center justify-center text-accent font-bold">
+                          <div className="flex-shrink-0 h-10 w-10 bg-cyan-500/10 rounded-full flex items-center justify-center text-cyan-500 font-bold">
                             {u.name.charAt(0).toUpperCase()}
                           </div>
                           <div className="ml-4">
                             <div className="text-sm font-medium text-primary-light dark:text-primary-dark">
                               {u.name}
                               {u.role === 'admin' && (
-                                <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-accent/10 text-accent">
+                                <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-cyan-500/10 text-cyan-500">
                                   Admin
                                 </span>
                               )}
@@ -223,7 +231,7 @@ const AdminUsers: React.FC = () => {
                       onClick={() => setPage(p)}
                       className={`w-8 h-8 rounded-md text-sm font-medium transition-colors ${
                         page === p
-                          ? 'bg-accent text-white'
+                          ? 'bg-cyan-500 text-white'
                           : 'text-secondary-light dark:text-secondary-dark hover:bg-surface-hover-light dark:hover:bg-surface-hover-dark'
                       }`}
                     >

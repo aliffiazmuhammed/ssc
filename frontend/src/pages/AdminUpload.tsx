@@ -169,12 +169,26 @@ const AdminUpload: React.FC = () => {
 
   return (
     <div className="py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto space-y-8">
+      <div className="max-w-5xl mx-auto space-y-8">
+        
+        {/* Header section */}
+        <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-cyan-500 to-blue-600 p-8 sm:p-10 shadow-lg shadow-cyan-500/20">
+          <div className="absolute -top-24 -right-24 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+          
+          <div className="relative z-10">
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-2">
+              Data Upload Center
+            </h1>
+            <p className="text-white/90 font-medium">
+              Upload JSON files to populate the database with questions and vocabulary.
+            </p>
+          </div>
+        </div>
         
         {/* JSON Templates Section */}
-        <div className="bg-surface-light dark:bg-surface-dark rounded-2xl shadow-card p-8">
+        <div className="bg-surface-light dark:bg-surface-dark rounded-[2rem] shadow-sm border border-divider-light dark:border-divider-dark p-8">
           <h2 className="text-xl font-semibold text-primary-light dark:text-primary-dark mb-4 flex items-center gap-2">
-            <Info className="h-5 w-5 text-accent" />
+            <Info className="h-5 w-5 text-cyan-500" />
             Sample JSON Formats
           </h2>
           <p className="text-sm text-secondary-light dark:text-secondary-dark mb-6">
@@ -185,7 +199,7 @@ const AdminUpload: React.FC = () => {
             <div>
               <div className="flex justify-between items-center mb-2">
                 <h3 className="text-sm font-bold text-primary-light dark:text-primary-dark">Questions Format</h3>
-                <button onClick={() => handleCopy(sampleQuestionJson, 'questions')} className="text-xs flex items-center gap-1 text-accent hover:underline">
+                <button onClick={() => handleCopy(sampleQuestionJson, 'questions')} className="text-xs font-bold flex items-center gap-1 text-cyan-500 hover:text-cyan-600 bg-cyan-500/10 px-2 py-1 rounded transition-colors">
                   {copiedText === 'questions' ? <><CheckCircle2 size={14} /> Copied!</> : <><Copy size={14} /> Copy JSON</>}
                 </button>
               </div>
@@ -198,7 +212,7 @@ const AdminUpload: React.FC = () => {
               <div>
                 <div className="flex justify-between items-center mb-2">
                   <h3 className="text-sm font-bold text-primary-light dark:text-primary-dark">One Word Subs</h3>
-                  <button onClick={() => handleCopy(sampleOwsJson, 'ows')} className="text-xs flex items-center gap-1 text-accent hover:underline">
+                  <button onClick={() => handleCopy(sampleOwsJson, 'ows')} className="text-xs font-bold flex items-center gap-1 text-cyan-500 hover:text-cyan-600 bg-cyan-500/10 px-2 py-1 rounded transition-colors">
                     {copiedText === 'ows' ? <><CheckCircle2 size={14} /> Copied!</> : <><Copy size={14} /> Copy</>}
                   </button>
                 </div>
@@ -210,7 +224,7 @@ const AdminUpload: React.FC = () => {
               <div>
                 <div className="flex justify-between items-center mb-2">
                   <h3 className="text-sm font-bold text-primary-light dark:text-primary-dark">Synonyms & Antonyms</h3>
-                  <button onClick={() => handleCopy(sampleSynonymsJson, 'synonyms')} className="text-xs flex items-center gap-1 text-accent hover:underline">
+                  <button onClick={() => handleCopy(sampleSynonymsJson, 'synonyms')} className="text-xs font-bold flex items-center gap-1 text-cyan-500 hover:text-cyan-600 bg-cyan-500/10 px-2 py-1 rounded transition-colors">
                     {copiedText === 'synonyms' ? <><CheckCircle2 size={14} /> Copied!</> : <><Copy size={14} /> Copy</>}
                   </button>
                 </div>
@@ -222,7 +236,7 @@ const AdminUpload: React.FC = () => {
               <div>
                 <div className="flex justify-between items-center mb-2">
                   <h3 className="text-sm font-bold text-primary-light dark:text-primary-dark">Idioms & Phrases</h3>
-                  <button onClick={() => handleCopy(sampleIdiomsJson, 'idioms')} className="text-xs flex items-center gap-1 text-accent hover:underline">
+                  <button onClick={() => handleCopy(sampleIdiomsJson, 'idioms')} className="text-xs font-bold flex items-center gap-1 text-cyan-500 hover:text-cyan-600 bg-cyan-500/10 px-2 py-1 rounded transition-colors">
                     {copiedText === 'idioms' ? <><CheckCircle2 size={14} /> Copied!</> : <><Copy size={14} /> Copy</>}
                   </button>
                 </div>
@@ -236,7 +250,7 @@ const AdminUpload: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Question Upload Section */}
-          <div className="bg-surface-light dark:bg-surface-dark rounded-2xl shadow-card p-8">
+          <div className="bg-surface-light dark:bg-surface-dark rounded-[2rem] shadow-sm border border-divider-light dark:border-divider-dark p-8">
           <h2 className="text-xl font-semibold text-primary-light dark:text-primary-dark mb-6">Upload Questions</h2>
           
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -247,7 +261,7 @@ const AdminUpload: React.FC = () => {
               <select
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-divider-light dark:border-divider-dark bg-transparent focus:outline-none focus:ring-2 focus:ring-accent transition-shadow text-primary-light dark:text-primary-dark"
+                className="w-full px-4 py-3 rounded-xl border border-divider-light dark:border-divider-dark bg-transparent focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-shadow text-primary-light dark:text-primary-dark font-medium"
               >
                 {SUBJECTS.map((sub) => (
                   <option key={sub} value={sub} className="bg-surface-light dark:bg-surface-dark">
@@ -263,7 +277,7 @@ const AdminUpload: React.FC = () => {
               </label>
               <div 
                 className={`border-2 border-dashed rounded-xl p-8 text-center transition-colors ${
-                  file ? 'border-accent bg-accent/5' : 'border-divider-light dark:border-divider-dark hover:border-accent'
+                  file ? 'border-cyan-500 bg-cyan-500/5' : 'border-divider-light dark:border-divider-dark hover:border-cyan-500/50'
                 }`}
               >
                 <input
@@ -278,7 +292,7 @@ const AdminUpload: React.FC = () => {
                   htmlFor="file-upload"
                   className="cursor-pointer flex flex-col items-center space-y-2"
                 >
-                  <Upload className={`h-10 w-10 ${file ? 'text-accent' : 'text-secondary-light dark:text-secondary-dark'}`} />
+                  <Upload className={`h-10 w-10 ${file ? 'text-cyan-500' : 'text-secondary-light dark:text-secondary-dark'}`} />
                   <span className="text-primary-light dark:text-primary-dark font-medium">
                     {file ? file.name : 'Click to upload or drag and drop'}
                   </span>
@@ -313,10 +327,10 @@ const AdminUpload: React.FC = () => {
             <button
               type="submit"
               disabled={status === 'uploading' || !file}
-              className="w-full flex justify-center py-3 px-4 rounded-xl text-white bg-accent hover:bg-accent/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent transition-all font-medium text-[16px] disabled:opacity-70"
+              className="w-full flex justify-center py-3 px-4 rounded-2xl text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-cyan-500/30 transition-all font-bold text-lg disabled:opacity-70 shadow-lg shadow-cyan-500/20 hover:-translate-y-0.5 active:translate-y-0"
             >
               {status === 'uploading' ? (
-                <Loader2 className="animate-spin h-5 w-5" />
+                <Loader2 className="animate-spin h-6 w-6" />
               ) : (
                 'Upload Questions'
               )}
@@ -325,7 +339,7 @@ const AdminUpload: React.FC = () => {
         </div>
 
           {/* Vocabulary Upload Section */}
-          <div className="bg-surface-light dark:bg-surface-dark rounded-2xl shadow-card p-8">
+          <div className="bg-surface-light dark:bg-surface-dark rounded-[2rem] shadow-sm border border-divider-light dark:border-divider-dark p-8">
           <h2 className="text-xl font-semibold text-primary-light dark:text-primary-dark mb-6">Upload Vocabulary</h2>
           
           <form onSubmit={handleVocabSubmit} className="space-y-6">
@@ -336,7 +350,7 @@ const AdminUpload: React.FC = () => {
               <select
                 value={vocabType}
                 onChange={(e) => setVocabType(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-divider-light dark:border-divider-dark bg-transparent focus:outline-none focus:ring-2 focus:ring-accent transition-shadow text-primary-light dark:text-primary-dark"
+                className="w-full px-4 py-3 rounded-xl border border-divider-light dark:border-divider-dark bg-transparent focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-shadow text-primary-light dark:text-primary-dark font-medium"
               >
                 <option value="ows" className="bg-surface-light dark:bg-surface-dark">One Word Substitutions</option>
                 <option value="synonyms-antonyms" className="bg-surface-light dark:bg-surface-dark">Synonyms & Antonyms</option>
@@ -350,7 +364,7 @@ const AdminUpload: React.FC = () => {
               </label>
               <div 
                 className={`border-2 border-dashed rounded-xl p-8 text-center transition-colors ${
-                  vocabFile ? 'border-accent bg-accent/5' : 'border-divider-light dark:border-divider-dark hover:border-accent'
+                  vocabFile ? 'border-cyan-500 bg-cyan-500/5' : 'border-divider-light dark:border-divider-dark hover:border-cyan-500/50'
                 }`}
               >
                 <input
@@ -365,7 +379,7 @@ const AdminUpload: React.FC = () => {
                   htmlFor="vocab-file-upload"
                   className="cursor-pointer flex flex-col items-center space-y-2"
                 >
-                  <Upload className={`h-10 w-10 ${vocabFile ? 'text-accent' : 'text-secondary-light dark:text-secondary-dark'}`} />
+                  <Upload className={`h-10 w-10 ${vocabFile ? 'text-cyan-500' : 'text-secondary-light dark:text-secondary-dark'}`} />
                   <span className="text-primary-light dark:text-primary-dark font-medium">
                     {vocabFile ? vocabFile.name : 'Click to upload or drag and drop'}
                   </span>
@@ -400,10 +414,10 @@ const AdminUpload: React.FC = () => {
             <button
               type="submit"
               disabled={vocabStatus === 'uploading' || !vocabFile}
-              className="w-full flex justify-center py-3 px-4 rounded-xl text-white bg-accent hover:bg-accent/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent transition-all font-medium text-[16px] disabled:opacity-70"
+              className="w-full flex justify-center py-3 px-4 rounded-2xl text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-cyan-500/30 transition-all font-bold text-lg disabled:opacity-70 shadow-lg shadow-cyan-500/20 hover:-translate-y-0.5 active:translate-y-0"
             >
               {vocabStatus === 'uploading' ? (
-                <Loader2 className="animate-spin h-5 w-5" />
+                <Loader2 className="animate-spin h-6 w-6" />
               ) : (
                 'Upload Vocabulary'
               )}

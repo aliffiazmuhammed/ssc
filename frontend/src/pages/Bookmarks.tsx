@@ -100,32 +100,36 @@ const Bookmarks: React.FC = () => {
       <div className="max-w-4xl mx-auto space-y-8">
         
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <Link
-              to="/"
-              className="p-2 rounded-full hover:bg-surface-light dark:hover:bg-surface-dark transition-colors text-secondary-light dark:text-secondary-dark"
-            >
-              <ArrowLeft size={24} />
-            </Link>
-            <div>
-              <h1 className="text-3xl font-extrabold text-primary-light dark:text-primary-dark tracking-tight">
-                Bookmarks
-              </h1>
-              <p className="mt-1 text-secondary-light dark:text-secondary-dark font-medium">
-                Review and practice your saved questions.
-              </p>
-            </div>
-          </div>
+        <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-pink-500 to-rose-500 p-8 sm:p-10 shadow-lg shadow-pink-500/20">
+          <div className="absolute -top-24 -right-24 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
           
-          <button
-            onClick={startBookmarkQuiz}
-            disabled={startingQuiz || totalCount === 0}
-            className="flex items-center gap-2 px-6 py-3 rounded-xl bg-accent text-white font-bold hover:bg-accent/90 disabled:opacity-50 transition-all shadow-lg shadow-accent/20"
-          >
-            {startingQuiz ? <Loader2 className="animate-spin" size={20} /> : <Play size={20} />}
-            Practice Bookmarks
-          </button>
+          <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+            <div className="flex items-center gap-4">
+              <Link
+                to="/"
+                className="p-2 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/20 text-white transition-all shadow-sm flex items-center justify-center"
+              >
+                <ArrowLeft size={24} />
+              </Link>
+              <div>
+                <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-1">
+                  Bookmarks
+                </h1>
+                <p className="text-white/90 font-medium">
+                  Review and practice your saved questions.
+                </p>
+              </div>
+            </div>
+            
+            <button
+              onClick={startBookmarkQuiz}
+              disabled={startingQuiz || totalCount === 0}
+              className="flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-white text-pink-600 font-extrabold hover:bg-white/90 disabled:opacity-50 transition-all shadow-lg hover:-translate-y-0.5 active:translate-y-0"
+            >
+              {startingQuiz ? <Loader2 className="animate-spin" size={20} /> : <Play size={20} />}
+              Practice Bookmarks
+            </button>
+          </div>
         </div>
 
         {/* Subject Filters */}
@@ -137,8 +141,8 @@ const Bookmarks: React.FC = () => {
               className={clsx(
                 'px-4 py-2 rounded-full text-sm font-semibold transition-all border',
                 selectedSubject === subject
-                  ? 'bg-accent/10 border-accent text-accent'
-                  : 'bg-surface-light dark:bg-surface-dark border-divider-light dark:border-divider-dark text-secondary-light dark:text-secondary-dark hover:border-accent/40'
+                  ? 'bg-pink-500 text-white shadow-md shadow-pink-500/20'
+                  : 'bg-surface-light dark:bg-surface-dark border-divider-light dark:border-divider-dark text-secondary-light dark:text-secondary-dark hover:border-pink-500/40 hover:text-pink-500'
               )}
             >
               {subject}
@@ -152,7 +156,7 @@ const Bookmarks: React.FC = () => {
 
         {/* Questions List */}
         {loading ? (
-          <div className="flex justify-center py-12"><Loader2 className="animate-spin text-accent w-10 h-10" /></div>
+          <div className="flex justify-center py-12"><Loader2 className="animate-spin text-pink-500 w-10 h-10" /></div>
         ) : questions.length === 0 ? (
           <div className="bg-surface-light dark:bg-surface-dark rounded-2xl p-12 text-center border border-divider-light dark:border-divider-dark">
             <Bookmark className="mx-auto w-12 h-12 text-secondary-light dark:text-secondary-dark mb-4 opacity-50" />
@@ -172,8 +176,8 @@ const Bookmarks: React.FC = () => {
                 <div 
                   key={q._id} 
                   className={clsx(
-                    "bg-surface-light dark:bg-surface-dark rounded-2xl border transition-all cursor-pointer",
-                    isExpanded ? "border-accent/50 shadow-card" : "border-divider-light dark:border-divider-dark hover:border-accent/30"
+                    "bg-surface-light dark:bg-surface-dark rounded-[1.5rem] border transition-all cursor-pointer",
+                    isExpanded ? "border-pink-500/50 shadow-sm" : "border-divider-light dark:border-divider-dark hover:border-pink-500/30"
                   )}
                   onClick={() => setExpandedId(isExpanded ? null : q._id)}
                 >
@@ -183,7 +187,7 @@ const Bookmarks: React.FC = () => {
                         <span className="text-xs font-semibold uppercase tracking-wider text-secondary-light dark:text-secondary-dark bg-base-light dark:bg-base-dark px-2 py-1 rounded-md border border-divider-light dark:border-divider-dark">
                           {q.subject}
                         </span>
-                        <span className="text-xs font-semibold uppercase tracking-wider text-accent bg-accent/10 px-2 py-1 rounded-md">
+                        <span className="text-xs font-semibold uppercase tracking-wider text-pink-500 bg-pink-500/10 px-2 py-1 rounded-md">
                           {q.topic}
                         </span>
                       </div>

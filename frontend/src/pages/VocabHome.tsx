@@ -43,20 +43,24 @@ const VocabHome: React.FC = () => {
       <div className="max-w-4xl mx-auto space-y-10">
         
         {/* Header section */}
-        <div className="flex items-center gap-4 mb-8">
-          <button
-            onClick={() => navigate('/')}
-            className="p-2 rounded-full hover:bg-surface-light dark:hover:bg-surface-dark transition-colors text-secondary-light dark:text-secondary-dark"
-          >
-            <ArrowLeft size={24} />
-          </button>
-          <div>
-            <h1 className="text-3xl font-extrabold text-primary-light dark:text-primary-dark tracking-tight">
-              English Vocabulary
-            </h1>
-            <p className="mt-1 text-secondary-light dark:text-secondary-dark font-medium">
-              Master OWS, Synonyms, Antonyms, and Idioms.
-            </p>
+        <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-pink-500 to-fuchsia-600 p-8 sm:p-10 shadow-lg shadow-pink-500/20 mb-10">
+          <div className="absolute -top-24 -right-24 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+          
+          <div className="relative z-10 flex items-center gap-4">
+            <button
+              onClick={() => navigate('/')}
+              className="p-2 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/20 text-white transition-all shadow-sm"
+            >
+              <ArrowLeft size={24} />
+            </button>
+            <div>
+              <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-1">
+                English Vocabulary
+              </h1>
+              <p className="text-white/90 font-medium">
+                Master OWS, Synonyms, Antonyms, and Idioms.
+              </p>
+            </div>
           </div>
         </div>
 
@@ -68,31 +72,33 @@ const VocabHome: React.FC = () => {
             return (
               <div 
                 key={category.id}
-                className="bg-surface-light dark:bg-surface-dark border-2 border-divider-light dark:border-divider-dark rounded-3xl p-6 shadow-card hover:border-accent/50 transition-colors flex flex-col h-full"
+                className="group bg-surface-light dark:bg-surface-dark rounded-[2rem] p-6 shadow-sm border border-divider-light dark:border-divider-dark hover:border-pink-500/30 hover:shadow-md transition-all duration-300 flex flex-col h-full relative overflow-hidden"
               >
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="bg-accent/10 p-3 rounded-2xl text-accent">
-                    <Icon size={24} />
+                <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-pink-500 to-fuchsia-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-r-full"></div>
+                
+                <div className="flex items-center gap-4 mb-6 relative z-10">
+                  <div className="bg-pink-500/10 p-3.5 rounded-2xl text-pink-500 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
+                    <Icon size={28} />
                   </div>
-                  <h3 className="font-bold text-lg text-primary-light dark:text-primary-dark leading-tight">{category.title}</h3>
+                  <h3 className="font-extrabold text-xl text-primary-light dark:text-primary-dark leading-tight">{category.title}</h3>
                 </div>
 
                 <div className="mb-6 flex-grow">
                   <VocabProgressBar studied={stats.studied} total={stats.total} />
                 </div>
 
-                <div className="flex flex-col gap-3 mt-auto">
+                <div className="flex flex-col gap-3 mt-auto relative z-10">
                   <button
                     onClick={() => navigate(`/vocab/${category.id}`)}
-                    className="w-full py-3 px-4 rounded-xl font-bold text-sm bg-base-light dark:bg-base-dark border border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark hover:border-accent/40 transition-colors"
+                    className="w-full py-3 px-4 rounded-xl font-bold text-sm bg-base-light dark:bg-base-dark border border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark hover:border-pink-500/40 hover:text-pink-600 dark:hover:text-pink-400 transition-all"
                   >
                     Browse Dictionary
                   </button>
                   <button
                     onClick={() => navigate(`/vocab/${category.id}/quiz`)}
-                    className="w-full py-3 px-4 rounded-xl font-bold text-sm bg-accent text-white shadow-lg shadow-accent/20 hover:bg-accent/90 transition-colors flex items-center justify-center gap-2"
+                    className="w-full py-3 px-4 rounded-xl font-bold text-sm bg-gradient-to-r from-pink-500 to-fuchsia-600 text-white shadow-md shadow-pink-500/20 hover:shadow-lg hover:shadow-pink-500/40 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2"
                   >
-                    <Play size={16} />
+                    <Play size={16} fill="currentColor" />
                     Start Quiz
                   </button>
                 </div>

@@ -103,43 +103,51 @@ const VocabBrowser: React.FC = () => {
       <div className="max-w-4xl mx-auto space-y-6">
         
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => navigate('/vocab')}
-              className="p-2 rounded-full hover:bg-surface-light dark:hover:bg-surface-dark transition-colors text-secondary-light dark:text-secondary-dark"
-            >
-              <ArrowLeft size={24} />
-            </button>
-            <h1 className="text-2xl font-extrabold text-primary-light dark:text-primary-dark">
-              {title}
-            </h1>
-          </div>
+        <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-pink-500 to-fuchsia-600 p-6 sm:p-8 shadow-lg shadow-pink-500/20">
+          <div className="absolute -top-24 -right-24 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
           
-          <div className="flex bg-surface-light dark:bg-surface-dark p-1 rounded-xl border border-divider-light dark:border-divider-dark">
-            <button
-              onClick={() => setTier('all')}
-              className={clsx(
-                "px-4 py-1.5 rounded-lg text-sm font-bold transition-colors",
-                tier === 'all' ? "bg-accent text-white" : "text-secondary-light dark:text-secondary-dark hover:text-primary-light dark:hover:text-primary-dark"
-              )}
-            >
-              All Words
-            </button>
-            <button
-              onClick={() => setTier('top200')}
-              className={clsx(
-                "px-4 py-1.5 rounded-lg text-sm font-bold transition-colors",
-                tier === 'top200' ? "bg-accent text-white" : "text-secondary-light dark:text-secondary-dark hover:text-primary-light dark:hover:text-primary-dark"
-              )}
-            >
-              Top 200
-            </button>
+          <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => navigate('/vocab')}
+                className="p-2 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/20 text-white transition-all shadow-sm"
+              >
+                <ArrowLeft size={24} />
+              </button>
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                {title}
+              </h1>
+            </div>
+            
+            <div className="flex bg-white/20 p-1 rounded-xl border border-white/20 backdrop-blur-md">
+              <button
+                onClick={() => setTier('all')}
+                className={clsx(
+                  "px-4 py-1.5 rounded-lg text-sm font-bold transition-all",
+                  tier === 'all' 
+                    ? "bg-white text-pink-600 shadow-sm" 
+                    : "text-white/90 hover:text-white hover:bg-white/10"
+                )}
+              >
+                All Words
+              </button>
+              <button
+                onClick={() => setTier('top200')}
+                className={clsx(
+                  "px-4 py-1.5 rounded-lg text-sm font-bold transition-all",
+                  tier === 'top200' 
+                    ? "bg-white text-pink-600 shadow-sm" 
+                    : "text-white/90 hover:text-white hover:bg-white/10"
+                )}
+              >
+                Top 200
+              </button>
+            </div>
           </div>
         </div>
 
         {/* Stats */}
-        <div className="bg-surface-light dark:bg-surface-dark p-4 rounded-2xl border border-divider-light dark:border-divider-dark shadow-sm">
+        <div className="bg-surface-light dark:bg-surface-dark p-6 rounded-[2rem] border border-divider-light dark:border-divider-dark shadow-sm">
            <VocabProgressBar studied={stats.studied} total={stats.total} />
         </div>
 

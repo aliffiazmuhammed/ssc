@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
 import { Loader2, ArrowLeft, TrendingUp, Target, AlertTriangle } from 'lucide-react';
+import clsx from 'clsx';
 import {
   LineChart,
   Line,
@@ -101,16 +102,24 @@ const Analytics: React.FC = () => {
   return (
     <div className="min-h-screen bg-base-light dark:bg-base-dark py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto space-y-8">
-        <div className="flex items-center gap-4">
-          <Link
-            to="/"
-            className="p-2 rounded-full hover:bg-surface-light dark:hover:bg-surface-dark transition-colors text-secondary-light dark:text-secondary-dark"
-          >
-            <ArrowLeft size={24} />
-          </Link>
-          <div>
-            <h1 className="text-3xl font-bold text-primary-light dark:text-primary-dark tracking-tight">Performance Analytics</h1>
-            <p className="mt-1 text-secondary-light dark:text-secondary-dark">Track your progress and identify weaknesses</p>
+        <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-teal-500 to-emerald-500 p-8 sm:p-10 shadow-lg shadow-teal-500/20">
+          <div className="absolute -top-24 -right-24 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+          
+          <div className="relative z-10 flex items-center gap-4">
+            <Link
+              to="/"
+              className="p-2 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/20 text-white transition-all shadow-sm flex items-center justify-center"
+            >
+              <ArrowLeft size={24} />
+            </Link>
+            <div>
+              <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-1">
+                Performance Analytics
+              </h1>
+              <p className="text-white/90 font-medium">
+                Track your progress and identify weaknesses
+              </p>
+            </div>
           </div>
         </div>
 
@@ -120,11 +129,11 @@ const Analytics: React.FC = () => {
             <button
               key={subject}
               onClick={() => setSelectedSubject(subject)}
-              className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
+              className={clsx("px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-300",
                 selectedSubject === subject
-                  ? 'bg-accent text-white shadow-md'
-                  : 'bg-surface-light dark:bg-surface-dark text-secondary-light dark:text-secondary-dark hover:bg-accent/10 hover:text-accent'
-              }`}
+                  ? 'bg-teal-500 text-white shadow-md shadow-teal-500/20'
+                  : 'bg-surface-light dark:bg-surface-dark border border-divider-light dark:border-divider-dark text-secondary-light dark:text-secondary-dark hover:border-teal-500/40 hover:text-teal-500'
+              )}
             >
               {subject}
             </button>
@@ -136,7 +145,7 @@ const Analytics: React.FC = () => {
             <p className="text-secondary-light dark:text-secondary-dark mb-4">Complete more quizzes to generate analytics.</p>
             <Link
               to="/"
-              className="inline-block py-2 px-6 rounded-xl bg-accent text-white font-medium hover:bg-accent/90 transition-colors"
+              className="inline-block py-3 px-8 rounded-2xl bg-gradient-to-r from-teal-500 to-emerald-500 text-white font-bold shadow-md shadow-teal-500/20 hover:shadow-lg hover:-translate-y-0.5 transition-all"
             >
               Start Practice
             </Link>
@@ -147,7 +156,7 @@ const Analytics: React.FC = () => {
             {/* Main Trend Chart */}
             <div className="lg:col-span-2 bg-surface-light dark:bg-surface-dark rounded-2xl shadow-card p-6 border border-divider-light dark:border-divider-dark">
               <div className="flex items-center gap-2 mb-6">
-                <TrendingUp className="text-accent" />
+                <TrendingUp className="text-teal-500" />
                 <h2 className="text-xl font-bold text-primary-light dark:text-primary-dark">Score Trend Over Time</h2>
               </div>
               <div className="h-80 w-full">
@@ -176,9 +185,9 @@ const Analytics: React.FC = () => {
                     <Line 
                       type="monotone" 
                       dataKey="score" 
-                      stroke="var(--color-accent)" 
+                      stroke="#14b8a6" 
                       strokeWidth={3} 
-                      dot={{ fill: 'var(--color-accent)', strokeWidth: 2 }} 
+                      dot={{ fill: '#14b8a6', strokeWidth: 2 }} 
                       activeDot={{ r: 8 }} 
                       animationDuration={1500}
                     />
@@ -206,7 +215,7 @@ const Analytics: React.FC = () => {
                     />
                     <Bar dataKey="accuracy" radius={[0, 8, 8, 0]} barSize={20} animationDuration={1500}>
                       {barChartData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.accuracy >= 80 ? '#22c55e' : entry.accuracy >= 50 ? 'var(--color-accent)' : '#ef4444'} />
+                        <Cell key={`cell-${index}`} fill={entry.accuracy >= 80 ? '#10b981' : entry.accuracy >= 50 ? '#14b8a6' : '#f43f5e'} />
                       ))}
                     </Bar>
                   </BarChart>

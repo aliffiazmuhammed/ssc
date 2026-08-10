@@ -261,26 +261,30 @@ const MathPractice: React.FC = () => {
         <div className="max-w-3xl mx-auto space-y-10">
 
           {/* Header */}
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => navigate('/')}
-              className="flex items-center justify-center w-10 h-10 rounded-xl border-2 border-divider-light dark:border-divider-dark bg-surface-light dark:bg-surface-dark hover:border-accent/50 transition-all text-primary-light dark:text-primary-dark"
-            >
-              <ArrowLeft size={20} />
-            </button>
-            <div>
-              <h1 className="text-4xl font-extrabold text-primary-light dark:text-primary-dark tracking-tight flex items-center gap-3">
-                <Calculator className="text-accent" size={36} />
-                Math Practice
-              </h1>
-              <p className="mt-1 text-lg text-secondary-light dark:text-secondary-dark font-medium">
-                Sharpen your arithmetic skills
-              </p>
+          <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-blue-500 to-cyan-500 p-8 sm:p-10 shadow-lg shadow-blue-500/20 mb-10">
+            <div className="absolute -top-24 -right-24 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+            
+            <div className="relative z-10 flex items-center gap-4">
+              <button
+                onClick={() => navigate('/')}
+                className="p-2 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/20 text-white transition-all shadow-sm"
+              >
+                <ArrowLeft size={24} />
+              </button>
+              <div>
+                <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-1 flex items-center gap-3">
+                  <Calculator size={36} className="text-white/90" />
+                  Math Practice
+                </h1>
+                <p className="text-white/90 font-medium">
+                  Sharpen your arithmetic skills
+                </p>
+              </div>
             </div>
           </div>
 
           {/* Config Card */}
-          <div className="bg-surface-light dark:bg-surface-dark rounded-3xl shadow-card border border-divider-light dark:border-divider-dark p-6 sm:p-8 space-y-10">
+          <div className="bg-surface-light dark:bg-surface-dark rounded-[2rem] shadow-sm border border-divider-light dark:border-divider-dark p-6 sm:p-8 space-y-10">
 
             {/* Step 1: Practice Type */}
             <section>
@@ -294,10 +298,10 @@ const MathPractice: React.FC = () => {
                     key={pt.key}
                     onClick={() => setSelectedType(pt.key)}
                     className={clsx(
-                      'relative flex flex-col items-start p-5 rounded-2xl border-2 transition-all text-left overflow-hidden group',
+                      'relative flex flex-col items-start p-5 rounded-2xl border-2 transition-all duration-300 text-left overflow-hidden group',
                       selectedType === pt.key
-                        ? 'border-accent bg-accent text-white shadow-lg shadow-accent/20 scale-[1.02]'
-                        : 'border-divider-light dark:border-divider-dark bg-surface-light dark:bg-surface-dark text-primary-light dark:text-primary-dark hover:border-accent/50'
+                        ? 'border-blue-500 bg-blue-500/10 text-blue-600 dark:text-blue-400 shadow-sm scale-[1.02]'
+                        : 'border-divider-light dark:border-divider-dark bg-base-light dark:bg-base-dark text-primary-light dark:text-primary-dark hover:border-blue-500/40 hover:bg-surface-light dark:hover:bg-surface-dark'
                     )}
                   >
                     <div className={clsx(
@@ -349,7 +353,7 @@ const MathPractice: React.FC = () => {
                           min={0}
                           value={rangeMin}
                           onChange={e => setRangeMin(parseInt(e.target.value) || 0)}
-                          className="w-28 px-4 py-3 rounded-xl border-2 border-divider-light dark:border-divider-dark bg-surface-light dark:bg-surface-dark focus:outline-none focus:border-accent focus:ring-4 focus:ring-accent/10 transition-all text-primary-light dark:text-primary-dark font-mono text-lg text-center font-bold"
+                          className="w-28 px-4 py-3 rounded-xl border-2 border-divider-light dark:border-divider-dark bg-surface-light dark:bg-surface-dark focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all text-primary-light dark:text-primary-dark font-mono text-lg text-center font-bold"
                         />
                       </div>
                       <span className="text-2xl font-bold text-secondary-light dark:text-secondary-dark pb-3">—</span>
@@ -362,7 +366,7 @@ const MathPractice: React.FC = () => {
                           min={rangeMin}
                           value={rangeMax}
                           onChange={e => setRangeMax(parseInt(e.target.value) || 0)}
-                          className="w-28 px-4 py-3 rounded-xl border-2 border-divider-light dark:border-divider-dark bg-surface-light dark:bg-surface-dark focus:outline-none focus:border-accent focus:ring-4 focus:ring-accent/10 transition-all text-primary-light dark:text-primary-dark font-mono text-lg text-center font-bold"
+                          className="w-28 px-4 py-3 rounded-xl border-2 border-divider-light dark:border-divider-dark bg-surface-light dark:bg-surface-dark focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all text-primary-light dark:text-primary-dark font-mono text-lg text-center font-bold"
                         />
                       </div>
                       {rangeMin > rangeMax && (
@@ -382,8 +386,8 @@ const MathPractice: React.FC = () => {
                             className={clsx(
                               'px-5 py-3 rounded-xl border-2 font-bold transition-all text-sm',
                               digits === opt.value
-                                ? 'border-accent bg-accent text-white shadow-md shadow-accent/20'
-                                : 'border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark hover:border-accent/40'
+                                ? 'border-blue-500 bg-blue-500 text-white shadow-md shadow-blue-500/20'
+                                : 'border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark hover:border-blue-500/40'
                             )}
                           >
                             {opt.label}
@@ -414,7 +418,7 @@ const MathPractice: React.FC = () => {
                     max={100}
                     value={questionCount}
                     onChange={e => setQuestionCount(Math.max(1, parseInt(e.target.value) || 1))}
-                    className="w-28 px-4 py-3 rounded-xl border-2 border-divider-light dark:border-divider-dark bg-surface-light dark:bg-surface-dark focus:outline-none focus:border-accent focus:ring-4 focus:ring-accent/10 transition-all text-primary-light dark:text-primary-dark font-mono text-lg text-center font-bold"
+                    className="w-28 px-4 py-3 rounded-xl border-2 border-divider-light dark:border-divider-dark bg-surface-light dark:bg-surface-dark focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all text-primary-light dark:text-primary-dark font-mono text-lg text-center font-bold"
                   />
                   <span className="ml-3 text-sm font-medium text-secondary-light dark:text-secondary-dark">questions</span>
                 </div>
@@ -432,7 +436,7 @@ const MathPractice: React.FC = () => {
                 <button
                   onClick={handleStart}
                   disabled={!canStart}
-                  className="w-full flex items-center justify-center gap-3 py-4 px-6 rounded-2xl text-white bg-accent hover:bg-accent/90 focus:outline-none focus:ring-4 focus:ring-accent/30 transition-all font-bold text-lg disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-accent/20 hover:-translate-y-0.5 active:translate-y-0"
+                  className="w-full flex items-center justify-center gap-3 py-4 px-6 rounded-2xl text-white bg-gradient-to-r from-blue-500 to-cyan-500 hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-blue-500/30 transition-all font-extrabold text-lg disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-blue-500/20 hover:-translate-y-0.5 active:translate-y-0"
                 >
                   <Sparkles size={24} />
                   Start Practice
@@ -480,7 +484,7 @@ const MathPractice: React.FC = () => {
             {/* Progress bar */}
             <div className="relative h-2 bg-divider-light dark:bg-divider-dark rounded-full overflow-hidden">
               <motion.div
-                className="absolute inset-y-0 left-0 bg-accent rounded-full"
+                className="absolute inset-y-0 left-0 bg-blue-500 rounded-full"
                 initial={{ width: 0 }}
                 animate={{ width: `${progress}%` }}
                 transition={{ duration: 0.4, ease: 'easeOut' }}
@@ -499,7 +503,7 @@ const MathPractice: React.FC = () => {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -40 }}
               transition={{ duration: 0.3 }}
-              className="bg-surface-light dark:bg-surface-dark rounded-3xl shadow-card border border-divider-light dark:border-divider-dark p-8 sm:p-12 space-y-8"
+              className="bg-surface-light dark:bg-surface-dark rounded-[2rem] shadow-sm border border-divider-light dark:border-divider-dark p-8 sm:p-12 space-y-10"
             >
               {/* Question Display */}
               <div className="text-center">
@@ -522,9 +526,9 @@ const MathPractice: React.FC = () => {
                     'w-48 px-6 py-4 rounded-2xl border-2 text-center font-mono text-2xl font-bold transition-all focus:outline-none',
                     answered
                       ? currentRecord?.correct
-                        ? 'border-success bg-success/5 text-success'
-                        : 'border-error bg-error/5 text-error'
-                      : 'border-divider-light dark:border-divider-dark bg-base-light dark:bg-base-dark text-primary-light dark:text-primary-dark focus:border-accent focus:ring-4 focus:ring-accent/10'
+                        ? 'border-success bg-success/5 text-success shadow-sm'
+                        : 'border-error bg-error/5 text-error shadow-sm'
+                      : 'border-divider-light dark:border-divider-dark bg-base-light dark:bg-base-dark text-primary-light dark:text-primary-dark focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10'
                   )}
                   autoComplete="off"
                 />
@@ -533,7 +537,7 @@ const MathPractice: React.FC = () => {
                   <button
                     onClick={handleSubmitAnswer}
                     disabled={userInput.trim() === ''}
-                    className="flex items-center gap-2 px-8 py-3 rounded-xl bg-accent text-white font-bold hover:bg-accent/90 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-md shadow-accent/20 hover:-translate-y-0.5 active:translate-y-0"
+                    className="flex items-center gap-2 px-8 py-3 rounded-2xl bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold hover:opacity-90 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-md shadow-blue-500/20 hover:-translate-y-0.5 active:translate-y-0"
                   >
                     Check
                     <ChevronRight size={18} />
@@ -567,7 +571,7 @@ const MathPractice: React.FC = () => {
                     {/* Next Button */}
                     <button
                       onClick={handleNext}
-                      className="flex items-center gap-2 px-8 py-3 rounded-xl bg-accent text-white font-bold hover:bg-accent/90 transition-all shadow-md shadow-accent/20 hover:-translate-y-0.5 active:translate-y-0"
+                      className="flex items-center gap-2 px-8 py-3 rounded-2xl bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold hover:opacity-90 transition-all shadow-md shadow-blue-500/20 hover:-translate-y-0.5 active:translate-y-0"
                     >
                       {currentIndex + 1 >= questions.length ? 'See Results' : 'Next'}
                       <ChevronRight size={18} />
@@ -592,14 +596,13 @@ const MathPractice: React.FC = () => {
       <div className="min-h-screen bg-base-light dark:bg-base-dark py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto space-y-8">
 
-          {/* Score Card */}
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="bg-surface-light dark:bg-surface-dark rounded-3xl shadow-card border border-divider-light dark:border-divider-dark p-8 sm:p-10 text-center space-y-6"
+            className="bg-surface-light dark:bg-surface-dark rounded-[2rem] shadow-sm border border-divider-light dark:border-divider-dark p-8 sm:p-10 text-center space-y-6"
           >
-            <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-accent/10 text-accent">
+            <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-blue-500/10 text-blue-500 shadow-inner">
               <Trophy size={40} />
             </div>
 
@@ -612,10 +615,10 @@ const MathPractice: React.FC = () => {
               </p>
             </div>
 
-            {/* Stats */}
+          {/* Stats */}
             <div className="grid grid-cols-3 gap-4">
-              <div className="bg-base-light dark:bg-base-dark rounded-2xl p-4 border border-divider-light dark:border-divider-dark">
-                <p className="text-3xl font-extrabold text-accent font-mono">{accuracy}%</p>
+              <div className="bg-blue-500/5 rounded-2xl p-4 border border-blue-500/20">
+                <p className="text-3xl font-extrabold text-blue-500 font-mono">{accuracy}%</p>
                 <p className="text-xs font-bold text-secondary-light dark:text-secondary-dark uppercase mt-1">Accuracy</p>
               </div>
               <div className="bg-success/5 rounded-2xl p-4 border border-success/20">
@@ -629,10 +632,10 @@ const MathPractice: React.FC = () => {
             </div>
 
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 pt-2">
+            <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <button
                 onClick={handlePracticeAgain}
-                className="flex-1 flex items-center justify-center gap-2 py-3.5 px-6 rounded-2xl bg-accent text-white font-bold hover:bg-accent/90 transition-all shadow-md shadow-accent/20 hover:-translate-y-0.5 active:translate-y-0"
+                className="flex-1 flex items-center justify-center gap-2 py-3.5 px-6 rounded-2xl bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold hover:opacity-90 transition-all shadow-md shadow-blue-500/20 hover:-translate-y-0.5 active:translate-y-0"
               >
                 <RotateCcw size={18} />
                 Practice Again
@@ -648,9 +651,9 @@ const MathPractice: React.FC = () => {
           </motion.div>
 
           {/* Question Review List */}
-          <div className="bg-surface-light dark:bg-surface-dark rounded-3xl shadow-card border border-divider-light dark:border-divider-dark p-6 sm:p-8 space-y-4">
-            <h3 className="text-lg font-bold text-primary-light dark:text-primary-dark">Review</h3>
-            <div className="space-y-2">
+          <div className="bg-surface-light dark:bg-surface-dark rounded-[2rem] shadow-sm border border-divider-light dark:border-divider-dark p-6 sm:p-8 space-y-4 mt-8">
+            <h3 className="text-lg font-bold text-primary-light dark:text-primary-dark mb-6">Review Answers</h3>
+            <div className="space-y-3">
               {answerRecords.map((record, idx) => (
                 <div
                   key={idx}

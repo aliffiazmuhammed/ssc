@@ -133,7 +133,7 @@ const QuestionBank: React.FC = () => {
       <button
         onClick={() => setPage(p => Math.max(1, p - 1))}
         disabled={page === 1}
-        className="px-4 py-2 rounded-xl text-sm font-bold disabled:opacity-50 disabled:cursor-not-allowed bg-base-light dark:bg-base-dark border border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark hover:bg-accent hover:text-white hover:border-accent transition-colors"
+        className="px-4 py-2 rounded-xl text-sm font-bold disabled:opacity-50 disabled:cursor-not-allowed bg-base-light dark:bg-base-dark border border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark hover:bg-violet-500 hover:text-white hover:border-violet-500 transition-colors"
       >
         Previous
       </button>
@@ -143,7 +143,7 @@ const QuestionBank: React.FC = () => {
       <button
         onClick={() => setPage(p => Math.min(totalPages, p + 1))}
         disabled={page === totalPages}
-        className="px-4 py-2 rounded-xl text-sm font-bold disabled:opacity-50 disabled:cursor-not-allowed bg-base-light dark:bg-base-dark border border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark hover:bg-accent hover:text-white hover:border-accent transition-colors"
+        className="px-4 py-2 rounded-xl text-sm font-bold disabled:opacity-50 disabled:cursor-not-allowed bg-base-light dark:bg-base-dark border border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark hover:bg-violet-500 hover:text-white hover:border-violet-500 transition-colors"
       >
         Next
       </button>
@@ -155,16 +155,20 @@ const QuestionBank: React.FC = () => {
       <div className="max-w-4xl mx-auto space-y-6">
         
         {/* Header */}
-        <div className="flex items-center gap-4">
-          <button
-            onClick={() => navigate('/')}
-            className="p-2 rounded-full hover:bg-surface-light dark:hover:bg-surface-dark transition-colors text-secondary-light dark:text-secondary-dark"
-          >
-            <ArrowLeft size={24} />
-          </button>
-          <h1 className="text-3xl font-extrabold text-primary-light dark:text-primary-dark tracking-tight">
-            Question Bank
-          </h1>
+        <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-violet-500 to-purple-600 p-8 sm:p-10 shadow-lg shadow-violet-500/20 mb-8">
+          <div className="absolute -top-24 -right-24 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+          
+          <div className="relative z-10 flex items-center gap-4">
+            <button
+              onClick={() => navigate('/')}
+              className="p-2 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/20 text-white transition-all shadow-sm"
+            >
+              <ArrowLeft size={24} />
+            </button>
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+              Question Bank
+            </h1>
+          </div>
         </div>
 
         {/* Controls */}
@@ -175,7 +179,7 @@ const QuestionBank: React.FC = () => {
               <select
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
-                className="w-full bg-base-light dark:bg-base-dark border border-divider-light dark:border-divider-dark rounded-xl px-4 py-2.5 text-primary-light dark:text-primary-dark font-medium focus:ring-2 focus:ring-accent outline-none"
+                className="w-full bg-base-light dark:bg-base-dark border border-divider-light dark:border-divider-dark rounded-xl px-4 py-2.5 text-primary-light dark:text-primary-dark font-medium focus:ring-2 focus:ring-violet-500 outline-none"
               >
                 {SUBJECTS.map(s => <option key={s} value={s}>{s}</option>)}
               </select>
@@ -185,7 +189,7 @@ const QuestionBank: React.FC = () => {
               <select
                 value={topic}
                 onChange={(e) => handleTopicChange(e.target.value)}
-                className="w-full bg-base-light dark:bg-base-dark border border-divider-light dark:border-divider-dark rounded-xl px-4 py-2.5 text-primary-light dark:text-primary-dark font-medium focus:ring-2 focus:ring-accent outline-none"
+                className="w-full bg-base-light dark:bg-base-dark border border-divider-light dark:border-divider-dark rounded-xl px-4 py-2.5 text-primary-light dark:text-primary-dark font-medium focus:ring-2 focus:ring-violet-500 outline-none"
               >
                 <option value="All">All Topics</option>
                 {topics.map(t => <option key={t} value={t}>{t}</option>)}
@@ -200,7 +204,7 @@ const QuestionBank: React.FC = () => {
                 <select
                   value={limit}
                   onChange={(e) => handleLimitChange(Number(e.target.value))}
-                  className="bg-base-light dark:bg-base-dark border border-divider-light dark:border-divider-dark rounded-lg px-2 py-1 text-sm font-medium text-primary-light dark:text-primary-dark focus:ring-2 focus:ring-accent outline-none"
+                  className="bg-base-light dark:bg-base-dark border border-divider-light dark:border-divider-dark rounded-lg px-2 py-1 text-sm font-medium text-primary-light dark:text-primary-dark focus:ring-2 focus:ring-violet-500 outline-none"
                 >
                   <option value={10}>10</option>
                   <option value={20}>20</option>
@@ -213,13 +217,13 @@ const QuestionBank: React.FC = () => {
                 <div className="flex bg-base-light dark:bg-base-dark border border-divider-light dark:border-divider-dark rounded-lg overflow-hidden">
                   <button
                     onClick={() => setLayout('card')}
-                    className={clsx('p-1.5 transition-colors', layout === 'card' ? 'bg-accent text-white' : 'text-secondary-light dark:text-secondary-dark hover:bg-surface-light dark:hover:bg-surface-dark')}
+                    className={clsx('p-1.5 transition-colors', layout === 'card' ? 'bg-violet-500 text-white' : 'text-secondary-light dark:text-secondary-dark hover:bg-surface-light dark:hover:bg-surface-dark')}
                   >
                     <LayoutGrid size={18} />
                   </button>
                   <button
                     onClick={() => setLayout('compact')}
-                    className={clsx('p-1.5 transition-colors', layout === 'compact' ? 'bg-accent text-white' : 'text-secondary-light dark:text-secondary-dark hover:bg-surface-light dark:hover:bg-surface-dark')}
+                    className={clsx('p-1.5 transition-colors', layout === 'compact' ? 'bg-violet-500 text-white' : 'text-secondary-light dark:text-secondary-dark hover:bg-surface-light dark:hover:bg-surface-dark')}
                   >
                     <List size={18} />
                   </button>
@@ -229,7 +233,7 @@ const QuestionBank: React.FC = () => {
 
             <button
               onClick={() => setGlobalShowAnswer(!globalShowAnswer)}
-              className="w-full sm:w-auto px-4 py-2 bg-base-light dark:bg-base-dark border border-divider-light dark:border-divider-dark rounded-xl text-sm font-bold text-accent hover:bg-accent/10 transition-colors"
+              className="w-full sm:w-auto px-4 py-2 bg-base-light dark:bg-base-dark border border-divider-light dark:border-divider-dark rounded-xl text-sm font-bold text-violet-500 hover:bg-violet-500/10 transition-colors"
             >
               {globalShowAnswer ? 'Hide All Answers' : 'Show All Answers'}
             </button>
@@ -266,7 +270,7 @@ const QuestionBank: React.FC = () => {
                           {q.topic}
                         </span>
                         {q.examYearAndType && (
-                          <span className="text-xs font-semibold tracking-wider text-accent bg-accent/10 px-2 py-1 rounded-md border border-accent/20">
+                          <span className="text-xs font-semibold tracking-wider text-violet-500 bg-violet-500/10 px-2 py-1 rounded-md border border-violet-500/20">
                             {q.examYearAndType}
                           </span>
                         )}
@@ -276,8 +280,8 @@ const QuestionBank: React.FC = () => {
                         className={clsx(
                           'p-2 rounded-lg transition-all',
                           bookmarkedIds.has(q._id)
-                            ? 'text-accent bg-accent/10'
-                            : 'text-secondary-light dark:text-secondary-dark hover:text-accent hover:bg-accent/5'
+                            ? 'text-violet-500 bg-violet-500/10'
+                            : 'text-secondary-light dark:text-secondary-dark hover:text-violet-500 hover:bg-violet-500/5'
                         )}
                       >
                         <Bookmark size={18} fill={bookmarkedIds.has(q._id) ? 'currentColor' : 'none'} />
@@ -316,7 +320,7 @@ const QuestionBank: React.FC = () => {
                     {!globalShowAnswer && (
                       <button
                         onClick={() => toggleReveal(q._id)}
-                        className="text-sm font-bold text-accent hover:underline"
+                        className="text-sm font-bold text-violet-500 hover:underline"
                       >
                         {isRevealed ? 'Hide Answer' : 'Show Answer'}
                       </button>
@@ -342,8 +346,8 @@ const QuestionBank: React.FC = () => {
                             className={clsx(
                               'p-1.5 rounded-lg transition-all shrink-0',
                               bookmarkedIds.has(q._id)
-                                ? 'text-accent bg-accent/10'
-                                : 'text-secondary-light dark:text-secondary-dark hover:text-accent hover:bg-accent/5'
+                                ? 'text-violet-500 bg-violet-500/10'
+                                : 'text-secondary-light dark:text-secondary-dark hover:text-violet-500 hover:bg-violet-500/5'
                             )}
                           >
                             <Bookmark size={16} fill={bookmarkedIds.has(q._id) ? 'currentColor' : 'none'} />
@@ -375,7 +379,7 @@ const QuestionBank: React.FC = () => {
                           <div>
                             <button
                               onClick={() => toggleReveal(q._id)}
-                              className="text-xs font-bold text-accent hover:underline bg-accent/10 px-2 py-1 rounded"
+                              className="text-xs font-bold text-violet-500 hover:underline bg-violet-500/10 px-2 py-1 rounded"
                             >
                               {isRevealed ? 'Hide Answer' : 'Show Answer'}
                             </button>

@@ -40,7 +40,9 @@ const Register: React.FC = () => {
         <ThemeToggle />
       </div>
       <div className="flex-1 flex items-center justify-center -mt-16">
-        <div className="max-w-md w-full space-y-8 bg-surface-light dark:bg-surface-dark p-8 rounded-2xl shadow-card">
+        <div className="relative overflow-hidden w-full max-w-md p-8 sm:p-10 rounded-[2.5rem] bg-surface-light dark:bg-surface-dark shadow-xl shadow-accent/5 border border-divider-light dark:border-divider-dark">
+          <div className="absolute top-0 inset-x-0 h-2 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500"></div>
+          
           <div>
           <h2 className="mt-2 text-center text-3xl font-bold tracking-tight text-primary-light dark:text-primary-dark">
             Create an account
@@ -63,7 +65,7 @@ const Register: React.FC = () => {
               <input
                 type="text"
                 required
-                className="w-full px-4 py-3 rounded-xl border border-divider-light dark:border-divider-dark bg-transparent focus:outline-none focus:ring-2 focus:ring-accent transition-shadow text-primary-light dark:text-primary-dark"
+                className="w-full px-5 py-4 rounded-2xl border-2 border-divider-light dark:border-divider-dark bg-transparent focus:outline-none focus:border-indigo-500 transition-colors text-primary-light dark:text-primary-dark font-medium"
                 placeholder="John Doe"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -76,7 +78,7 @@ const Register: React.FC = () => {
               <input
                 type="email"
                 required
-                className="w-full px-4 py-3 rounded-xl border border-divider-light dark:border-divider-dark bg-transparent focus:outline-none focus:ring-2 focus:ring-accent transition-shadow text-primary-light dark:text-primary-dark"
+                className="w-full px-5 py-4 rounded-2xl border-2 border-divider-light dark:border-divider-dark bg-transparent focus:outline-none focus:border-indigo-500 transition-colors text-primary-light dark:text-primary-dark font-medium"
                 placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -90,7 +92,7 @@ const Register: React.FC = () => {
                 type="password"
                 required
                 minLength={6}
-                className="w-full px-4 py-3 rounded-xl border border-divider-light dark:border-divider-dark bg-transparent focus:outline-none focus:ring-2 focus:ring-accent transition-shadow text-primary-light dark:text-primary-dark"
+                className="w-full px-5 py-4 rounded-2xl border-2 border-divider-light dark:border-divider-dark bg-transparent focus:outline-none focus:border-indigo-500 transition-colors text-primary-light dark:text-primary-dark font-medium"
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -98,13 +100,13 @@ const Register: React.FC = () => {
             </div>
           </div>
 
-          <div>
+          <div className="pt-2">
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex justify-center py-3 px-4 rounded-xl text-white bg-accent hover:bg-accent/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent transition-all font-medium text-[16px] disabled:opacity-70"
+              className="w-full flex justify-center py-4 px-4 rounded-2xl text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-indigo-500/30 transition-all font-bold text-lg disabled:opacity-70 shadow-lg shadow-indigo-500/20 hover:-translate-y-0.5 active:translate-y-0"
             >
-              {loading ? <Loader2 className="animate-spin h-5 w-5" /> : 'Sign up'}
+              {loading ? <Loader2 className="animate-spin h-6 w-6" /> : 'Create account'}
             </button>
           </div>
           

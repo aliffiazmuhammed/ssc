@@ -87,33 +87,36 @@ const VocabQuiz: React.FC = () => {
     return (
       <div className="min-h-screen bg-base-light dark:bg-base-dark py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto space-y-8">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => navigate('/vocab')}
-              className="p-2 rounded-full hover:bg-surface-light dark:hover:bg-surface-dark transition-colors text-secondary-light dark:text-secondary-dark"
-            >
-              <ArrowLeft size={24} />
-            </button>
-            <h1 className="text-3xl font-extrabold text-primary-light dark:text-primary-dark">
-              Quiz: {title}
-            </h1>
+          <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-pink-500 to-fuchsia-600 p-8 sm:p-10 shadow-lg shadow-pink-500/20">
+            <div className="absolute -top-24 -right-24 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div className="relative z-10 flex items-center gap-4">
+              <button
+                onClick={() => navigate('/vocab')}
+                className="p-2 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/20 text-white transition-all shadow-sm"
+              >
+                <ArrowLeft size={24} />
+              </button>
+              <h1 className="text-3xl font-extrabold text-white tracking-tight">
+                Quiz: {title}
+              </h1>
+            </div>
           </div>
 
-          <div className="bg-surface-light dark:bg-surface-dark rounded-3xl p-8 border border-divider-light dark:border-divider-dark shadow-card space-y-8">
+          <div className="bg-surface-light dark:bg-surface-dark rounded-[2rem] p-8 border border-divider-light dark:border-divider-dark shadow-sm space-y-10">
             <div>
               <label className="block text-sm font-bold text-secondary-light dark:text-secondary-dark uppercase tracking-wider mb-4">
                 Number of Questions
               </label>
-              <div className="flex gap-4">
+              <div className="flex bg-base-light dark:bg-base-dark p-1.5 rounded-2xl overflow-x-auto scrollbar-hide shadow-inner border border-divider-light dark:border-divider-dark gap-1">
                 {[10, 20, 30].map(c => (
                   <button
                     key={c}
                     onClick={() => setCount(c)}
                     className={clsx(
-                      "flex-1 py-3 rounded-xl border-2 font-bold transition-colors",
+                      "flex-1 py-3 rounded-xl font-bold transition-all duration-300",
                       count === c 
-                        ? "border-accent bg-accent/10 text-accent" 
-                        : "border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark hover:border-accent/40"
+                        ? "bg-surface-light dark:bg-surface-dark text-pink-600 dark:text-pink-400 shadow-sm ring-1 ring-divider-light dark:ring-divider-dark" 
+                        : "text-secondary-light dark:text-secondary-dark hover:text-primary-light dark:hover:text-primary-dark hover:bg-surface-light/50 dark:hover:bg-surface-dark/50"
                     )}
                   >
                     {c}
@@ -126,7 +129,7 @@ const VocabQuiz: React.FC = () => {
               <label className="block text-sm font-bold text-secondary-light dark:text-secondary-dark uppercase tracking-wider mb-4">
                 Question Source
               </label>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {[
                   { id: 'all', label: 'All Words' },
                   { id: 'top200', label: 'Top 200 Only' },
@@ -137,10 +140,10 @@ const VocabQuiz: React.FC = () => {
                     key={s.id}
                     onClick={() => setSource(s.id as any)}
                     className={clsx(
-                      "flex-1 py-3 px-4 rounded-xl border-2 font-bold transition-colors",
+                      "py-4 px-4 rounded-2xl border font-bold transition-all duration-300 text-center",
                       source === s.id 
-                        ? "border-accent bg-accent/10 text-accent" 
-                        : "border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark hover:border-accent/40"
+                        ? "border-pink-500 bg-pink-500/10 text-pink-600 dark:text-pink-400 shadow-sm" 
+                        : "border-divider-light dark:border-divider-dark bg-base-light dark:bg-base-dark text-secondary-light dark:text-secondary-dark hover:border-pink-500/40 hover:text-primary-light dark:hover:text-primary-dark"
                     )}
                   >
                     {s.label}
@@ -155,13 +158,13 @@ const VocabQuiz: React.FC = () => {
               </div>
             )}
 
-            <button
-              onClick={handleStart}
-              disabled={loading}
-              className="w-full py-4 rounded-2xl font-bold text-lg text-white bg-accent hover:bg-accent/90 transition-colors shadow-lg shadow-accent/20 flex justify-center items-center disabled:opacity-70"
-            >
-              {loading ? <Loader2 className="animate-spin w-6 h-6" /> : 'Start Quiz'}
-            </button>
+              <button
+                onClick={handleStart}
+                disabled={loading}
+                className="w-full py-4 rounded-2xl bg-gradient-to-r from-pink-500 to-fuchsia-600 text-white font-extrabold text-lg shadow-md shadow-pink-500/20 hover:shadow-lg hover:shadow-pink-500/40 hover:-translate-y-0.5 transition-all disabled:opacity-70 disabled:hover:translate-y-0"
+              >
+                {loading ? <Loader2 className="animate-spin mx-auto" /> : 'Start Quiz'}
+              </button>
           </div>
         </div>
       </div>
@@ -193,25 +196,33 @@ const VocabQuiz: React.FC = () => {
 
           {/* Question Area */}
           <div className="flex-grow flex flex-col justify-center">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-primary-light dark:text-primary-dark text-center mb-10 leading-relaxed">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-primary-light dark:text-primary-dark text-center mb-12 leading-relaxed">
               {q.question}
             </h2>
 
-            <div className="grid grid-cols-1 gap-4 max-w-xl mx-auto w-full">
+            <div className="grid grid-cols-1 gap-4 max-w-2xl mx-auto w-full">
               {q.options.map((opt: string, i: number) => {
-                const isSelected = answers[q._id] === opt;
+                const isSelected = answers[q.wordId] === opt;
                 return (
                   <button
                     key={i}
                     onClick={() => handleAnswer(opt)}
                     className={clsx(
-                      "p-5 rounded-2xl border-2 text-left transition-all font-medium text-lg",
+                      "p-5 sm:p-6 rounded-[1.5rem] border-2 text-left transition-all duration-300 font-bold text-lg group relative overflow-hidden",
                       isSelected
-                        ? "border-accent bg-accent/5 text-accent shadow-sm"
-                        : "border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark hover:border-accent/40 bg-surface-light dark:bg-surface-dark"
+                        ? "border-pink-500 bg-pink-500/10 text-pink-600 dark:text-pink-400 shadow-md sm:scale-[1.02]"
+                        : "border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark hover:border-pink-500/40 hover:bg-surface-light dark:hover:bg-surface-dark bg-base-light dark:bg-base-dark"
                     )}
                   >
-                    {opt}
+                    <div className="flex items-center gap-4 relative z-10">
+                      <div className={clsx(
+                        "w-6 h-6 sm:w-8 sm:h-8 rounded-full border-2 flex items-center justify-center transition-colors shrink-0",
+                        isSelected ? "border-pink-500 bg-pink-500" : "border-secondary-light dark:border-secondary-dark group-hover:border-pink-400"
+                      )}>
+                        {isSelected && <div className="w-2 h-2 sm:w-3 sm:h-3 bg-white rounded-full" />}
+                      </div>
+                      <span className="leading-tight">{opt}</span>
+                    </div>
                   </button>
                 )
               })}
@@ -219,7 +230,7 @@ const VocabQuiz: React.FC = () => {
           </div>
 
           {/* Controls */}
-          <div className="mt-10 flex justify-between items-center max-w-xl mx-auto w-full">
+          <div className="mt-10 flex justify-between items-center max-w-2xl mx-auto w-full">
             <button
               onClick={() => setCurrentIndex(i => Math.max(0, i - 1))}
               disabled={currentIndex === 0}
@@ -232,7 +243,7 @@ const VocabQuiz: React.FC = () => {
               <button
                 onClick={handleSubmit}
                 disabled={answeredCount < questions.length || loading}
-                className="px-8 py-3 rounded-xl font-bold text-white bg-accent hover:bg-accent/90 disabled:opacity-50 transition-colors shadow-lg shadow-accent/20 flex items-center gap-2"
+                className="px-8 py-3 rounded-2xl font-bold text-white bg-gradient-to-r from-pink-500 to-fuchsia-600 hover:opacity-90 disabled:opacity-50 transition-all shadow-md shadow-pink-500/20 hover:shadow-lg hover:-translate-y-0.5 flex items-center gap-2"
               >
                 {loading && <Loader2 className="animate-spin w-4 h-4" />}
                 Submit Quiz
@@ -240,7 +251,7 @@ const VocabQuiz: React.FC = () => {
             ) : (
               <button
                 onClick={() => setCurrentIndex(i => Math.min(questions.length - 1, i + 1))}
-                className="px-8 py-3 rounded-xl font-bold text-white bg-primary-light dark:bg-primary-dark hover:bg-opacity-90 transition-colors shadow-md"
+                className="px-8 py-3 rounded-2xl font-bold text-white bg-primary-light dark:bg-primary-dark hover:bg-opacity-90 transition-all shadow-md hover:-translate-y-0.5"
               >
                 Next
               </button>
@@ -260,35 +271,37 @@ const VocabQuiz: React.FC = () => {
       <div className="max-w-3xl mx-auto space-y-10">
         
         <div className="text-center space-y-4">
-          <h1 className="text-3xl font-extrabold text-primary-light dark:text-primary-dark">Quiz Results</h1>
+          <h1 className="text-4xl font-extrabold text-primary-light dark:text-primary-dark">Quiz Results</h1>
           
-          <div className="w-32 h-32 mx-auto rounded-full border-4 border-accent flex items-center justify-center bg-surface-light dark:bg-surface-dark shadow-lg shadow-accent/10">
-            <span className="text-4xl font-black text-accent">{percentage}%</span>
+          <div className="relative w-36 h-36 mx-auto mt-8 mb-4">
+            <div className="absolute inset-0 bg-gradient-to-tr from-pink-500 to-fuchsia-600 rounded-full blur-xl opacity-20"></div>
+            <div className="relative w-full h-full rounded-full border-4 border-pink-500 flex items-center justify-center bg-surface-light dark:bg-surface-dark shadow-xl">
+              <span className="text-4xl font-black bg-gradient-to-r from-pink-500 to-fuchsia-600 bg-clip-text text-transparent">{percentage}%</span>
+            </div>
           </div>
           
-          <div className="flex justify-center gap-6 mt-6">
-            <div className="text-center">
-              <span className="block text-2xl font-bold text-success-DEFAULT">{results.correct}</span>
-              <span className="text-sm font-bold text-secondary-light dark:text-secondary-dark uppercase">Correct</span>
+          <div className="flex justify-center gap-8 mt-6">
+            <div className="text-center bg-surface-light dark:bg-surface-dark px-6 py-4 rounded-2xl border border-divider-light dark:border-divider-dark shadow-sm">
+              <span className="block text-3xl font-black text-success-DEFAULT mb-1">{results.correct}</span>
+              <span className="text-xs font-bold text-secondary-light dark:text-secondary-dark uppercase tracking-wider">Correct</span>
             </div>
-            <div className="w-px bg-divider-light dark:bg-divider-dark"></div>
-            <div className="text-center">
-              <span className="block text-2xl font-bold text-error-DEFAULT">{results.incorrect}</span>
-              <span className="text-sm font-bold text-secondary-light dark:text-secondary-dark uppercase">Incorrect</span>
+            <div className="text-center bg-surface-light dark:bg-surface-dark px-6 py-4 rounded-2xl border border-divider-light dark:border-divider-dark shadow-sm">
+              <span className="block text-3xl font-black text-error-DEFAULT mb-1">{results.incorrect}</span>
+              <span className="text-xs font-bold text-secondary-light dark:text-secondary-dark uppercase tracking-wider">Incorrect</span>
             </div>
           </div>
         </div>
 
-        <div className="flex justify-center gap-4">
+        <div className="flex flex-wrap justify-center gap-4 mt-10">
            <button
              onClick={reset}
-             className="px-6 py-3 rounded-xl font-bold bg-accent text-white shadow-lg shadow-accent/20 hover:bg-accent/90 transition-colors"
+             className="px-8 py-3.5 rounded-2xl font-bold bg-gradient-to-r from-pink-500 to-fuchsia-600 text-white shadow-md shadow-pink-500/20 hover:shadow-lg hover:-translate-y-0.5 transition-all"
            >
              Try Again
            </button>
            <button
              onClick={() => navigate('/vocab')}
-             className="px-6 py-3 rounded-xl font-bold border-2 border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark hover:bg-surface-light dark:hover:bg-surface-dark transition-colors"
+             className="px-8 py-3.5 rounded-2xl font-bold border-2 border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark hover:bg-surface-light dark:hover:bg-surface-dark transition-all hover:-translate-y-0.5"
            >
              Back to Vocab
            </button>

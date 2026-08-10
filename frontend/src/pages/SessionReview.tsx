@@ -88,18 +88,26 @@ const SessionReview: React.FC = () => {
   return (
     <div className="min-h-screen bg-base-light dark:bg-base-dark py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto space-y-8">
-        <div className="flex items-center gap-4 mb-8">
-          <Link
-            to="/history"
-            className="p-2 rounded-full hover:bg-surface-light dark:hover:bg-surface-dark transition-colors text-secondary-light dark:text-secondary-dark"
-          >
-            <ArrowLeft size={24} />
-          </Link>
-          <div>
-            <h1 className="text-3xl font-bold text-primary-light dark:text-primary-dark tracking-tight">Session Review</h1>
-            <p className="mt-1 text-secondary-light dark:text-secondary-dark">
-              Score: {session.results.score}% • Correct: {session.results.correctCount}/{session.config.totalQuestions}
-            </p>
+        <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-emerald-500 to-teal-600 p-8 sm:p-10 shadow-lg shadow-emerald-500/20 mb-8">
+          <div className="absolute -top-24 -right-24 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+          
+          <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+            <div className="flex items-center gap-4">
+              <Link
+                to="/history"
+                className="p-2 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/20 text-white transition-all shadow-sm flex items-center justify-center"
+              >
+                <ArrowLeft size={24} />
+              </Link>
+              <div>
+                <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-1">
+                  Session Review
+                </h1>
+                <p className="text-white/90 font-medium">
+                  Score: {session.results.score}% • Correct: {session.results.correctCount}/{session.config.totalQuestions}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -112,7 +120,7 @@ const SessionReview: React.FC = () => {
             const isUnanswered = attempt.selectedOption === null;
 
             return (
-              <div key={attempt._id} className="bg-surface-light dark:bg-surface-dark rounded-2xl shadow-card p-6 sm:p-8">
+              <div key={attempt._id} className="bg-surface-light dark:bg-surface-dark rounded-[2rem] shadow-sm border border-divider-light dark:border-divider-dark p-6 sm:p-8">
                 <div className="flex items-start justify-between gap-4 mb-4">
                   <div className="flex items-center flex-wrap gap-2">
                     <span className="bg-primary-light/5 dark:bg-primary-dark/5 text-primary-light dark:text-primary-dark px-3 py-1 rounded-lg text-sm font-bold font-mono">
@@ -122,7 +130,7 @@ const SessionReview: React.FC = () => {
                       {q.topic}
                     </span>
                     {q.examYearAndType && (
-                      <span className="text-xs font-semibold tracking-wider text-accent bg-accent/10 px-2 py-1 rounded-md border border-accent/20">
+                      <span className="text-xs font-semibold tracking-wider text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-md border border-emerald-500/20">
                         {q.examYearAndType}
                       </span>
                     )}
@@ -145,8 +153,8 @@ const SessionReview: React.FC = () => {
                     className={clsx(
                       'p-2 rounded-lg transition-all ml-auto',
                       bookmarkedIds.has(q._id)
-                        ? 'text-accent bg-accent/10'
-                        : 'text-secondary-light dark:text-secondary-dark hover:text-accent hover:bg-accent/5'
+                        ? 'text-emerald-500 bg-emerald-500/10'
+                        : 'text-secondary-light dark:text-secondary-dark hover:text-emerald-500 hover:bg-emerald-500/5'
                     )}
                     title={bookmarkedIds.has(q._id) ? 'Remove bookmark' : 'Bookmark this question'}
                   >

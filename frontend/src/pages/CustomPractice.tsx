@@ -180,25 +180,29 @@ const CustomPractice: React.FC = () => {
       <div className="max-w-3xl mx-auto space-y-10">
         
         {/* Header section */}
-        <div className="flex items-center gap-4">
-          <button
-            onClick={() => navigate('/')}
-            className="p-2 rounded-full hover:bg-surface-light dark:hover:bg-surface-dark transition-colors text-secondary-light dark:text-secondary-dark"
-          >
-            <ArrowLeft size={24} />
-          </button>
-          <div>
-            <h1 className="text-3xl font-extrabold text-primary-light dark:text-primary-dark tracking-tight">
-              Custom Practice
-            </h1>
-            <p className="mt-1 text-secondary-light dark:text-secondary-dark font-medium">
-              Configure your practice session.
-            </p>
+        <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-amber-500 to-orange-500 p-8 sm:p-10 shadow-lg shadow-amber-500/20 mb-10">
+          <div className="absolute -top-24 -right-24 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+          
+          <div className="relative z-10 flex items-center gap-4">
+            <button
+              onClick={() => navigate('/')}
+              className="p-2 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/20 text-white transition-all shadow-sm"
+            >
+              <ArrowLeft size={24} />
+            </button>
+            <div>
+              <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-1">
+                Custom Practice
+              </h1>
+              <p className="text-white/90 font-medium">
+                Configure your practice session.
+              </p>
+            </div>
           </div>
         </div>
 
         {/* Configuration Builder */}
-        <div className="bg-surface-light dark:bg-surface-dark rounded-3xl shadow-card border border-divider-light dark:border-divider-dark p-6 sm:p-8 space-y-10">
+        <div className="bg-surface-light dark:bg-surface-dark rounded-[2rem] shadow-sm border border-divider-light dark:border-divider-dark p-6 sm:p-8 space-y-10">
           
           {/* Subject */}
           <section>
@@ -212,10 +216,10 @@ const CustomPractice: React.FC = () => {
                   key={sub}
                   onClick={() => setSelectedSubject(sub)}
                   className={clsx(
-                    'p-4 rounded-xl border-2 text-left transition-all',
+                    'p-4 rounded-xl border-2 text-left transition-all duration-300 font-bold',
                     selectedSubject === sub 
-                      ? 'border-accent bg-accent/5 text-accent font-semibold' 
-                      : 'border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark hover:border-accent/40 font-medium'
+                      ? 'border-amber-500 bg-amber-500/10 text-amber-600 dark:text-amber-500 shadow-sm' 
+                      : 'border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark hover:border-amber-500/40 hover:bg-surface-light dark:hover:bg-surface-dark'
                   )}
                 >
                   {sub}
@@ -234,14 +238,14 @@ const CustomPractice: React.FC = () => {
                 </h2>
                 <button 
                   onClick={toggleAllTopics}
-                  className="text-sm font-bold text-accent hover:text-accent/80 transition-colors bg-accent/10 px-3 py-1.5 rounded-lg"
+                  className="text-sm font-bold text-amber-500 hover:text-amber-600 transition-colors bg-amber-500/10 px-3 py-1.5 rounded-lg"
                 >
                   {selectedTopics.size === topics.length ? 'Deselect All' : 'Select All'}
                 </button>
               </div>
               
               {topicsLoading ? (
-                <div className="py-8 flex justify-center"><Loader2 className="animate-spin text-accent w-8 h-8" /></div>
+                <div className="py-8 flex justify-center"><Loader2 className="animate-spin text-amber-500 w-8 h-8" /></div>
               ) : topics.length === 0 ? (
                 <div className="bg-base-light dark:bg-base-dark rounded-xl p-6 text-center border border-divider-light dark:border-divider-dark">
                   <p className="text-secondary-light dark:text-secondary-dark font-medium">No topics available for this subject.</p>
@@ -253,16 +257,16 @@ const CustomPractice: React.FC = () => {
                       key={t.topic}
                       onClick={() => toggleTopic(t.topic)}
                       className={clsx(
-                        'flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 transition-all text-sm group',
+                        'flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 transition-all duration-300 text-sm group',
                         selectedTopics.has(t.topic)
-                          ? 'border-accent bg-accent text-white shadow-md shadow-accent/20'
-                          : 'border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark hover:border-accent/40 hover:bg-base-light dark:hover:bg-base-dark'
+                          ? 'border-amber-500 bg-amber-500 text-white shadow-md shadow-amber-500/20'
+                          : 'border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark hover:border-amber-500/40 hover:bg-base-light dark:hover:bg-base-dark'
                       )}
                     >
                       {selectedTopics.has(t.topic) ? (
                         <CheckSquare size={16} />
                       ) : (
-                        <div className="w-4 h-4 rounded border-2 border-secondary-light/30 dark:border-secondary-dark/30 group-hover:border-accent/40 transition-colors" />
+                        <div className="w-4 h-4 rounded border-2 border-secondary-light/30 dark:border-secondary-dark/30 group-hover:border-amber-500/40 transition-colors" />
                       )}
                       <span className="font-semibold">{t.topic}</span>
                       <div className="flex flex-col items-start ml-1">
@@ -297,34 +301,34 @@ const CustomPractice: React.FC = () => {
               <div className="flex flex-wrap gap-3">
                 <button
                   onClick={() => setSource('all')}
-                  className={clsx(
-                    'px-5 py-3 rounded-xl border-2 transition-all font-semibold',
-                    source === 'all'
-                      ? 'border-accent bg-accent/5 text-accent'
-                      : 'border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark hover:border-accent/40'
-                  )}
+                    className={clsx(
+                      'px-5 py-3 rounded-xl border-2 transition-all font-bold',
+                      source === 'all'
+                        ? 'border-amber-500 bg-amber-500/10 text-amber-600 dark:text-amber-500 shadow-sm'
+                        : 'border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark hover:border-amber-500/40 hover:bg-surface-light dark:hover:bg-surface-dark'
+                    )}
                 >
                   All Questions
                 </button>
                 <button
                   onClick={() => setSource('unattempted')}
-                  className={clsx(
-                    'px-5 py-3 rounded-xl border-2 transition-all font-semibold',
-                    source === 'unattempted'
-                      ? 'border-accent bg-accent/5 text-accent'
-                      : 'border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark hover:border-accent/40'
-                  )}
+                    className={clsx(
+                      'px-5 py-3 rounded-xl border-2 transition-all font-bold',
+                      source === 'unattempted'
+                        ? 'border-amber-500 bg-amber-500/10 text-amber-600 dark:text-amber-500 shadow-sm'
+                        : 'border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark hover:border-amber-500/40 hover:bg-surface-light dark:hover:bg-surface-dark'
+                    )}
                 >
                   Unattempted Only
                 </button>
                 <button
                   onClick={() => setSource('bookmarked')}
-                  className={clsx(
-                    'px-5 py-3 rounded-xl border-2 transition-all font-semibold',
-                    source === 'bookmarked'
-                      ? 'border-accent bg-accent/5 text-accent'
-                      : 'border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark hover:border-accent/40'
-                  )}
+                    className={clsx(
+                      'px-5 py-3 rounded-xl border-2 transition-all font-bold',
+                      source === 'bookmarked'
+                        ? 'border-amber-500 bg-amber-500/10 text-amber-600 dark:text-amber-500 shadow-sm'
+                        : 'border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark hover:border-amber-500/40 hover:bg-surface-light dark:hover:bg-surface-dark'
+                    )}
                 >
                   Bookmarked Only
                 </button>
@@ -359,7 +363,7 @@ const CustomPractice: React.FC = () => {
                           setQuestionCount(clamped);
                           setQuestionCountRaw(String(clamped));
                         }}
-                        className="w-24 px-4 py-3 rounded-xl border-2 border-divider-light dark:border-divider-dark bg-surface-light dark:bg-surface-dark focus:outline-none focus:border-accent focus:ring-4 focus:ring-accent/10 transition-all text-primary-light dark:text-primary-dark font-mono text-lg text-center font-bold"
+                        className="w-24 px-4 py-3 rounded-xl border-2 border-divider-light dark:border-divider-dark bg-surface-light dark:bg-surface-dark focus:outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 transition-all text-primary-light dark:text-primary-dark font-mono text-lg text-center font-bold"
                       />
                       <span className="text-sm font-medium text-secondary-light dark:text-secondary-dark">
                         of {totalAvailableForSelectedTopics} max
@@ -384,7 +388,7 @@ const CustomPractice: React.FC = () => {
                           setTimeValue(newVal);
                           setTimeValueRaw(String(newVal));
                         }}
-                        className="text-xs font-bold bg-surface-light dark:bg-surface-dark border-2 border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark rounded-lg px-2 py-1 focus:outline-none focus:border-accent"
+                        className="text-xs font-bold bg-surface-light dark:bg-surface-dark border-2 border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark rounded-lg px-2 py-1 focus:outline-none focus:border-amber-500"
                       >
                         <option value="total">Total Time</option>
                         <option value="per-question">Per Question</option>
@@ -403,13 +407,13 @@ const CustomPractice: React.FC = () => {
                           setTimeValue(clamped);
                           setTimeValueRaw(String(clamped));
                         }}
-                        className="w-24 px-4 py-3 rounded-xl border-2 border-divider-light dark:border-divider-dark bg-surface-light dark:bg-surface-dark focus:outline-none focus:border-accent focus:ring-4 focus:ring-accent/10 transition-all text-primary-light dark:text-primary-dark font-mono text-lg text-center font-bold"
+                        className="w-24 px-4 py-3 rounded-xl border-2 border-divider-light dark:border-divider-dark bg-surface-light dark:bg-surface-dark focus:outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 transition-all text-primary-light dark:text-primary-dark font-mono text-lg text-center font-bold"
                       />
                       <span className="text-sm font-medium text-secondary-light dark:text-secondary-dark">
                         {timerMode === 'total' ? 'minutes total' : 'seconds each'}
                       </span>
                     </div>
-                    <div className="mt-3 text-xs font-bold text-accent bg-accent/10 inline-flex px-3 py-1.5 rounded-lg border border-accent/20">
+                    <div className="mt-3 text-xs font-bold text-amber-600 dark:text-amber-500 bg-amber-500/10 inline-flex px-3 py-1.5 rounded-lg border border-amber-500/20">
                         Total duration: {(() => {
                           const t = parseInt(timeValueRaw) || 0;
                           const c = parseInt(questionCountRaw) || 0;
@@ -435,7 +439,7 @@ const CustomPractice: React.FC = () => {
               <button
                 onClick={handleStart}
                 disabled={starting}
-                className="w-full flex items-center justify-center gap-3 py-4 px-6 rounded-2xl text-white bg-accent hover:bg-accent/90 focus:outline-none focus:ring-4 focus:ring-accent/30 transition-all font-bold text-lg disabled:opacity-70 shadow-lg shadow-accent/20 hover:-translate-y-0.5 active:translate-y-0"
+                className="w-full flex items-center justify-center gap-3 py-4 px-6 rounded-2xl text-white bg-gradient-to-r from-amber-500 to-orange-500 hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-amber-500/30 transition-all font-extrabold text-lg disabled:opacity-70 shadow-lg shadow-amber-500/20 hover:-translate-y-0.5 active:translate-y-0"
               >
                 {starting ? <Loader2 className="animate-spin h-6 w-6" /> : (
                   <>

@@ -63,16 +63,24 @@ const History: React.FC = () => {
   return (
     <div className="min-h-screen bg-base-light dark:bg-base-dark py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto space-y-8">
-        <div className="flex items-center gap-4">
-          <Link
-            to="/"
-            className="p-2 rounded-full hover:bg-surface-light dark:hover:bg-surface-dark transition-colors text-secondary-light dark:text-secondary-dark"
-          >
-            <ArrowLeft size={24} />
-          </Link>
-          <div>
-            <h1 className="text-3xl font-bold text-primary-light dark:text-primary-dark tracking-tight">Your History</h1>
-            <p className="mt-1 text-secondary-light dark:text-secondary-dark">Review your past performance</p>
+        <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-blue-600 to-indigo-600 p-8 sm:p-10 shadow-lg shadow-blue-500/20 mb-8">
+          <div className="absolute -top-24 -right-24 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+          
+          <div className="relative z-10 flex items-center gap-4">
+            <Link
+              to="/"
+              className="p-2 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/20 text-white transition-all shadow-sm flex items-center justify-center"
+            >
+              <ArrowLeft size={24} />
+            </Link>
+            <div>
+              <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-1">
+                Your History
+              </h1>
+              <p className="text-white/90 font-medium">
+                Review your past performance
+              </p>
+            </div>
           </div>
         </div>
 
@@ -87,11 +95,11 @@ const History: React.FC = () => {
             <Loader2 className="animate-spin text-accent w-10 h-10" />
           </div>
         ) : sessions.length === 0 ? (
-          <div className="bg-surface-light dark:bg-surface-dark p-8 rounded-2xl shadow-card text-center">
+          <div className="bg-surface-light dark:bg-surface-dark p-8 rounded-[2rem] shadow-sm text-center border border-divider-light dark:border-divider-dark">
             <p className="text-secondary-light dark:text-secondary-dark mb-4">You haven't attempted any quizzes yet.</p>
             <Link
               to="/"
-              className="inline-block py-2 px-6 rounded-xl bg-accent text-white font-medium hover:bg-accent/90 transition-colors"
+              className="inline-block py-3 px-8 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold shadow-md shadow-blue-500/20 hover:shadow-lg hover:-translate-y-0.5 transition-all"
             >
               Start Practice
             </Link>
@@ -105,8 +113,8 @@ const History: React.FC = () => {
                 key={session._id}
                 to={`/history/${session._id}`}
                 className={clsx(
-                  "block bg-surface-light dark:bg-surface-dark rounded-2xl shadow-card p-6 hover:shadow-lg transition-shadow border",
-                  isAbandoned ? "border-warning-DEFAULT/30 hover:border-warning-DEFAULT/50 opacity-80" : "border-transparent hover:border-accent/20"
+                  "block bg-surface-light dark:bg-surface-dark rounded-[1.5rem] shadow-sm p-6 hover:shadow-md transition-all border",
+                  isAbandoned ? "border-warning-DEFAULT/30 hover:border-warning-DEFAULT/50 opacity-80" : "border-divider-light dark:border-divider-dark hover:border-blue-500/30"
                 )}
               >
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -114,7 +122,7 @@ const History: React.FC = () => {
                     <div className="flex items-center gap-3 mb-2">
                       <span className={clsx(
                         "text-xs font-bold uppercase tracking-wider px-2 py-1 rounded-md",
-                        session.quizType === 'mock' ? "bg-primary-light/10 text-primary-light dark:bg-primary-dark/10 dark:text-primary-dark" : "bg-accent/10 text-accent"
+                        session.quizType === 'mock' ? "bg-indigo-500/10 text-indigo-500" : "bg-blue-500/10 text-blue-500"
                       )}>
                         {session.quizType}
                       </span>

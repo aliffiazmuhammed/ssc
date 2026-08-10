@@ -135,7 +135,7 @@ const QuizSession: React.FC = () => {
           
           <button
             onClick={finishQuiz}
-            className="text-sm font-medium text-accent hover:text-accent/80 transition-colors flex items-center gap-1"
+            className="text-sm font-bold text-blue-500 hover:text-blue-600 transition-colors flex items-center gap-1"
           >
             <CheckCircle size={18} />
             <span className="hidden sm:inline">Submit Quiz</span>
@@ -159,7 +159,7 @@ const QuizSession: React.FC = () => {
           <div className="max-w-2xl mx-auto w-full px-4 mt-6">
             <button
               onClick={finishQuiz}
-              className="w-full flex items-center justify-center gap-3 py-4 px-6 rounded-2xl text-white bg-success-DEFAULT hover:bg-success-DEFAULT/90 transition-all font-bold text-lg shadow-lg hover:-translate-y-0.5 active:translate-y-0"
+              className="w-full flex items-center justify-center gap-3 py-4 px-6 rounded-2xl text-white bg-gradient-to-r from-emerald-500 to-teal-500 hover:opacity-90 transition-all font-bold text-lg shadow-lg hover:-translate-y-0.5 active:translate-y-0"
             >
               <CheckCircle size={22} />
               Submit Quiz
@@ -183,7 +183,7 @@ const QuizSession: React.FC = () => {
           {state.currentIndex === state.questions.length - 1 ? (
             <button
               onClick={finishQuiz}
-              className="flex items-center space-x-2 px-8 py-3.5 rounded-xl text-white bg-success-DEFAULT hover:bg-success-DEFAULT/90 transition-all font-medium text-[16px]"
+              className="flex items-center space-x-2 px-8 py-3.5 rounded-xl text-white bg-gradient-to-r from-emerald-500 to-teal-500 hover:opacity-90 transition-all font-bold text-[16px] shadow-md shadow-emerald-500/20"
             >
               <span>Submit Quiz</span>
               <CheckCircle size={20} />
@@ -191,7 +191,7 @@ const QuizSession: React.FC = () => {
           ) : (
             <button
               onClick={handleNext}
-              className="flex items-center space-x-2 px-8 py-3.5 rounded-xl text-white bg-accent hover:bg-accent/90 transition-all font-medium text-[16px]"
+              className="flex items-center space-x-2 px-8 py-3.5 rounded-xl text-white bg-gradient-to-r from-blue-500 to-cyan-500 hover:opacity-90 transition-all font-bold text-[16px] shadow-md shadow-blue-500/20"
             >
               <span>Next</span>
               <ArrowRight size={20} />
