@@ -20,6 +20,7 @@ const VocabBrowser: React.FC = () => {
   const [words, setWords] = useState<any[]>([]);
   const [stats, setStats] = useState({ total: 0, studied: 0 });
   const [pagination, setPagination] = useState({ page: 1, pages: 1 });
+  const [bookmarkedIds, setBookmarkedIds] = useState<Set<string>>(new Set());
   
   const [tier, setTier] = useState<'all' | 'top200'>('all');
   const [search, setSearch] = useState('');
@@ -60,10 +61,18 @@ const VocabBrowser: React.FC = () => {
       if (studiedFilter !== 'all') params.set('studied', studiedFilter);
       params.set('sort', 'word:asc');
 
-      const res = await api.get(`/vocab/words?${params.toString()}`);
+      const [res, bookmarkRes] = await Promise.all([
+        api.get(`/vocab/words?${params.toString()}`),
+        api.get('/vocab/bookmark-ids').catch(() => null)
+      ]);
+      
       setWords(res.data.data.words);
       setPagination(res.data.data.pagination);
       setStats(res.data.data.stats);
+      
+      if (bookmarkRes) {
+        setBookmarkedIds(new Set(bookmarkRes.data.data.bookmarkedIds));
+      }
     } catch (err) {
       console.error('Failed to fetch words');
     } finally {
@@ -93,6 +102,24 @@ const VocabBrowser: React.FC = () => {
     } catch (err) {
       console.error('Failed to toggle study status');
       fetchWords(); // Revert on failure
+    }
+  };
+
+  const handleToggleBookmark = async (id: string) => {
+    try {
+      // Optimistic update
+      setBookmarkedIds(prev => {
+        const next = new Set(prev);
+        if (next.has(id)) next.delete(id);
+        else next.add(id);
+        return next;
+      });
+      await api.post(`/vocab/words/${id}/bookmark`);
+    } catch (err) {
+      console.error('Failed to toggle bookmark');
+      // Revert optimistic update by refetching
+      const res = await api.get('/vocab/bookmark-ids');
+      setBookmarkedIds(new Set(res.data.data.bookmarkedIds));
     }
   };
 
@@ -249,7 +276,13 @@ const VocabBrowser: React.FC = () => {
             </div>
           ) : (
             words.map(word => (
-              <WordCard key={word._id} word={word} onToggleStudy={toggleStudy} />
+              <WordCard 
+                key={word._id} 
+                word={word} 
+                onToggleStudy={toggleStudy} 
+                isBookmarked={bookmarkedIds.has(word._id)}
+                onToggleBookmark={handleToggleBookmark}
+              />
             ))
           )}
         </div>

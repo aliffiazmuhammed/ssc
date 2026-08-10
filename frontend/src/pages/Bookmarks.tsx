@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../services/api';
 import { useQuiz } from '../store/QuizContext';
-import { Loader2, ArrowLeft, Bookmark, BookmarkX, Play, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Loader2, ArrowLeft, Bookmark, BookmarkX, Play, ChevronLeft, ChevronRight, BookOpen } from 'lucide-react';
 import clsx from 'clsx';
 import renderMathInText from '../utils/renderMathInText';
+import WordCard from '../components/vocab/WordCard';
 
 interface BookmarkedQuestion {
   _id: string;
@@ -36,10 +37,37 @@ const Bookmarks: React.FC = () => {
 
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [startingQuiz, setStartingQuiz] = useState(false);
+  
+  // Vocabulary state
+  const [activeTab, setActiveTab] = useState<'questions' | 'vocabulary'>('questions');
+  const [vocabWords, setVocabWords] = useState<any[]>([]);
+  const [vocabPage, setVocabPage] = useState(1);
+  const [vocabTotalPages, setVocabTotalPages] = useState(1);
+  const [vocabTotalCount, setVocabTotalCount] = useState(0);
+  const vocabLimit = 20;
+  const [loadingVocab, setLoadingVocab] = useState(false);
 
   useEffect(() => {
-    fetchBookmarks();
-  }, [selectedSubject, page]);
+    if (activeTab === 'questions') {
+      fetchBookmarks();
+    } else {
+      fetchVocabBookmarks();
+    }
+  }, [selectedSubject, page, activeTab, vocabPage]);
+
+  const fetchVocabBookmarks = async () => {
+    setLoadingVocab(true);
+    try {
+      const res = await api.get(`/vocab/bookmarks?page=${vocabPage}&limit=${vocabLimit}`);
+      setVocabWords(res.data.data.words);
+      setVocabTotalPages(res.data.data.pagination.pages);
+      setVocabTotalCount(res.data.data.pagination.total);
+    } catch (err) {
+      setError('Failed to load vocabulary bookmarks.');
+    } finally {
+      setLoadingVocab(false);
+    }
+  };
 
   const fetchBookmarks = async () => {
     setLoading(true);
@@ -67,6 +95,19 @@ const Bookmarks: React.FC = () => {
       }
     } catch (err) {
       console.error('Failed to remove bookmark', err);
+    }
+  };
+
+  const removeVocabBookmark = async (id: string) => {
+    try {
+      await api.post(`/vocab/words/${id}/bookmark`);
+      setVocabWords(prev => prev.filter(w => w._id !== id));
+      setVocabTotalCount(prev => prev - 1);
+      if (vocabWords.length === 1 && vocabPage > 1) {
+        setVocabPage(p => p - 1);
+      }
+    } catch (err) {
+      console.error('Failed to remove vocab bookmark', err);
     }
   };
 
@@ -123,40 +164,69 @@ const Bookmarks: React.FC = () => {
             
             <button
               onClick={startBookmarkQuiz}
-              disabled={startingQuiz || totalCount === 0}
+              disabled={startingQuiz || totalCount === 0 || activeTab === 'vocabulary'}
               className="flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-white text-pink-600 font-extrabold hover:bg-white/90 disabled:opacity-50 transition-all shadow-lg hover:-translate-y-0.5 active:translate-y-0"
             >
               {startingQuiz ? <Loader2 className="animate-spin" size={20} /> : <Play size={20} />}
-              Practice Bookmarks
+              Practice Questions
             </button>
           </div>
         </div>
 
-        {/* Subject Filters */}
-        <div className="flex flex-wrap gap-2">
-          {SUBJECTS.map(subject => (
-            <button
-              key={subject}
-              onClick={() => { setSelectedSubject(subject); setPage(1); }}
-              className={clsx(
-                'px-4 py-2 rounded-full text-sm font-semibold transition-all border',
-                selectedSubject === subject
-                  ? 'bg-pink-500 text-white shadow-md shadow-pink-500/20'
-                  : 'bg-surface-light dark:bg-surface-dark border-divider-light dark:border-divider-dark text-secondary-light dark:text-secondary-dark hover:border-pink-500/40 hover:text-pink-500'
-              )}
-            >
-              {subject}
-            </button>
-          ))}
+        {/* Tabs */}
+        <div className="flex border-b border-divider-light dark:border-divider-dark">
+          <button
+            onClick={() => setActiveTab('questions')}
+            className={clsx(
+              "px-6 py-3 text-sm font-bold border-b-2 transition-colors",
+              activeTab === 'questions' 
+                ? "border-pink-500 text-pink-500" 
+                : "border-transparent text-secondary-light dark:text-secondary-dark hover:text-primary-light dark:hover:text-primary-dark"
+            )}
+          >
+            Questions
+          </button>
+          <button
+            onClick={() => setActiveTab('vocabulary')}
+            className={clsx(
+              "px-6 py-3 text-sm font-bold border-b-2 transition-colors",
+              activeTab === 'vocabulary' 
+                ? "border-pink-500 text-pink-500" 
+                : "border-transparent text-secondary-light dark:text-secondary-dark hover:text-primary-light dark:hover:text-primary-dark"
+            )}
+          >
+            Vocabulary
+          </button>
         </div>
+
+        {/* Subject Filters (Only for Questions Tab) */}
+        {activeTab === 'questions' && (
+          <div className="flex flex-wrap gap-2">
+            {SUBJECTS.map(subject => (
+              <button
+                key={subject}
+                onClick={() => { setSelectedSubject(subject); setPage(1); }}
+                className={clsx(
+                  'px-4 py-2 rounded-full text-sm font-semibold transition-all border',
+                  selectedSubject === subject
+                    ? 'bg-pink-500 text-white shadow-md shadow-pink-500/20'
+                    : 'bg-surface-light dark:bg-surface-dark border-divider-light dark:border-divider-dark text-secondary-light dark:text-secondary-dark hover:border-pink-500/40 hover:text-pink-500'
+                )}
+              >
+                {subject}
+              </button>
+            ))}
+          </div>
+        )}
 
         {error && (
           <div className="bg-error-tint text-error p-4 rounded-xl font-medium">{error}</div>
         )}
 
         {/* Questions List */}
-        {loading ? (
-          <div className="flex justify-center py-12"><Loader2 className="animate-spin text-pink-500 w-10 h-10" /></div>
+        {activeTab === 'questions' && (
+          loading ? (
+            <div className="flex justify-center py-12"><Loader2 className="animate-spin text-pink-500 w-10 h-10" /></div>
         ) : questions.length === 0 ? (
           <div className="bg-surface-light dark:bg-surface-dark rounded-2xl p-12 text-center border border-divider-light dark:border-divider-dark">
             <Bookmark className="mx-auto w-12 h-12 text-secondary-light dark:text-secondary-dark mb-4 opacity-50" />
@@ -253,6 +323,60 @@ const Bookmarks: React.FC = () => {
               </div>
             )}
           </div>
+        )}
+
+        {/* Vocabulary List */}
+        {activeTab === 'vocabulary' && (
+          loadingVocab ? (
+            <div className="flex justify-center py-12"><Loader2 className="animate-spin text-pink-500 w-10 h-10" /></div>
+          ) : vocabWords.length === 0 ? (
+            <div className="bg-surface-light dark:bg-surface-dark rounded-2xl p-12 text-center border border-divider-light dark:border-divider-dark">
+              <BookOpen className="mx-auto w-12 h-12 text-secondary-light dark:text-secondary-dark mb-4 opacity-50" />
+              <h3 className="text-xl font-bold text-primary-light dark:text-primary-dark mb-2">No vocabulary bookmarked</h3>
+              <p className="text-secondary-light dark:text-secondary-dark">
+                You haven't bookmarked any vocabulary words yet. Explore the dictionary to save words!
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {vocabWords.map((word) => (
+                <WordCard 
+                  key={word._id} 
+                  word={word} 
+                  onToggleStudy={async (id) => {
+                    // Update study status in place
+                    setVocabWords(prev => prev.map(w => w._id === id ? { ...w, isStudied: !w.isStudied } : w));
+                    await api.post(`/vocab/words/${id}/study`);
+                  }}
+                  isBookmarked={true}
+                  onToggleBookmark={removeVocabBookmark}
+                />
+              ))}
+
+              {/* Vocab Pagination */}
+              {vocabTotalPages > 1 && (
+                <div className="flex items-center justify-center gap-4 pt-6">
+                  <button
+                    disabled={vocabPage === 1}
+                    onClick={() => setVocabPage(p => p - 1)}
+                    className="p-2 rounded-xl bg-surface-light dark:bg-surface-dark border border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark disabled:opacity-50 hover:bg-base-light dark:hover:bg-base-dark transition-colors"
+                  >
+                    <ChevronLeft size={24} />
+                  </button>
+                  <span className="text-sm font-bold text-secondary-light dark:text-secondary-dark">
+                    Page {vocabPage} of {vocabTotalPages}
+                  </span>
+                  <button
+                    disabled={vocabPage === vocabTotalPages}
+                    onClick={() => setVocabPage(p => p + 1)}
+                    className="p-2 rounded-xl bg-surface-light dark:bg-surface-dark border border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark disabled:opacity-50 hover:bg-base-light dark:hover:bg-base-dark transition-colors"
+                  >
+                    <ChevronRight size={24} />
+                  </button>
+                </div>
+              )}
+            </div>
+          )
         )}
       </div>
     </div>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Loader2, CheckCircle2, XCircle } from 'lucide-react';
+import { ArrowLeft, Loader2, CheckCircle2, XCircle, Bookmark } from 'lucide-react';
 import api from '../services/api';
 import clsx from 'clsx';
 
@@ -31,6 +31,17 @@ const VocabQuiz: React.FC = () => {
   
   // Results state
   const [results, setResults] = useState<any>(null);
+
+  // Bookmark state
+  const [bookmarkedIds, setBookmarkedIds] = useState<Set<string>>(new Set());
+
+  React.useEffect(() => {
+    api.get('/vocab/bookmark-ids')
+      .then(res => {
+        setBookmarkedIds(new Set(res.data.data.bookmarkedIds));
+      })
+      .catch(() => {});
+  }, []);
 
   const title = vocabType ? CATEGORY_NAMES[vocabType] || 'Vocabulary' : 'Vocabulary';
 
@@ -86,6 +97,22 @@ const VocabQuiz: React.FC = () => {
     setCurrentIndex(0);
     setAnswers({});
     setResults(null);
+  };
+
+  const handleToggleBookmark = async (id: string) => {
+    try {
+      setBookmarkedIds(prev => {
+        const next = new Set(prev);
+        if (next.has(id)) next.delete(id);
+        else next.add(id);
+        return next;
+      });
+      await api.post(`/vocab/words/${id}/bookmark`);
+    } catch (err) {
+      console.error('Failed to toggle bookmark');
+      const res = await api.get('/vocab/bookmark-ids');
+      setBookmarkedIds(new Set(res.data.data.bookmarkedIds));
+    }
   };
 
   if (phase === 'config') {
@@ -187,9 +214,20 @@ const VocabQuiz: React.FC = () => {
           
           {/* Progress */}
           <div className="mb-8">
-             <div className="flex justify-between text-sm font-bold text-secondary-light dark:text-secondary-dark mb-2">
+             <div className="flex justify-between items-center text-sm font-bold text-secondary-light dark:text-secondary-dark mb-2">
                <span>Question {currentIndex + 1} of {questions.length}</span>
-               <span>{answeredCount} Answered</span>
+               <div className="flex items-center gap-4">
+                 <button
+                   onClick={() => handleToggleBookmark(q.wordId || q._id)}
+                   className={clsx(
+                     "transition-all",
+                     bookmarkedIds.has(q.wordId || q._id) ? "text-pink-500" : "hover:text-pink-500"
+                   )}
+                 >
+                   <Bookmark size={20} fill={bookmarkedIds.has(q.wordId || q._id) ? "currentColor" : "none"} />
+                 </button>
+                 <span>{answeredCount} Answered</span>
+               </div>
              </div>
              <div className="w-full h-2 bg-divider-light dark:bg-divider-dark rounded-full overflow-hidden">
                <div 

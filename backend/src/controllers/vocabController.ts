@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import VocabWord from '../models/VocabWord';
 import VocabProgress from '../models/VocabProgress';
 import VocabQuizSession from '../models/VocabQuizSession';
+import VocabBookmark from '../models/VocabBookmark';
 import { AuthRequest } from '../middlewares/authMiddleware';
 
 export const uploadVocab = async (req: AuthRequest, res: Response): Promise<void> => {
@@ -529,6 +530,93 @@ export const getQuizHistory = async (req: AuthRequest, res: Response): Promise<v
       }
     });
 
+  } catch (error: any) {
+    res.status(500).json({ status: 'error', message: error.message || 'Server error' });
+  }
+};
+
+export const toggleVocabBookmark = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const userId = req.user?._id;
+    const { id: wordId } = req.params;
+
+    if (!userId) {
+      res.status(401).json({ status: 'error', message: 'Unauthorized' });
+      return;
+    }
+
+    const existing = await VocabBookmark.findOne({ userId, wordId });
+
+    if (existing) {
+      await VocabBookmark.deleteOne({ _id: existing._id });
+      res.status(200).json({ status: 'success', data: { isBookmarked: false } });
+    } else {
+      await VocabBookmark.create({ userId, wordId });
+      res.status(200).json({ status: 'success', data: { isBookmarked: true } });
+    }
+  } catch (error: any) {
+    res.status(500).json({ status: 'error', message: error.message || 'Server error' });
+  }
+};
+
+export const getVocabBookmarks = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const userId = req.user?._id;
+    if (!userId) {
+      res.status(401).json({ status: 'error', message: 'Unauthorized' });
+      return;
+    }
+
+    const { page = '1', limit = '10' } = req.query;
+    const skip = (Number(page) - 1) * Number(limit);
+
+    const bookmarks = await VocabBookmark.find({ userId })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(Number(limit))
+      .populate('wordId')
+      .lean();
+
+    const totalCount = await VocabBookmark.countDocuments({ userId });
+
+    const words = bookmarks.map(b => ({
+      ...((b.wordId as any) || {}),
+      isBookmarked: true,
+      bookmarkedAt: b.createdAt
+    })).filter(w => w._id);
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        words,
+        pagination: {
+          total: totalCount,
+          page: Number(page),
+          limit: Number(limit),
+          pages: Math.ceil(totalCount / Number(limit))
+        }
+      }
+    });
+  } catch (error: any) {
+    res.status(500).json({ status: 'error', message: error.message || 'Server error' });
+  }
+};
+
+export const getVocabBookmarkIds = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const userId = req.user?._id;
+    if (!userId) {
+      res.status(401).json({ status: 'error', message: 'Unauthorized' });
+      return;
+    }
+
+    const bookmarks = await VocabBookmark.find({ userId }).select('wordId').lean();
+    const bookmarkedIds = bookmarks.map(b => b.wordId.toString());
+
+    res.status(200).json({
+      status: 'success',
+      data: { bookmarkedIds }
+    });
   } catch (error: any) {
     res.status(500).json({ status: 'error', message: error.message || 'Server error' });
   }

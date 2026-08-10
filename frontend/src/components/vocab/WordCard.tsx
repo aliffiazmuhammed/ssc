@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CheckCircle2, Circle, ChevronDown, ChevronUp } from 'lucide-react';
+import { CheckCircle2, Circle, ChevronDown, ChevronUp, Bookmark } from 'lucide-react';
 import clsx from 'clsx';
 
 interface WordProps {
@@ -14,16 +14,19 @@ interface WordProps {
     antonyms?: string[];
     isStudied: boolean;
   };
+  };
   onToggleStudy: (id: string) => void;
+  isBookmarked?: boolean;
+  onToggleBookmark?: (id: string) => void;
 }
 
-const WordCard: React.FC<WordProps> = ({ word, onToggleStudy }) => {
+const WordCard: React.FC<WordProps> = ({ word, onToggleStudy, isBookmarked = false, onToggleBookmark }) => {
   const [expanded, setExpanded] = useState(false);
 
   const hasExtra = !!(word.exampleSentence || (word.synonyms && word.synonyms.length > 0) || (word.antonyms && word.antonyms.length > 0));
 
   return (
-    <div className="bg-surface-light dark:bg-surface-dark border-2 border-divider-light dark:border-divider-dark rounded-2xl overflow-hidden shadow-sm transition-colors hover:border-accent/30">
+    <div className="relative bg-surface-light dark:bg-surface-dark border-2 border-divider-light dark:border-divider-dark rounded-2xl overflow-hidden shadow-sm transition-colors hover:border-pink-500/30">
       <div 
         className={clsx("p-4 sm:p-5 flex gap-4 cursor-pointer", hasExtra ? "" : "cursor-default")}
         onClick={() => hasExtra && setExpanded(!expanded)}
@@ -33,14 +36,14 @@ const WordCard: React.FC<WordProps> = ({ word, onToggleStudy }) => {
           className="flex-shrink-0 mt-0.5 text-secondary-light dark:text-secondary-dark hover:text-accent transition-colors focus:outline-none"
         >
           {word.isStudied ? (
-            <CheckCircle2 size={24} className="text-accent" />
+            <CheckCircle2 size={24} className="text-pink-500" />
           ) : (
             <Circle size={24} />
           )}
         </button>
         
         <div className="flex-grow">
-          <h3 className="text-lg font-bold text-primary-light dark:text-primary-dark">{word.word}</h3>
+          <h3 className="text-lg font-bold text-primary-light dark:text-primary-dark pr-8">{word.word}</h3>
           <p className="text-sm font-medium text-secondary-light dark:text-secondary-dark mt-1 leading-relaxed">
             {word.meaning}
           </p>
@@ -49,6 +52,22 @@ const WordCard: React.FC<WordProps> = ({ word, onToggleStudy }) => {
         {hasExtra && (
           <div className="flex-shrink-0 text-secondary-light dark:text-secondary-dark self-start mt-1">
             {expanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+          </div>
+        )}
+
+        {onToggleBookmark && (
+          <div className="absolute top-4 right-4 sm:top-5 sm:right-5">
+            <button
+              onClick={(e) => { e.stopPropagation(); onToggleBookmark(word._id); }}
+              className={clsx(
+                "p-1.5 rounded-lg transition-all",
+                isBookmarked 
+                  ? "text-pink-500 bg-pink-500/10" 
+                  : "text-secondary-light dark:text-secondary-dark hover:text-pink-500 hover:bg-pink-500/10"
+              )}
+            >
+              <Bookmark size={18} fill={isBookmarked ? 'currentColor' : 'none'} />
+            </button>
           </div>
         )}
       </div>
