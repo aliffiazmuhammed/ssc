@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { LogOut, UploadCloud, Users } from 'lucide-react';
 import { useAuth } from '../../store/AuthContext';
+import ThemeToggle from '../ThemeToggle';
 
 const AdminLayout: React.FC = () => {
   const { logout, user } = useAuth();
@@ -57,6 +58,8 @@ const AdminLayout: React.FC = () => {
               <span className="text-sm text-secondary-light dark:text-secondary-dark hidden sm:block">
                 {user?.email}
               </span>
+              <div className="w-px h-4 bg-divider-light dark:bg-divider-dark hidden sm:block"></div>
+              <ThemeToggle className="p-1 -mr-2 shadow-none border-none bg-transparent hover:bg-surface-light dark:hover:bg-surface-dark" />
               <button
                 onClick={handleLogout}
                 className="flex items-center space-x-2 text-secondary-light hover:text-error dark:text-secondary-dark dark:hover:text-error transition-colors p-2 rounded-md"

@@ -11,6 +11,7 @@ import SessionReview from './pages/SessionReview';
 import Analytics from './pages/Analytics';
 
 import { QuizProvider } from './store/QuizContext';
+import { ThemeProvider } from './store/ThemeContext';
 import StudentHome from './pages/StudentHome';
 import QuizSession from './pages/QuizSession';
 import MathPractice from './pages/MathPractice';
@@ -24,43 +25,45 @@ import VocabQuiz from './pages/VocabQuiz';
 
 function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          
-          {/* Admin Routes */}
-          <Route element={<AuthGate requiredRole="admin" />}>
-            <Route element={<AdminLayout />}>
-              <Route path="/admin" element={<AdminUpload />} />
-              <Route path="/admin/users" element={<AdminUsers />} />
+    <ThemeProvider>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            
+            {/* Admin Routes */}
+            <Route element={<AuthGate requiredRole="admin" />}>
+              <Route element={<AdminLayout />}>
+                <Route path="/admin" element={<AdminUpload />} />
+                <Route path="/admin/users" element={<AdminUsers />} />
+              </Route>
             </Route>
-          </Route>
 
-          {/* Student Routes */}
-          <Route element={<AuthGate requiredRole="student" />}>
-            <Route path="/math-practice" element={<MathPractice />} />
-            <Route element={<QuizProvider><Outlet /></QuizProvider>}>
-              <Route path="/" element={<StudentHome />} />
-              <Route path="/custom-practice" element={<CustomPractice />} />
-              <Route path="/quiz" element={<QuizSession />} />
-              <Route path="/history" element={<History />} />
-              <Route path="/history/:id" element={<SessionReview />} />
-              <Route path="/analytics" element={<Analytics />} />
-              <Route path="/bookmarks" element={<Bookmarks />} />
-              <Route path="/question-bank" element={<QuestionBank />} />
-              <Route path="/vocab" element={<VocabHome />} />
-              <Route path="/vocab/:vocabType" element={<VocabBrowser />} />
-              <Route path="/vocab/:vocabType/quiz" element={<VocabQuiz />} />
+            {/* Student Routes */}
+            <Route element={<AuthGate requiredRole="student" />}>
+              <Route path="/math-practice" element={<MathPractice />} />
+              <Route element={<QuizProvider><Outlet /></QuizProvider>}>
+                <Route path="/" element={<StudentHome />} />
+                <Route path="/custom-practice" element={<CustomPractice />} />
+                <Route path="/quiz" element={<QuizSession />} />
+                <Route path="/history" element={<History />} />
+                <Route path="/history/:id" element={<SessionReview />} />
+                <Route path="/analytics" element={<Analytics />} />
+                <Route path="/bookmarks" element={<Bookmarks />} />
+                <Route path="/question-bank" element={<QuestionBank />} />
+                <Route path="/vocab" element={<VocabHome />} />
+                <Route path="/vocab/:vocabType" element={<VocabBrowser />} />
+                <Route path="/vocab/:vocabType/quiz" element={<VocabQuiz />} />
+              </Route>
             </Route>
-          </Route>
 
-          {/* Fallback */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+            {/* Fallback */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

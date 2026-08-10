@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../store/AuthContext';
 import { LogOut, Target, Zap, Calculator, BookOpen, Library } from 'lucide-react';
 import DailyWordsSection from '../components/vocab/DailyWordsSection';
+import ThemeToggle from '../components/ThemeToggle';
 
 const StudentHome: React.FC = () => {
   const { user, logout } = useAuth();
@@ -49,8 +50,10 @@ const StudentHome: React.FC = () => {
               className="flex items-center space-x-2 text-sm text-secondary-light hover:text-error dark:text-secondary-dark dark:hover:text-error transition-colors font-medium"
             >
               <LogOut size={16} />
-              <span>Logout</span>
+              <span className="hidden sm:inline">Logout</span>
             </button>
+            <div className="w-px h-4 bg-divider-light dark:bg-divider-dark"></div>
+            <ThemeToggle className="p-1 -mr-2 shadow-none border-none bg-transparent hover:bg-surface-light dark:hover:bg-surface-dark" />
           </div>
         </div>
 

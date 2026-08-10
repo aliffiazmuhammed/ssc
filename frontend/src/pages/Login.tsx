@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../store/AuthContext';
 import api from '../services/api';
 import { Loader2 } from 'lucide-react';
+import ThemeToggle from '../components/ThemeToggle';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -37,9 +38,13 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-base-light dark:bg-base-dark px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 bg-surface-light dark:bg-surface-dark p-8 rounded-2xl shadow-card">
-        <div>
+    <div className="min-h-screen flex flex-col bg-base-light dark:bg-base-dark px-4 sm:px-6 lg:px-8">
+      <div className="flex justify-end p-4">
+        <ThemeToggle />
+      </div>
+      <div className="flex-1 flex items-center justify-center -mt-16">
+        <div className="max-w-md w-full space-y-8 bg-surface-light dark:bg-surface-dark p-8 rounded-2xl shadow-card">
+          <div>
           <h2 className="mt-2 text-center text-3xl font-bold tracking-tight text-primary-light dark:text-primary-dark">
             Welcome back
           </h2>
@@ -99,6 +104,7 @@ const Login: React.FC = () => {
             </Link>
           </div>
         </form>
+      </div>
       </div>
     </div>
   );
