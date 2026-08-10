@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../store/AuthContext';
-import { LogOut, Target, Zap, GraduationCap, Calculator, BookOpen } from 'lucide-react';
+import { LogOut, Target, Zap, Calculator, BookOpen, Library } from 'lucide-react';
 import DailyWordsSection from '../components/vocab/DailyWordsSection';
 
 const StudentHome: React.FC = () => {
@@ -102,19 +102,16 @@ const StudentHome: React.FC = () => {
               </span>
             </button>
 
-            {/* Mock Card */}
+            {/* Question Bank Card */}
             <button
-              disabled
-              className="relative flex flex-col items-start p-6 rounded-2xl border-2 border-transparent bg-surface-light dark:bg-surface-dark text-primary-light dark:text-primary-dark opacity-60 cursor-not-allowed text-left overflow-hidden h-40"
+              onClick={() => navigate('/question-bank')}
+              className="relative flex flex-col items-start p-6 rounded-2xl border-2 border-divider-light dark:border-divider-dark bg-surface-light dark:bg-surface-dark text-primary-light dark:text-primary-dark hover:border-accent/50 transition-all text-left overflow-hidden h-40 group"
             >
-              <GraduationCap size={28} className="mb-3 text-secondary-light dark:text-secondary-dark" />
-              <h3 className="font-bold text-lg mb-1">Mock Exam</h3>
+              <Library size={28} className="mb-3 text-accent" />
+              <h3 className="font-bold text-lg mb-1">Question Bank</h3>
               <p className="text-sm font-medium text-secondary-light dark:text-secondary-dark">
-                Full-length simulated test.
+                Browse and study questions.
               </p>
-              <span className="absolute top-4 right-4 bg-divider-light dark:bg-divider-dark text-xs px-2 py-1 rounded-md font-bold text-secondary-light dark:text-secondary-dark">
-                Coming Soon
-              </span>
             </button>
 
             {/* Rapid Card */}
