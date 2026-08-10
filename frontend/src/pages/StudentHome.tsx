@@ -14,63 +14,69 @@ const StudentHome: React.FC = () => {
       <div className="max-w-3xl mx-auto space-y-10">
         
         {/* Header section */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-          <div>
-            <h1 className="text-4xl font-extrabold text-primary-light dark:text-primary-dark tracking-tight">
-              Dashboard
-            </h1>
-            <p className="mt-2 text-lg text-secondary-light dark:text-secondary-dark font-medium">
-              Welcome back, {user?.name?.split(' ')[0]}
-            </p>
-          </div>
-          <div className="flex items-center gap-4 bg-surface-light dark:bg-surface-dark px-4 py-2.5 rounded-full shadow-sm border border-divider-light dark:border-divider-dark">
-            <Link
-              to="/history"
-              className="flex items-center gap-2 text-sm font-bold text-accent hover:text-accent/80 transition-colors"
-            >
-              History
-            </Link>
-            <div className="w-px h-4 bg-divider-light dark:bg-divider-dark"></div>
-            <Link
-              to="/analytics"
-              className="flex items-center gap-2 text-sm font-bold text-accent hover:text-accent/80 transition-colors"
-            >
-              Analytics
-            </Link>
-            <div className="w-px h-4 bg-divider-light dark:bg-divider-dark"></div>
-            <Link
-              to="/bookmarks"
-              className="flex items-center gap-2 text-sm font-bold text-accent hover:text-accent/80 transition-colors"
-            >
-              Bookmarks
-            </Link>
-            <div className="w-px h-4 bg-divider-light dark:bg-divider-dark"></div>
-            <button
-              onClick={logout}
-              className="flex items-center space-x-2 text-sm text-secondary-light hover:text-error dark:text-secondary-dark dark:hover:text-error transition-colors font-medium"
-            >
-              <LogOut size={16} />
-              <span className="hidden sm:inline">Logout</span>
-            </button>
-            <div className="w-px h-4 bg-divider-light dark:bg-divider-dark"></div>
-            <ThemeToggle className="p-1 -mr-2 shadow-none border-none bg-transparent hover:bg-surface-light dark:hover:bg-surface-dark" />
+        <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-accent to-fuchsia-600 p-8 sm:p-10 shadow-lg shadow-accent/20">
+          {/* Abstract background shapes */}
+          <div className="absolute -top-24 -right-24 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+          <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+          
+          <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div>
+              <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight mb-2">
+                Dashboard
+              </h1>
+              <p className="text-lg text-white/90 font-medium">
+                Welcome back, {user?.name?.split(' ')[0]} 👋
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <Link
+                to="/history"
+                className="px-5 py-2.5 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/20 text-white text-sm font-bold transition-all shadow-sm"
+              >
+                History
+              </Link>
+              <Link
+                to="/analytics"
+                className="px-5 py-2.5 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/20 text-white text-sm font-bold transition-all shadow-sm"
+              >
+                Analytics
+              </Link>
+              <Link
+                to="/bookmarks"
+                className="px-5 py-2.5 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/20 text-white text-sm font-bold transition-all shadow-sm"
+              >
+                Bookmarks
+              </Link>
+              <div className="w-px h-6 bg-white/30 mx-1 hidden sm:block"></div>
+              <ThemeToggle className="bg-white/20 hover:bg-white/30 border border-white/20 text-white hover:text-white" />
+              <button
+                onClick={logout}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/20 hover:bg-error/90 backdrop-blur-md border border-white/20 text-white text-sm font-bold transition-all shadow-sm"
+              >
+                <LogOut size={16} />
+                <span className="hidden sm:inline">Logout</span>
+              </button>
+            </div>
           </div>
         </div>
 
         {/* Step 1: Mode Selection Cards */}
-        <section className="space-y-4">
-          <h2 className="text-xl font-bold text-primary-light dark:text-primary-dark flex items-center gap-2">
-            Select Practice Mode
+        <section className="space-y-6 mt-8">
+          <h2 className="text-2xl font-extrabold text-primary-light dark:text-primary-dark flex items-center gap-2">
+            Practice Modes
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {/* Practice Card */}
             <button
               onClick={() => navigate('/custom-practice')}
-              className="relative flex flex-col items-start p-6 rounded-2xl border-2 border-divider-light dark:border-divider-dark bg-surface-light dark:bg-surface-dark text-primary-light dark:text-primary-dark hover:border-accent/50 transition-all text-left overflow-hidden h-40 group"
+              className="relative flex flex-col items-start p-6 rounded-3xl bg-surface-light dark:bg-surface-dark border border-divider-light dark:border-divider-dark shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-accent/50 transition-all duration-300 text-left overflow-hidden group"
             >
-              <Target size={28} className="mb-3 text-accent" />
-              <h3 className="font-bold text-lg mb-1">Custom Practice</h3>
-              <p className="text-sm font-medium text-secondary-light dark:text-secondary-dark">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-accent/5 rounded-bl-full transition-transform duration-500 group-hover:scale-125 pointer-events-none"></div>
+              <div className="bg-accent/10 p-3.5 rounded-2xl mb-5 group-hover:scale-110 group-hover:bg-accent group-hover:text-white transition-all duration-300 text-accent">
+                <Target size={28} />
+              </div>
+              <h3 className="font-extrabold text-xl mb-2 text-primary-light dark:text-primary-dark">Custom Practice</h3>
+              <p className="text-sm font-medium text-secondary-light dark:text-secondary-dark leading-relaxed">
                 Focus on specific subjects and topics.
               </p>
             </button>
@@ -78,14 +84,17 @@ const StudentHome: React.FC = () => {
             {/* Math Practice Card */}
             <button
               onClick={() => navigate('/math-practice')}
-              className="relative flex flex-col items-start p-6 rounded-2xl border-2 border-divider-light dark:border-divider-dark bg-surface-light dark:bg-surface-dark text-primary-light dark:text-primary-dark hover:border-accent/50 transition-all text-left overflow-hidden h-40 group"
+              className="relative flex flex-col items-start p-6 rounded-3xl bg-surface-light dark:bg-surface-dark border border-divider-light dark:border-divider-dark shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-blue-500/50 transition-all duration-300 text-left overflow-hidden group"
             >
-              <Calculator size={28} className="mb-3 text-accent" />
-              <h3 className="font-bold text-lg mb-1">Math Practice</h3>
-              <p className="text-sm font-medium text-secondary-light dark:text-secondary-dark">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-bl-full transition-transform duration-500 group-hover:scale-125 pointer-events-none"></div>
+              <div className="bg-blue-500/10 p-3.5 rounded-2xl mb-5 group-hover:scale-110 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300 text-blue-500">
+                <Calculator size={28} />
+              </div>
+              <h3 className="font-extrabold text-xl mb-2 text-primary-light dark:text-primary-dark">Math Practice</h3>
+              <p className="text-sm font-medium text-secondary-light dark:text-secondary-dark leading-relaxed">
                 Squares, cubes, tables &amp; arithmetic.
               </p>
-              <span className="absolute top-4 right-4 bg-accent/10 text-accent text-xs px-2 py-1 rounded-md font-bold">
+              <span className="absolute top-5 right-5 bg-gradient-to-r from-blue-500 to-cyan-500 text-white text-xs px-2.5 py-1 rounded-lg font-bold shadow-sm">
                 New
               </span>
             </button>
@@ -93,14 +102,17 @@ const StudentHome: React.FC = () => {
             {/* Vocab Card */}
             <button
               onClick={() => navigate('/vocab')}
-              className="relative flex flex-col items-start p-6 rounded-2xl border-2 border-divider-light dark:border-divider-dark bg-surface-light dark:bg-surface-dark text-primary-light dark:text-primary-dark hover:border-accent/50 transition-all text-left overflow-hidden h-40 group"
+              className="relative flex flex-col items-start p-6 rounded-3xl bg-surface-light dark:bg-surface-dark border border-divider-light dark:border-divider-dark shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-fuchsia-500/50 transition-all duration-300 text-left overflow-hidden group"
             >
-              <BookOpen size={28} className="mb-3 text-accent" />
-              <h3 className="font-bold text-lg mb-1">English Vocabulary</h3>
-              <p className="text-sm font-medium text-secondary-light dark:text-secondary-dark">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-fuchsia-500/5 rounded-bl-full transition-transform duration-500 group-hover:scale-125 pointer-events-none"></div>
+              <div className="bg-fuchsia-500/10 p-3.5 rounded-2xl mb-5 group-hover:scale-110 group-hover:bg-fuchsia-500 group-hover:text-white transition-all duration-300 text-fuchsia-500">
+                <BookOpen size={28} />
+              </div>
+              <h3 className="font-extrabold text-xl mb-2 text-primary-light dark:text-primary-dark">English Vocab</h3>
+              <p className="text-sm font-medium text-secondary-light dark:text-secondary-dark leading-relaxed">
                 Master OWS, Synonyms, Antonyms.
               </p>
-              <span className="absolute top-4 right-4 bg-accent/10 text-accent text-xs px-2 py-1 rounded-md font-bold">
+              <span className="absolute top-5 right-5 bg-gradient-to-r from-fuchsia-500 to-pink-500 text-white text-xs px-2.5 py-1 rounded-lg font-bold shadow-sm">
                 New
               </span>
             </button>
@@ -108,11 +120,14 @@ const StudentHome: React.FC = () => {
             {/* Question Bank Card */}
             <button
               onClick={() => navigate('/question-bank')}
-              className="relative flex flex-col items-start p-6 rounded-2xl border-2 border-divider-light dark:border-divider-dark bg-surface-light dark:bg-surface-dark text-primary-light dark:text-primary-dark hover:border-accent/50 transition-all text-left overflow-hidden h-40 group"
+              className="relative flex flex-col items-start p-6 rounded-3xl bg-surface-light dark:bg-surface-dark border border-divider-light dark:border-divider-dark shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-teal-500/50 transition-all duration-300 text-left overflow-hidden group"
             >
-              <Library size={28} className="mb-3 text-accent" />
-              <h3 className="font-bold text-lg mb-1">Question Bank</h3>
-              <p className="text-sm font-medium text-secondary-light dark:text-secondary-dark">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-teal-500/5 rounded-bl-full transition-transform duration-500 group-hover:scale-125 pointer-events-none"></div>
+              <div className="bg-teal-500/10 p-3.5 rounded-2xl mb-5 group-hover:scale-110 group-hover:bg-teal-500 group-hover:text-white transition-all duration-300 text-teal-600 dark:text-teal-400">
+                <Library size={28} />
+              </div>
+              <h3 className="font-extrabold text-xl mb-2 text-primary-light dark:text-primary-dark">Question Bank</h3>
+              <p className="text-sm font-medium text-secondary-light dark:text-secondary-dark leading-relaxed">
                 Browse and study questions.
               </p>
             </button>
@@ -120,14 +135,16 @@ const StudentHome: React.FC = () => {
             {/* Rapid Card */}
             <button
               disabled
-              className="relative flex flex-col items-start p-6 rounded-2xl border-2 border-transparent bg-surface-light dark:bg-surface-dark text-primary-light dark:text-primary-dark opacity-60 cursor-not-allowed text-left overflow-hidden h-40"
+              className="relative flex flex-col items-start p-6 rounded-3xl bg-surface-light dark:bg-surface-dark border border-transparent shadow-sm opacity-60 cursor-not-allowed text-left overflow-hidden"
             >
-              <Zap size={28} className="mb-3 text-warning-DEFAULT" />
-              <h3 className="font-bold text-lg mb-1">Rapid Fire</h3>
-              <p className="text-sm font-medium text-secondary-light dark:text-secondary-dark">
+              <div className="bg-warning-DEFAULT/10 p-3.5 rounded-2xl mb-5 text-warning-DEFAULT">
+                <Zap size={28} />
+              </div>
+              <h3 className="font-extrabold text-xl mb-2 text-primary-light dark:text-primary-dark">Rapid Fire</h3>
+              <p className="text-sm font-medium text-secondary-light dark:text-secondary-dark leading-relaxed">
                 Speed drills against the clock.
               </p>
-              <span className="absolute top-4 right-4 bg-divider-light dark:bg-divider-dark text-xs px-2 py-1 rounded-md font-bold text-secondary-light dark:text-secondary-dark">
+              <span className="absolute top-5 right-5 bg-divider-light dark:bg-divider-dark text-xs px-2.5 py-1 rounded-lg font-bold text-secondary-light dark:text-secondary-dark">
                 Coming Soon
               </span>
             </button>
