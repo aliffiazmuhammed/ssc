@@ -270,7 +270,7 @@ const VocabQuiz: React.FC = () => {
   }
 
   // phase === 'results'
-  const percentage = Math.round((results.score / results.total) * 100);
+  const percentage = Math.round((results.score / results.totalQuestions) * 100);
   
   return (
     <div className="min-h-screen bg-base-light dark:bg-base-dark py-12 px-4 sm:px-6 lg:px-8">
@@ -288,11 +288,11 @@ const VocabQuiz: React.FC = () => {
           
           <div className="flex justify-center gap-8 mt-6">
             <div className="text-center bg-surface-light dark:bg-surface-dark px-6 py-4 rounded-2xl border border-divider-light dark:border-divider-dark shadow-sm">
-              <span className="block text-3xl font-black text-success-DEFAULT mb-1">{results.correct}</span>
+              <span className="block text-3xl font-black text-success-DEFAULT mb-1">{results.correctCount}</span>
               <span className="text-xs font-bold text-secondary-light dark:text-secondary-dark uppercase tracking-wider">Correct</span>
             </div>
             <div className="text-center bg-surface-light dark:bg-surface-dark px-6 py-4 rounded-2xl border border-divider-light dark:border-divider-dark shadow-sm">
-              <span className="block text-3xl font-black text-error-DEFAULT mb-1">{results.incorrect}</span>
+              <span className="block text-3xl font-black text-error-DEFAULT mb-1">{results.incorrectCount}</span>
               <span className="text-xs font-bold text-secondary-light dark:text-secondary-dark uppercase tracking-wider">Incorrect</span>
             </div>
           </div>
@@ -315,16 +315,17 @@ const VocabQuiz: React.FC = () => {
 
         <div className="space-y-4 pt-8">
           <h2 className="text-xl font-bold text-primary-light dark:text-primary-dark mb-6">Review Answers</h2>
-          {results.results.map((r: any) => {
+          {results.answers?.map((r: any) => {
             const isCorrect = r.isCorrect;
+            const originalQuestion = questions.find(q => (q.wordId || q._id) === r.wordId);
             return (
-              <div key={r.questionId} className="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl border-2 border-divider-light dark:border-divider-dark shadow-sm">
+              <div key={r.wordId} className="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl border-2 border-divider-light dark:border-divider-dark shadow-sm">
                 <div className="flex gap-3 items-start mb-4">
                   <div className="mt-1">
                     {isCorrect ? <CheckCircle2 className="text-success-DEFAULT" /> : <XCircle className="text-error-DEFAULT" />}
                   </div>
                   <div>
-                    <h3 className="font-bold text-primary-light dark:text-primary-dark text-lg">{r.question}</h3>
+                    <h3 className="font-bold text-primary-light dark:text-primary-dark text-lg">{originalQuestion?.question || 'Question text not found'}</h3>
                   </div>
                 </div>
                 
@@ -332,7 +333,7 @@ const VocabQuiz: React.FC = () => {
                   <p className="text-sm font-medium">
                     <span className="text-secondary-light dark:text-secondary-dark inline-block w-24">Your Answer:</span>
                     <span className={isCorrect ? 'text-success-DEFAULT font-bold' : 'text-error-DEFAULT font-bold'}>
-                      {r.userAnswer || 'Not answered'}
+                      {r.selectedOption || 'Not answered'}
                     </span>
                   </p>
                   {!isCorrect && (
@@ -340,12 +341,6 @@ const VocabQuiz: React.FC = () => {
                       <span className="text-secondary-light dark:text-secondary-dark inline-block w-24">Correct:</span>
                       <span className="text-success-DEFAULT font-bold">{r.correctAnswer}</span>
                     </p>
-                  )}
-                  {r.word && r.meaning && (
-                    <div className="mt-4 pt-4 border-t border-divider-light dark:border-divider-dark">
-                       <p className="text-sm font-bold text-primary-light dark:text-primary-dark">{r.word}</p>
-                       <p className="text-sm text-secondary-light dark:text-secondary-dark mt-1">{r.meaning}</p>
-                    </div>
                   )}
                 </div>
               </div>
