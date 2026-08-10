@@ -410,7 +410,13 @@ const CustomPractice: React.FC = () => {
                       </span>
                     </div>
                     <div className="mt-3 text-xs font-bold text-accent bg-accent/10 inline-flex px-3 py-1.5 rounded-lg border border-accent/20">
-                        Total duration: {timerMode === 'total' ? `${timeValue}m 0s` : `${Math.floor((timeValue * questionCount) / 60)}m ${(timeValue * questionCount) % 60}s`}
+                        Total duration: {(() => {
+                          const t = parseInt(timeValueRaw) || 0;
+                          const c = parseInt(questionCountRaw) || 0;
+                          if (timerMode === 'total') return `${t}m 0s`;
+                          const totalSec = t * c;
+                          return `${Math.floor(totalSec / 60)}m ${totalSec % 60}s`;
+                        })()}
                     </div>
                  </div>
                </div>
