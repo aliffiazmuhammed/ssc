@@ -25,9 +25,11 @@ const CustomPractice: React.FC = () => {
   const [selectedTopics, setSelectedTopics] = useState<Set<string>>(new Set());
   
   const [questionCount, setQuestionCount] = useState<number>(10);
+  const [questionCountRaw, setQuestionCountRaw] = useState<string>('10');
   
   const [timerMode, setTimerMode] = useState<'total' | 'per-question'>('total');
   const [timeValue, setTimeValue] = useState<number>(15);
+  const [timeValueRaw, setTimeValueRaw] = useState<string>('15');
   
   const [loading, setLoading] = useState(true);
   const [topicsLoading, setTopicsLoading] = useState(false);
@@ -281,8 +283,14 @@ const CustomPractice: React.FC = () => {
                         type="number"
                         min={Math.min(10, totalAvailableForSelectedTopics)}
                         max={totalAvailableForSelectedTopics}
-                        value={questionCount}
-                        onChange={(e) => setQuestionCount(parseInt(e.target.value) || 0)}
+                        value={questionCountRaw}
+                        onChange={(e) => setQuestionCountRaw(e.target.value)}
+                        onBlur={() => {
+                          const val = parseInt(questionCountRaw) || 10;
+                          const clamped = Math.max(1, Math.min(val, totalAvailableForSelectedTopics));
+                          setQuestionCount(clamped);
+                          setQuestionCountRaw(String(clamped));
+                        }}
                         className="w-24 px-4 py-3 rounded-xl border-2 border-divider-light dark:border-divider-dark bg-surface-light dark:bg-surface-dark focus:outline-none focus:border-accent focus:ring-4 focus:ring-accent/10 transition-all text-primary-light dark:text-primary-dark font-mono text-lg text-center font-bold"
                       />
                       <span className="text-sm font-medium text-secondary-light dark:text-secondary-dark">
@@ -304,7 +312,9 @@ const CustomPractice: React.FC = () => {
                         value={timerMode}
                         onChange={(e) => {
                           setTimerMode(e.target.value as 'total' | 'per-question');
-                          setTimeValue(e.target.value === 'total' ? 15 : 60);
+                          const newVal = e.target.value === 'total' ? 15 : 60;
+                          setTimeValue(newVal);
+                          setTimeValueRaw(String(newVal));
                         }}
                         className="text-xs font-bold bg-surface-light dark:bg-surface-dark border-2 border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark rounded-lg px-2 py-1 focus:outline-none focus:border-accent"
                       >
@@ -317,8 +327,14 @@ const CustomPractice: React.FC = () => {
                       <input
                         type="number"
                         min={1}
-                        value={timeValue}
-                        onChange={(e) => setTimeValue(parseInt(e.target.value) || 1)}
+                        value={timeValueRaw}
+                        onChange={(e) => setTimeValueRaw(e.target.value)}
+                        onBlur={() => {
+                          const val = parseInt(timeValueRaw) || 1;
+                          const clamped = Math.max(1, val);
+                          setTimeValue(clamped);
+                          setTimeValueRaw(String(clamped));
+                        }}
                         className="w-24 px-4 py-3 rounded-xl border-2 border-divider-light dark:border-divider-dark bg-surface-light dark:bg-surface-dark focus:outline-none focus:border-accent focus:ring-4 focus:ring-accent/10 transition-all text-primary-light dark:text-primary-dark font-mono text-lg text-center font-bold"
                       />
                       <span className="text-sm font-medium text-secondary-light dark:text-secondary-dark">
