@@ -140,9 +140,9 @@ export const getWords = async (req: AuthRequest, res: Response): Promise<void> =
       studiedWordIds = progress.map(p => p.wordId);
     }
 
-    if (studied === 'true') {
+    if (studied === 'studied') {
       query._id = { $in: studiedWordIds };
-    } else if (studied === 'false') {
+    } else if (studied === 'unstudied') {
       query._id = { $nin: studiedWordIds };
     }
 

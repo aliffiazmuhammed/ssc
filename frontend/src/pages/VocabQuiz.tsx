@@ -50,15 +50,21 @@ const VocabQuiz: React.FC = () => {
   };
 
   const handleAnswer = (option: string) => {
-    setAnswers(prev => ({ ...prev, [questions[currentIndex]._id]: option }));
+    setAnswers(prev => ({ ...prev, [questions[currentIndex].wordId]: option }));
   };
 
   const handleSubmit = async () => {
     setLoading(true);
     try {
+      const formattedAnswers = questions.map(q => ({
+        wordId: q.wordId,
+        selectedOption: answers[q.wordId] || '',
+        correctAnswer: q.correctAnswer
+      }));
+
       const res = await api.post('/vocab/quiz/submit', {
         vocabType,
-        answers
+        answers: formattedAnswers
       });
       setResults(res.data.data);
       setPhase('results');

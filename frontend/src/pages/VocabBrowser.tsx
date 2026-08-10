@@ -27,6 +27,7 @@ const VocabBrowser: React.FC = () => {
   const [letter, setLetter] = useState<string | null>(null);
   const [studiedFilter, setStudiedFilter] = useState<'all' | 'studied' | 'unstudied'>('all');
   const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
   
   const [loading, setLoading] = useState(true);
   const searchTimeout = useRef<number | null>(null);
@@ -43,7 +44,7 @@ const VocabBrowser: React.FC = () => {
   // Reset page when filters change
   useEffect(() => {
     setPage(1);
-  }, [tier, letter, studiedFilter]);
+  }, [tier, letter, studiedFilter, limit]);
 
   const fetchWords = useCallback(async () => {
     if (!vocabType) return;
@@ -52,7 +53,7 @@ const VocabBrowser: React.FC = () => {
       const params = new URLSearchParams();
       params.set('vocabType', vocabType);
       params.set('page', String(page));
-      params.set('limit', '50');
+      params.set('limit', String(limit));
       if (tier === 'top200') params.set('tier', 'top200');
       if (debouncedSearch) params.set('search', debouncedSearch);
       if (letter) params.set('letter', letter);
@@ -68,7 +69,7 @@ const VocabBrowser: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [vocabType, page, tier, debouncedSearch, letter, studiedFilter]);
+  }, [vocabType, page, tier, debouncedSearch, letter, studiedFilter, limit]);
 
   useEffect(() => {
     fetchWords();
@@ -165,21 +166,37 @@ const VocabBrowser: React.FC = () => {
 
           <AlphabetStrip activeLetter={letter} onSelect={setLetter} />
           
-          <div className="flex gap-2 pb-2 overflow-x-auto scrollbar-hide">
-            {(['all', 'studied', 'unstudied'] as const).map(filter => (
-              <button
-                key={filter}
-                onClick={() => setStudiedFilter(filter)}
-                className={clsx(
-                  "px-4 py-2 rounded-xl text-sm font-bold transition-colors capitalize whitespace-nowrap",
-                  studiedFilter === filter
-                    ? "bg-primary-light dark:bg-primary-dark text-surface-light dark:text-surface-dark"
-                    : "bg-surface-light dark:bg-surface-dark border border-divider-light dark:border-divider-dark text-secondary-light dark:text-secondary-dark hover:border-accent/40"
-                )}
+          <div className="flex flex-wrap items-center justify-between gap-4 pb-2">
+            <div className="flex gap-2 overflow-x-auto scrollbar-hide">
+              {(['all', 'studied', 'unstudied'] as const).map(filter => (
+                <button
+                  key={filter}
+                  onClick={() => setStudiedFilter(filter)}
+                  className={clsx(
+                    "px-4 py-2 rounded-xl text-sm font-bold transition-colors capitalize whitespace-nowrap",
+                    studiedFilter === filter
+                      ? "bg-primary-light dark:bg-primary-dark text-surface-light dark:text-surface-dark"
+                      : "bg-surface-light dark:bg-surface-dark border border-divider-light dark:border-divider-dark text-secondary-light dark:text-secondary-dark hover:border-accent/40"
+                  )}
+                >
+                  {filter}
+                </button>
+              ))}
+            </div>
+
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-secondary-light dark:text-secondary-dark">Per page:</span>
+              <select
+                value={limit}
+                onChange={(e) => setLimit(Number(e.target.value))}
+                className="bg-surface-light dark:bg-surface-dark border border-divider-light dark:border-divider-dark rounded-xl px-3 py-1.5 text-sm font-bold text-primary-light dark:text-primary-dark focus:outline-none focus:border-accent"
               >
-                {filter}
-              </button>
-            ))}
+                <option value={10}>10</option>
+                <option value={20}>20</option>
+                <option value={30}>30</option>
+                <option value={50}>50</option>
+              </select>
+            </div>
           </div>
         </div>
 
