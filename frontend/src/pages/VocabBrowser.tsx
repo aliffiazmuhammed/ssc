@@ -160,7 +160,7 @@ const VocabBrowser: React.FC = () => {
               placeholder="Search words or meanings..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-12 pr-10 py-3 rounded-xl border-2 border-divider-light dark:border-divider-dark bg-surface-light dark:bg-surface-dark focus:outline-none focus:border-accent text-primary-light dark:text-primary-dark font-medium transition-colors"
+              className="w-full pl-12 pr-10 py-3 rounded-xl border-2 border-divider-light dark:border-divider-dark bg-surface-light dark:bg-surface-dark focus:outline-none focus:border-pink-500 text-primary-light dark:text-primary-dark font-medium transition-colors"
             />
             {search && (
               <button 
@@ -184,7 +184,7 @@ const VocabBrowser: React.FC = () => {
                     "px-4 py-2 rounded-xl text-sm font-bold transition-colors capitalize whitespace-nowrap",
                     studiedFilter === filter
                       ? "bg-primary-light dark:bg-primary-dark text-surface-light dark:text-surface-dark"
-                      : "bg-surface-light dark:bg-surface-dark border border-divider-light dark:border-divider-dark text-secondary-light dark:text-secondary-dark hover:border-accent/40"
+                      : "bg-surface-light dark:bg-surface-dark border border-divider-light dark:border-divider-dark text-secondary-light dark:text-secondary-dark hover:border-pink-500/40"
                   )}
                 >
                   {filter}
@@ -197,7 +197,7 @@ const VocabBrowser: React.FC = () => {
               <select
                 value={limit}
                 onChange={(e) => setLimit(Number(e.target.value))}
-                className="bg-surface-light dark:bg-surface-dark border border-divider-light dark:border-divider-dark rounded-xl px-3 py-1.5 text-sm font-bold text-primary-light dark:text-primary-dark focus:outline-none focus:border-accent"
+                className="bg-surface-light dark:bg-surface-dark border border-divider-light dark:border-divider-dark rounded-xl px-3 py-1.5 text-sm font-bold text-primary-light dark:text-primary-dark focus:outline-none focus:border-pink-500"
               >
                 <option value={10}>10</option>
                 <option value={20}>20</option>
@@ -208,18 +208,41 @@ const VocabBrowser: React.FC = () => {
           </div>
         </div>
 
+        {/* Top Pagination */}
+        {!loading && pagination.pages > 1 && (
+          <div className="flex items-center justify-between pb-4 border-b border-divider-light dark:border-divider-dark">
+            <button
+              onClick={() => setPage(p => Math.max(1, p - 1))}
+              disabled={page === 1}
+              className="flex items-center gap-1 px-4 py-2 rounded-xl font-bold text-sm bg-surface-light dark:bg-surface-dark border border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark disabled:opacity-50 transition-colors hover:border-pink-500/40"
+            >
+              <ChevronLeft size={16} /> Prev
+            </button>
+            <span className="text-sm font-bold text-secondary-light dark:text-secondary-dark">
+              Page {page} of {pagination.pages}
+            </span>
+            <button
+              onClick={() => setPage(p => Math.min(pagination.pages, p + 1))}
+              disabled={page === pagination.pages}
+              className="flex items-center gap-1 px-4 py-2 rounded-xl font-bold text-sm bg-surface-light dark:bg-surface-dark border border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark disabled:opacity-50 transition-colors hover:border-pink-500/40"
+            >
+              Next <ChevronRight size={16} />
+            </button>
+          </div>
+        )}
+
         {/* Word List */}
         <div className="space-y-3 min-h-[400px]">
           {loading ? (
              <div className="flex justify-center items-center py-20">
-               <Loader2 className="animate-spin text-accent w-10 h-10" />
+               <Loader2 className="animate-spin text-pink-500 w-10 h-10" />
              </div>
           ) : words.length === 0 ? (
             <div className="bg-surface-light dark:bg-surface-dark border border-divider-light dark:border-divider-dark rounded-2xl p-10 text-center">
                <p className="text-secondary-light dark:text-secondary-dark font-medium text-lg">No words found matching your criteria.</p>
                <button 
                  onClick={() => { setSearch(''); setLetter(null); setStudiedFilter('all'); setTier('all'); }}
-                 className="mt-4 text-accent font-bold hover:underline"
+                 className="mt-4 text-pink-500 font-bold hover:underline"
                >
                  Clear Filters
                </button>
@@ -237,7 +260,7 @@ const VocabBrowser: React.FC = () => {
             <button
               onClick={() => setPage(p => Math.max(1, p - 1))}
               disabled={page === 1}
-              className="flex items-center gap-1 px-4 py-2 rounded-xl font-bold text-sm bg-surface-light dark:bg-surface-dark border border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark disabled:opacity-50 transition-colors hover:border-accent/40"
+              className="flex items-center gap-1 px-4 py-2 rounded-xl font-bold text-sm bg-surface-light dark:bg-surface-dark border border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark disabled:opacity-50 transition-colors hover:border-pink-500/40"
             >
               <ChevronLeft size={16} /> Prev
             </button>
@@ -247,7 +270,7 @@ const VocabBrowser: React.FC = () => {
             <button
               onClick={() => setPage(p => Math.min(pagination.pages, p + 1))}
               disabled={page === pagination.pages}
-              className="flex items-center gap-1 px-4 py-2 rounded-xl font-bold text-sm bg-surface-light dark:bg-surface-dark border border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark disabled:opacity-50 transition-colors hover:border-accent/40"
+              className="flex items-center gap-1 px-4 py-2 rounded-xl font-bold text-sm bg-surface-light dark:bg-surface-dark border border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark disabled:opacity-50 transition-colors hover:border-pink-500/40"
             >
               Next <ChevronRight size={16} />
             </button>

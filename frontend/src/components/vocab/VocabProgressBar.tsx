@@ -17,7 +17,7 @@ const VocabProgressBar: React.FC<VocabProgressBarProps> = ({ studied, total }) =
       </div>
       <div className="w-full h-2.5 bg-divider-light dark:bg-divider-dark rounded-full overflow-hidden">
         <div 
-          className="h-full bg-accent rounded-full transition-all duration-500 ease-out" 
+          className="h-full bg-gradient-to-r from-pink-500 to-fuchsia-600 transition-all duration-500" 
           style={{ width: `${percentage}%` }} 
         />
       </div>

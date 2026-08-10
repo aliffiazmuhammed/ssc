@@ -16,8 +16,8 @@ const AlphabetStrip: React.FC<AlphabetStripProps> = ({ activeLetter, onSelect })
         className={clsx(
           'flex-shrink-0 px-4 py-2 rounded-xl font-bold text-sm transition-colors border-2',
           activeLetter === null
-            ? 'border-accent bg-accent text-white shadow-md shadow-accent/20'
-            : 'border-divider-light dark:border-divider-dark text-secondary-light dark:text-secondary-dark hover:border-accent/40 hover:text-primary-light dark:hover:text-primary-dark'
+            ? 'border-pink-500 bg-pink-500 text-white shadow-md shadow-pink-500/20'
+            : 'border-divider-light dark:border-divider-dark text-secondary-light dark:text-secondary-dark hover:border-pink-500/40 hover:text-primary-light dark:hover:text-primary-dark'
         )}
       >
         All
@@ -29,8 +29,8 @@ const AlphabetStrip: React.FC<AlphabetStripProps> = ({ activeLetter, onSelect })
           className={clsx(
             'flex-shrink-0 w-10 h-10 rounded-xl font-bold text-sm flex items-center justify-center transition-colors border-2',
             activeLetter === letter
-              ? 'border-accent bg-accent text-white shadow-md shadow-accent/20'
-              : 'border-divider-light dark:border-divider-dark text-secondary-light dark:text-secondary-dark hover:border-accent/40 hover:text-primary-light dark:hover:text-primary-dark'
+              ? 'border-pink-500 bg-pink-500 text-white shadow-md shadow-pink-500/20'
+              : 'border-divider-light dark:border-divider-dark text-secondary-light dark:text-secondary-dark hover:border-pink-500/40 hover:text-primary-light dark:hover:text-primary-dark'
           )}
         >
           {letter}
