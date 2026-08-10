@@ -37,6 +37,13 @@ const StudentHome: React.FC = () => {
               Analytics
             </Link>
             <div className="w-px h-4 bg-divider-light dark:bg-divider-dark"></div>
+            <Link
+              to="/bookmarks"
+              className="flex items-center gap-2 text-sm font-bold text-accent hover:text-accent/80 transition-colors"
+            >
+              Bookmarks
+            </Link>
+            <div className="w-px h-4 bg-divider-light dark:bg-divider-dark"></div>
             <button
               onClick={logout}
               className="flex items-center space-x-2 text-sm text-secondary-light hover:text-error dark:text-secondary-dark dark:hover:text-error transition-colors font-medium"

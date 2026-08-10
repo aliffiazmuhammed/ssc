@@ -15,6 +15,7 @@ import StudentHome from './pages/StudentHome';
 import QuizSession from './pages/QuizSession';
 import MathPractice from './pages/MathPractice';
 import CustomPractice from './pages/CustomPractice';
+import Bookmarks from './pages/Bookmarks';
 
 import VocabHome from './pages/VocabHome';
 import VocabBrowser from './pages/VocabBrowser';
@@ -46,6 +47,7 @@ function App() {
               <Route path="/history" element={<History />} />
               <Route path="/history/:id" element={<SessionReview />} />
               <Route path="/analytics" element={<Analytics />} />
+              <Route path="/bookmarks" element={<Bookmarks />} />
               <Route path="/vocab" element={<VocabHome />} />
               <Route path="/vocab/:vocabType" element={<VocabBrowser />} />
               <Route path="/vocab/:vocabType/quiz" element={<VocabQuiz />} />

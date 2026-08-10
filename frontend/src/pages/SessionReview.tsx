@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import api from '../services/api';
-import { Loader2, ArrowLeft, Check, X } from 'lucide-react';
+import { Loader2, ArrowLeft, Check, X, Bookmark } from 'lucide-react';
 import clsx from 'clsx';
 import type { Question } from '../store/QuizContext';
 import renderMathInText from '../utils/renderMathInText';
@@ -25,6 +25,7 @@ const SessionReview: React.FC = () => {
   const [data, setData] = useState<SessionData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [bookmarkedIds, setBookmarkedIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -39,6 +40,31 @@ const SessionReview: React.FC = () => {
     };
     if (id) fetchSession();
   }, [id]);
+
+  useEffect(() => {
+    if (data?.session?.config?.totalQuestions) {
+      const ids = data.attempts.map(a => a.questionId?._id).filter(Boolean).join(',');
+      if (ids) {
+        api.get(`/questions/bookmark-ids?questionIds=${ids}`)
+          .then(res => setBookmarkedIds(new Set(res.data.data.bookmarkedIds)))
+          .catch(() => {});
+      }
+    }
+  }, [data]);
+
+  const handleToggleBookmark = async (questionId: string) => {
+    try {
+      const res = await api.post(`/questions/${questionId}/bookmark`);
+      setBookmarkedIds(prev => {
+        const next = new Set(prev);
+        if (res.data.data.isBookmarked) next.add(questionId);
+        else next.delete(questionId);
+        return next;
+      });
+    } catch (err) {
+      console.error('Failed to toggle bookmark', err);
+    }
+  };
 
   if (loading) {
     return (
@@ -114,6 +140,18 @@ const SessionReview: React.FC = () => {
                       <X size={16} /> Incorrect
                     </div>
                   )}
+                  <button
+                    onClick={(e) => { e.stopPropagation(); handleToggleBookmark(q._id); }}
+                    className={clsx(
+                      'p-2 rounded-lg transition-all ml-auto',
+                      bookmarkedIds.has(q._id)
+                        ? 'text-accent bg-accent/10'
+                        : 'text-secondary-light dark:text-secondary-dark hover:text-accent hover:bg-accent/5'
+                    )}
+                    title={bookmarkedIds.has(q._id) ? 'Remove bookmark' : 'Bookmark this question'}
+                  >
+                    <Bookmark size={18} fill={bookmarkedIds.has(q._id) ? 'currentColor' : 'none'} />
+                  </button>
                 </div>
 
                 <div 

@@ -5,6 +5,7 @@ import QuestionAttempt from '../models/QuestionAttempt';
 import Question from '../models/Question';
 import User from '../models/User';
 import { SUBJECTS, Subject, QUIZ_TYPES, QuizType } from '../config/constants';
+import Bookmark from '../models/Bookmark';
 
 /**
  * POST /api/sessions/start
@@ -12,7 +13,7 @@ import { SUBJECTS, Subject, QUIZ_TYPES, QuizType } from '../config/constants';
  */
 export const startSession = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const { subject, topics, count, quizType = 'practice', timeLimit, timerMode } = req.body;
+    const { subject, topics, count, quizType = 'practice', timeLimit, timerMode, source = 'all' } = req.body;
     const userId = req.user?._id;
 
     if (!userId) {
@@ -21,9 +22,11 @@ export const startSession = async (req: AuthRequest, res: Response): Promise<voi
     }
 
     // Basic validation
-    if (!subject || !SUBJECTS.includes(subject as Subject)) {
-      res.status(400).json({ status: 'error', message: `Invalid subject.` });
-      return;
+    if (source !== 'bookmarked' || subject) {
+      if (!subject || !SUBJECTS.includes(subject as Subject)) {
+        res.status(400).json({ status: 'error', message: `Invalid subject.` });
+        return;
+      }
     }
     if (!QUIZ_TYPES.includes(quizType as QuizType)) {
       res.status(400).json({ status: 'error', message: `Invalid quizType.` });
@@ -32,74 +35,111 @@ export const startSession = async (req: AuthRequest, res: Response): Promise<voi
 
     let activeTopics = topics;
     let requestedCount = parseInt(count, 10);
+    let allQuestions: any[] = [];
 
-    // --- Generation Logic (Similar to old generateQuiz) ---
-    const availabilityAgg = await Question.aggregate([
-      { $match: { subject: subject as string, topic: { $in: topics } } },
-      { $group: { _id: '$topic', count: { $sum: 1 } } },
-    ]);
-
-    const availableMap: Record<string, number> = {};
-    for (const item of availabilityAgg) {
-      availableMap[item._id] = item.count;
-    }
-
-    const totalAvailable = Object.values(availableMap).reduce((s, c) => s + c, 0);
-
-    if (totalAvailable === 0) {
-      res.status(404).json({ status: 'error', message: 'No questions found for the selected criteria' });
-      return;
-    }
-
-    const effectiveCount = Math.min(requestedCount, totalAvailable);
-    activeTopics = topics.filter((t: string) => (availableMap[t] || 0) > 0);
-
-    const perTopic = Math.floor(effectiveCount / activeTopics.length);
-    let remainder = effectiveCount % activeTopics.length;
-
-    const quotas: Record<string, number> = {};
-    for (const t of activeTopics) {
-      quotas[t] = perTopic + (remainder > 0 ? 1 : 0);
-      if (remainder > 0) remainder--;
-    }
-
-    let deficit = 0;
-    for (const t of activeTopics) {
-      const available = availableMap[t] || 0;
-      if (quotas[t] > available) {
-        deficit += quotas[t] - available;
-        quotas[t] = available;
+    if (source === 'bookmarked') {
+      const bookmarks = await Bookmark.find({ userId }).select('questionId').lean();
+      const bookmarkedIds = bookmarks.map(b => b.questionId);
+      
+      const filter: any = { _id: { $in: bookmarkedIds } };
+      if (subject) filter.subject = subject;
+      if (topics && topics.length > 0) filter.topic = { $in: topics };
+      
+      allQuestions = await Question.find(filter).lean();
+      
+      for (let i = allQuestions.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [allQuestions[i], allQuestions[j]] = [allQuestions[j], allQuestions[i]];
       }
-    }
+      
+      allQuestions = allQuestions.slice(0, requestedCount);
+    } else {
+      // --- Generation Logic (Similar to old generateQuiz) ---
+      let attemptedIds: any[] = [];
+      if (source === 'unattempted') {
+        attemptedIds = await QuestionAttempt.find({
+          userId,
+          subject,
+          topic: { $in: topics },
+        }).distinct('questionId');
+      }
 
-    if (deficit > 0) {
+      const matchFilter: any = { subject: subject as string, topic: { $in: topics } };
+      if (source === 'unattempted' && attemptedIds.length > 0) {
+        matchFilter._id = { $nin: attemptedIds };
+      }
+
+      const availabilityAgg = await Question.aggregate([
+        { $match: matchFilter },
+        { $group: { _id: '$topic', count: { $sum: 1 } } },
+      ]);
+
+      const availableMap: Record<string, number> = {};
+      for (const item of availabilityAgg) {
+        availableMap[item._id] = item.count;
+      }
+
+      const totalAvailable = Object.values(availableMap).reduce((s, c) => s + c, 0);
+
+      if (totalAvailable === 0) {
+        res.status(404).json({ status: 'error', message: 'No questions found for the selected criteria' });
+        return;
+      }
+
+      const effectiveCount = Math.min(requestedCount, totalAvailable);
+      activeTopics = topics.filter((t: string) => (availableMap[t] || 0) > 0);
+
+      const perTopic = Math.floor(effectiveCount / activeTopics.length);
+      let remainder = effectiveCount % activeTopics.length;
+
+      const quotas: Record<string, number> = {};
       for (const t of activeTopics) {
-        if (deficit <= 0) break;
+        quotas[t] = perTopic + (remainder > 0 ? 1 : 0);
+        if (remainder > 0) remainder--;
+      }
+
+      let deficit = 0;
+      for (const t of activeTopics) {
         const available = availableMap[t] || 0;
-        const spare = available - quotas[t];
-        if (spare > 0) {
-          const add = Math.min(spare, deficit);
-          quotas[t] += add;
-          deficit -= add;
+        if (quotas[t] > available) {
+          deficit += quotas[t] - available;
+          quotas[t] = available;
         }
       }
-    }
 
-    const allQuestions: any[] = [];
-    for (const t of activeTopics) {
-      const quota = quotas[t];
-      if (quota <= 0) continue;
+      if (deficit > 0) {
+        for (const t of activeTopics) {
+          if (deficit <= 0) break;
+          const available = availableMap[t] || 0;
+          const spare = available - quotas[t];
+          if (spare > 0) {
+            const add = Math.min(spare, deficit);
+            quotas[t] += add;
+            deficit -= add;
+          }
+        }
+      }
 
-      const topicQuestions = await Question.aggregate([
-        { $match: { subject: subject as string, topic: t } },
-        { $sample: { size: quota } },
-      ]);
-      allQuestions.push(...topicQuestions);
-    }
+      for (const t of activeTopics) {
+        const quota = quotas[t];
+        if (quota <= 0) continue;
 
-    for (let i = allQuestions.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [allQuestions[i], allQuestions[j]] = [allQuestions[j], allQuestions[i]];
+        const topicMatch: any = { subject: subject as string, topic: t };
+        if (source === 'unattempted' && attemptedIds.length > 0) {
+          topicMatch._id = { $nin: attemptedIds };
+        }
+
+        const topicQuestions = await Question.aggregate([
+          { $match: topicMatch },
+          { $sample: { size: quota } },
+        ]);
+        allQuestions.push(...topicQuestions);
+      }
+
+      for (let i = allQuestions.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [allQuestions[i], allQuestions[j]] = [allQuestions[j], allQuestions[i]];
+      }
     }
     // -----------------------------------------------------
 

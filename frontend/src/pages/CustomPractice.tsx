@@ -31,6 +31,9 @@ const CustomPractice: React.FC = () => {
   const [timeValue, setTimeValue] = useState<number>(15);
   const [timeValueRaw, setTimeValueRaw] = useState<string>('15');
   
+  const [attemptedStats, setAttemptedStats] = useState<Record<string, { total: number, attempted: number }>>({}); 
+  const [source, setSource] = useState<'all' | 'unattempted' | 'bookmarked'>('all');
+  
   const [loading, setLoading] = useState(true);
   const [topicsLoading, setTopicsLoading] = useState(false);
   const [starting, setStarting] = useState(false);
@@ -56,8 +59,20 @@ const CustomPractice: React.FC = () => {
     if (!selectedSubject) {
       setTopics([]);
       setSelectedTopics(new Set());
+      setAttemptedStats({});
       return;
     }
+    
+    // Fetch attempted stats
+    api.get(`/questions/attempted-stats?subject=${encodeURIComponent(selectedSubject)}`)
+      .then(res => {
+        const stats: Record<string, { total: number, attempted: number }> = {};
+        res.data.data.stats.forEach((s: any) => {
+          stats[s.topic] = { total: s.totalQuestions, attempted: s.attemptedCount };
+        });
+        setAttemptedStats(stats);
+      })
+      .catch(() => {});
     
     const fetchTopics = async () => {
       setTopicsLoading(true);
@@ -129,7 +144,8 @@ const CustomPractice: React.FC = () => {
         count: questionCount,
         quizType: selectedMode,
         timeLimit: timerMode === 'total' ? timeValue * 60 : timeValue * questionCount,
-        timerMode
+        timerMode,
+        source
       });
       
       const fetchedQuestions = res.data.data.questions;
@@ -249,14 +265,21 @@ const CustomPractice: React.FC = () => {
                         <div className="w-4 h-4 rounded border-2 border-secondary-light/30 dark:border-secondary-dark/30 group-hover:border-accent/40 transition-colors" />
                       )}
                       <span className="font-semibold">{t.topic}</span>
-                      <span className={clsx(
-                        "text-xs px-2 py-0.5 rounded-md font-mono font-bold ml-1", 
-                        selectedTopics.has(t.topic) 
-                          ? "bg-white/20 text-white" 
-                          : "bg-divider-light dark:bg-divider-dark text-secondary-light dark:text-secondary-dark"
-                      )}>
-                        {t.count}
-                      </span>
+                      <div className="flex flex-col items-start ml-1">
+                        <span className={clsx(
+                          "text-xs px-2 py-0.5 rounded-md font-mono font-bold w-full text-center", 
+                          selectedTopics.has(t.topic) 
+                            ? "bg-white/20 text-white" 
+                            : "bg-divider-light dark:bg-divider-dark text-secondary-light dark:text-secondary-dark"
+                        )}>
+                          {t.count}
+                        </span>
+                        <span className={clsx("text-[10px] mt-0.5 opacity-80",
+                          selectedTopics.has(t.topic) ? "text-white" : "text-secondary-light dark:text-secondary-dark"
+                        )}>
+                          {attemptedStats[t.topic]?.attempted || 0}/{t.count} done
+                        </span>
+                      </div>
                     </button>
                   ))}
                 </div>
@@ -264,11 +287,56 @@ const CustomPractice: React.FC = () => {
             </section>
           )}
 
+          {/* Source filter */}
+          {selectedTopics.size > 0 && (
+            <section className="animate-in fade-in slide-in-from-top-4 duration-300">
+              <h2 className="text-lg font-bold text-primary-light dark:text-primary-dark mb-4 flex items-center gap-3">
+                <span className="bg-primary-light dark:bg-primary-dark text-surface-light dark:text-surface-dark w-6 h-6 rounded-md flex items-center justify-center text-sm">3</span>
+                Question Source
+              </h2>
+              <div className="flex flex-wrap gap-3">
+                <button
+                  onClick={() => setSource('all')}
+                  className={clsx(
+                    'px-5 py-3 rounded-xl border-2 transition-all font-semibold',
+                    source === 'all'
+                      ? 'border-accent bg-accent/5 text-accent'
+                      : 'border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark hover:border-accent/40'
+                  )}
+                >
+                  All Questions
+                </button>
+                <button
+                  onClick={() => setSource('unattempted')}
+                  className={clsx(
+                    'px-5 py-3 rounded-xl border-2 transition-all font-semibold',
+                    source === 'unattempted'
+                      ? 'border-accent bg-accent/5 text-accent'
+                      : 'border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark hover:border-accent/40'
+                  )}
+                >
+                  Unattempted Only
+                </button>
+                <button
+                  onClick={() => setSource('bookmarked')}
+                  className={clsx(
+                    'px-5 py-3 rounded-xl border-2 transition-all font-semibold',
+                    source === 'bookmarked'
+                      ? 'border-accent bg-accent/5 text-accent'
+                      : 'border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark hover:border-accent/40'
+                  )}
+                >
+                  Bookmarked Only
+                </button>
+              </div>
+            </section>
+          )}
+
           {/* Configuration (Count & Timer) */}
           {selectedTopics.size > 0 && (
              <section className="animate-in fade-in slide-in-from-top-4 duration-300">
                <h2 className="text-lg font-bold text-primary-light dark:text-primary-dark mb-6 flex items-center gap-3">
-                 <span className="bg-primary-light dark:bg-primary-dark text-surface-light dark:text-surface-dark w-6 h-6 rounded-md flex items-center justify-center text-sm">3</span>
+                 <span className="bg-primary-light dark:bg-primary-dark text-surface-light dark:text-surface-dark w-6 h-6 rounded-md flex items-center justify-center text-sm">4</span>
                  Customize Parameters
                </h2>
                

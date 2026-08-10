@@ -1,9 +1,11 @@
+import mongoose from 'mongoose';
 import { Response } from 'express';
 import multer from 'multer';
 import Question from '../models/Question';
+import QuestionAttempt from '../models/QuestionAttempt';
+import Bookmark from '../models/Bookmark';
 import { AuthRequest } from '../middlewares/authMiddleware';
 import { SUBJECTS, Subject } from '../config/constants';
-
 // Multer config — store file in memory as buffer
 const storage = multer.memoryStorage();
 export const upload = multer({
@@ -414,6 +416,162 @@ export const generateQuiz = async (req: AuthRequest, res: Response): Promise<voi
           distribution,
         },
       },
+    });
+  } catch (error: any) {
+    res.status(500).json({ status: 'error', message: error.message });
+  }
+};
+
+/**
+ * GET /api/questions/attempted-stats
+ * Query param: subject (required)
+ */
+export const getAttemptedStats = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const { subject } = req.query;
+    const userId = req.user!._id;
+
+    if (!subject) {
+      res.status(400).json({ status: 'error', message: 'Subject query param is required' });
+      return;
+    }
+
+    // Step 1: Get total questions per topic
+    const topicTotals = await Question.aggregate([
+      { $match: { subject: subject as string } },
+      { $group: { _id: '$topic', totalQuestions: { $sum: 1 } } },
+    ]);
+
+    // Step 2: Get attempted (distinct) questions per topic for this user
+    const attemptedCounts = await QuestionAttempt.aggregate([
+      { $match: { userId: new mongoose.Types.ObjectId(userId as unknown as string), subject: subject as string } },
+      { $group: { _id: { topic: '$topic', questionId: '$questionId' } } },
+      { $group: { _id: '$_id.topic', attemptedCount: { $sum: 1 } } },
+    ]);
+
+    // Step 3: Merge
+    const attemptedMap = Object.fromEntries(attemptedCounts.map(a => [a._id, a.attemptedCount]));
+    const stats = topicTotals.map(t => ({
+      topic: t._id,
+      totalQuestions: t.totalQuestions,
+      attemptedCount: attemptedMap[t._id] || 0,
+      unattemptedCount: t.totalQuestions - (attemptedMap[t._id] || 0),
+    }));
+
+    res.status(200).json({
+      status: 'success',
+      data: stats,
+    });
+  } catch (error: any) {
+    res.status(500).json({ status: 'error', message: error.message });
+  }
+};
+
+/**
+ * POST /api/questions/:id/bookmark
+ */
+export const toggleBookmark = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const { id: questionId } = req.params;
+    const userId = req.user!._id;
+
+    const existing = await Bookmark.findOne({ userId, questionId });
+
+    if (existing) {
+      await Bookmark.deleteOne({ _id: existing._id });
+      res.status(200).json({ status: 'success', data: { isBookmarked: false } });
+    } else {
+      await Bookmark.create({ userId, questionId: questionId as string });
+      res.status(200).json({ status: 'success', data: { isBookmarked: true } });
+    }
+  } catch (error: any) {
+    res.status(500).json({ status: 'error', message: error.message });
+  }
+};
+
+/**
+ * GET /api/questions/bookmarks
+ */
+export const getBookmarks = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const { subject, page = '1', limit = '20' } = req.query;
+    const userId = req.user!._id;
+
+    const pageNum = parseInt(page as string, 10) || 1;
+    const limitNum = parseInt(limit as string, 10) || 20;
+
+    // Get all bookmark questionIds for this user
+    const bookmarks = await Bookmark.find({ userId }).select('questionId').lean();
+    const bookmarkedIds = bookmarks.map(b => b.questionId);
+
+    // Build question filter
+    const filter: any = { _id: { $in: bookmarkedIds } };
+    if (subject) filter.subject = subject;
+
+    const total = await Question.countDocuments(filter);
+    const questions = await Question.find(filter)
+      .skip((pageNum - 1) * limitNum)
+      .limit(limitNum)
+      .sort({ createdAt: -1 })
+      .lean();
+
+    // Mark all as bookmarked
+    const result = questions.map(q => ({ ...q, isBookmarked: true }));
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        questions: result,
+        pagination: {
+          total,
+          page: pageNum,
+          limit: limitNum,
+          totalPages: Math.ceil(total / limitNum),
+        }
+      },
+    });
+  } catch (error: any) {
+    res.status(500).json({ status: 'error', message: error.message });
+  }
+};
+
+/**
+ * DELETE /api/questions/bookmarks/:id
+ */
+export const removeBookmark = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const { id: questionId } = req.params;
+    const userId = req.user!._id;
+
+    await Bookmark.findOneAndDelete({ userId, questionId });
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Bookmark removed successfully',
+    });
+  } catch (error: any) {
+    res.status(500).json({ status: 'error', message: error.message });
+  }
+};
+
+/**
+ * GET /api/questions/bookmark-ids
+ */
+export const getBookmarkIds = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const userId = req.user!._id;
+    const ids = ((req.query.questionIds as string) || '').split(',').filter(Boolean);
+
+    const bookmarks = await Bookmark.find({
+      userId,
+      questionId: { $in: ids.map(id => new mongoose.Types.ObjectId(id)) },
+    }).select('questionId').lean();
+
+    const bookmarkedIds = bookmarks.map(b => b.questionId.toString());
+
+    res.status(200).json({
+      status: 'success',
+      data: { bookmarkedIds },
     });
   } catch (error: any) {
     res.status(500).json({ status: 'error', message: error.message });

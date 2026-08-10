@@ -5,11 +5,37 @@ import { ProgressBar, Timer } from '../components/quiz/QuizHeader';
 import { QuestionCard } from '../components/quiz/QuestionCard';
 import { SessionSummary } from '../components/quiz/SessionSummary';
 import { ArrowRight, ArrowLeft, XCircle, CheckCircle, AlertTriangle } from 'lucide-react';
+import api from '../services/api';
 
 const QuizSession: React.FC = () => {
   const { state, submitAnswer, nextQuestion, prevQuestion, resetQuiz, tickTimer, finishQuiz } = useQuiz();
   const navigate = useNavigate();
   const [showQuitModal, setShowQuitModal] = useState(false);
+  const [bookmarkedIds, setBookmarkedIds] = useState<Set<string>>(new Set());
+
+  // Fetch initial bookmark status for all quiz questions on mount
+  useEffect(() => {
+    if (state.questions.length > 0) {
+      const ids = state.questions.map(q => q._id).join(',');
+      api.get(`/questions/bookmark-ids?questionIds=${ids}`)
+        .then(res => setBookmarkedIds(new Set(res.data.data.bookmarkedIds)))
+        .catch(() => {});
+    }
+  }, [state.questions]);
+
+  const handleToggleBookmark = async (questionId: string) => {
+    try {
+      const res = await api.post(`/questions/${questionId}/bookmark`);
+      setBookmarkedIds(prev => {
+        const next = new Set(prev);
+        if (res.data.data.isBookmarked) next.add(questionId);
+        else next.delete(questionId);
+        return next;
+      });
+    } catch (err) {
+      console.error('Failed to toggle bookmark', err);
+    }
+  };
 
   // Prevent accidental reload/leave
   useEffect(() => {
@@ -124,6 +150,8 @@ const QuizSession: React.FC = () => {
           selectedOption={selectedOption}
           onSelect={handleSelect}
           isRevealed={false}
+          isBookmarked={bookmarkedIds.has(currentQuestion._id)}
+          onToggleBookmark={handleToggleBookmark}
         />
 
         {/* Submit button below question on last question */}
