@@ -19,7 +19,12 @@ const VocabHome: React.FC = () => {
     const fetchProgress = async () => {
       try {
         const res = await api.get('/vocab/progress');
-        setProgress(res.data.data || {});
+        const progressArray = res.data.data || [];
+        const progressMap: Record<string, any> = {};
+        progressArray.forEach((p: any) => {
+          progressMap[p.vocabType] = p;
+        });
+        setProgress(progressMap);
       } catch (err) {
         console.error('Failed to fetch vocab progress');
       } finally {

@@ -40,7 +40,7 @@ const VocabQuiz: React.FC = () => {
     setError('');
     try {
       const res = await api.post('/vocab/quiz/generate', { vocabType, count, source });
-      setQuestions(res.data.data.questions);
+      setQuestions(res.data.data || []);
       setPhase('quiz');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to generate quiz');
