@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Upload, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
+import { Upload, CheckCircle2, AlertCircle, Loader2, Copy, Info } from 'lucide-react';
 import api from '../services/api';
 
 const SUBJECTS = [
@@ -8,6 +8,48 @@ const SUBJECTS = [
   'English',
   'General Awareness',
 ];
+
+const sampleQuestionJson = `[
+  {
+    "question": "What is the capital of France?",
+    "option1": "London",
+    "option2": "Paris",
+    "option3": "Berlin",
+    "option4": "Madrid",
+    "answer": "option2",
+    "topic": "Geography",
+    "sub topic": "Capitals",
+    "examYearAndType": "SSC CGL 2023"
+  }
+]`;
+
+const sampleOwsJson = `[
+  {
+    "word": "Agnostic",
+    "meaning": "One who is not sure about God's existence",
+    "exampleSentence": "He is an agnostic.",
+    "isTop200": true
+  }
+]`;
+
+const sampleSynonymsJson = `[
+  {
+    "word": "Abundant",
+    "meaning": "Present in great quantity",
+    "synonyms": ["plentiful", "copious", "ample"],
+    "antonyms": ["scarce", "sparse"],
+    "isTop200": true
+  }
+]`;
+
+const sampleIdiomsJson = `[
+  {
+    "idiom": "A blessing in disguise",
+    "meaning": "A good thing that seemed bad at first",
+    "exampleSentence": "Losing that job turned out to be a blessing in disguise.",
+    "isTop200": false
+  }
+]`;
 
 const AdminUpload: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -24,6 +66,14 @@ const AdminUpload: React.FC = () => {
   const [vocabMessage, setVocabMessage] = useState<string>('');
   const [vocabStats, setVocabStats] = useState<{ total: number; inserted: number; skipped: number } | null>(null);
   const vocabFileInputRef = useRef<HTMLInputElement>(null);
+
+  const [copiedText, setCopiedText] = useState<string>('');
+
+  const handleCopy = (text: string, id: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedText(id);
+    setTimeout(() => setCopiedText(''), 2000);
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -119,8 +169,74 @@ const AdminUpload: React.FC = () => {
 
   return (
     <div className="py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-2xl mx-auto space-y-8">
+      <div className="max-w-4xl mx-auto space-y-8">
+        
+        {/* JSON Templates Section */}
         <div className="bg-surface-light dark:bg-surface-dark rounded-2xl shadow-card p-8">
+          <h2 className="text-xl font-semibold text-primary-light dark:text-primary-dark mb-4 flex items-center gap-2">
+            <Info className="h-5 w-5 text-accent" />
+            Sample JSON Formats
+          </h2>
+          <p className="text-sm text-secondary-light dark:text-secondary-dark mb-6">
+            Ensure your JSON files follow these exact structures before uploading. The system expects a JSON array of objects.
+          </p>
+          
+          <div className="space-y-6">
+            <div>
+              <div className="flex justify-between items-center mb-2">
+                <h3 className="text-sm font-bold text-primary-light dark:text-primary-dark">Questions Format</h3>
+                <button onClick={() => handleCopy(sampleQuestionJson, 'questions')} className="text-xs flex items-center gap-1 text-accent hover:underline">
+                  {copiedText === 'questions' ? <><CheckCircle2 size={14} /> Copied!</> : <><Copy size={14} /> Copy JSON</>}
+                </button>
+              </div>
+              <pre className="text-xs bg-base-light dark:bg-base-dark p-4 rounded-xl overflow-x-auto border border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark font-mono">
+                {sampleQuestionJson}
+              </pre>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div>
+                <div className="flex justify-between items-center mb-2">
+                  <h3 className="text-sm font-bold text-primary-light dark:text-primary-dark">One Word Subs</h3>
+                  <button onClick={() => handleCopy(sampleOwsJson, 'ows')} className="text-xs flex items-center gap-1 text-accent hover:underline">
+                    {copiedText === 'ows' ? <><CheckCircle2 size={14} /> Copied!</> : <><Copy size={14} /> Copy</>}
+                  </button>
+                </div>
+                <pre className="text-xs bg-base-light dark:bg-base-dark p-4 rounded-xl overflow-x-auto border border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark font-mono">
+                  {sampleOwsJson}
+                </pre>
+              </div>
+
+              <div>
+                <div className="flex justify-between items-center mb-2">
+                  <h3 className="text-sm font-bold text-primary-light dark:text-primary-dark">Synonyms & Antonyms</h3>
+                  <button onClick={() => handleCopy(sampleSynonymsJson, 'synonyms')} className="text-xs flex items-center gap-1 text-accent hover:underline">
+                    {copiedText === 'synonyms' ? <><CheckCircle2 size={14} /> Copied!</> : <><Copy size={14} /> Copy</>}
+                  </button>
+                </div>
+                <pre className="text-xs bg-base-light dark:bg-base-dark p-4 rounded-xl overflow-x-auto border border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark font-mono">
+                  {sampleSynonymsJson}
+                </pre>
+              </div>
+
+              <div>
+                <div className="flex justify-between items-center mb-2">
+                  <h3 className="text-sm font-bold text-primary-light dark:text-primary-dark">Idioms & Phrases</h3>
+                  <button onClick={() => handleCopy(sampleIdiomsJson, 'idioms')} className="text-xs flex items-center gap-1 text-accent hover:underline">
+                    {copiedText === 'idioms' ? <><CheckCircle2 size={14} /> Copied!</> : <><Copy size={14} /> Copy</>}
+                  </button>
+                </div>
+                <pre className="text-xs bg-base-light dark:bg-base-dark p-4 rounded-xl overflow-x-auto border border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark font-mono">
+                  {sampleIdiomsJson}
+                </pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Question Upload Section */}
+          <div className="bg-surface-light dark:bg-surface-dark rounded-2xl shadow-card p-8">
           <h2 className="text-xl font-semibold text-primary-light dark:text-primary-dark mb-6">Upload Questions</h2>
           
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -208,8 +324,8 @@ const AdminUpload: React.FC = () => {
           </form>
         </div>
 
-        {/* Vocabulary Upload Section */}
-        <div className="bg-surface-light dark:bg-surface-dark rounded-2xl shadow-card p-8">
+          {/* Vocabulary Upload Section */}
+          <div className="bg-surface-light dark:bg-surface-dark rounded-2xl shadow-card p-8">
           <h2 className="text-xl font-semibold text-primary-light dark:text-primary-dark mb-6">Upload Vocabulary</h2>
           
           <form onSubmit={handleVocabSubmit} className="space-y-6">
@@ -293,6 +409,7 @@ const AdminUpload: React.FC = () => {
               )}
             </button>
           </form>
+        </div>
         </div>
       </div>
     </div>
