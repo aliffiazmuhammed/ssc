@@ -193,7 +193,7 @@ const VocabQuiz: React.FC = () => {
              </div>
              <div className="w-full h-2 bg-divider-light dark:bg-divider-dark rounded-full overflow-hidden">
                <div 
-                 className="h-full bg-accent transition-all duration-300"
+                 className="h-full bg-gradient-to-r from-pink-500 to-fuchsia-600 transition-all duration-300"
                  style={{ width: `${((currentIndex + 1) / questions.length) * 100}%` }}
                />
              </div>

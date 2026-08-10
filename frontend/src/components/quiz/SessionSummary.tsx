@@ -68,14 +68,14 @@ export const SessionSummary: React.FC = () => {
       className="w-full max-w-lg mx-auto bg-surface-light dark:bg-surface-dark rounded-2xl shadow-card p-8 sm:p-10 text-center"
     >
       {timerExpired && (
-        <motion.div variants={itemVariants} className="mb-6 bg-warning-tint text-warning-DEFAULT p-3 rounded-xl flex items-center justify-center gap-2">
+        <motion.div variants={itemVariants} className="mb-6 bg-warning-DEFAULT/10 text-warning-DEFAULT p-3 rounded-xl flex items-center justify-center gap-2">
           <AlertCircle size={20} />
           <span className="font-semibold text-sm">Time's up! The session was auto-submitted.</span>
         </motion.div>
       )}
 
       <motion.div variants={itemVariants} className="mb-8">
-        <div className="w-16 h-16 bg-success-tint rounded-full flex items-center justify-center mx-auto mb-4">
+        <div className="w-16 h-16 bg-success-DEFAULT/10 rounded-full flex items-center justify-center mx-auto mb-4">
           <CheckCircle2 className="text-success-DEFAULT w-8 h-8" />
         </div>
         <h2 className="text-3xl font-bold text-primary-light dark:text-primary-dark">Session Complete!</h2>
@@ -109,11 +109,11 @@ export const SessionSummary: React.FC = () => {
       </motion.div>
 
       <motion.div variants={itemVariants} className="grid grid-cols-3 gap-3 mb-10">
-        <div className="bg-success-tint p-3 rounded-xl flex flex-col justify-center border border-success-DEFAULT/20">
+        <div className="bg-success-DEFAULT/10 p-3 rounded-xl flex flex-col justify-center border border-success-DEFAULT/20">
           <div className="font-mono text-2xl font-bold text-success-DEFAULT">{correctCount}</div>
           <div className="text-[10px] font-bold text-success-DEFAULT uppercase mt-1">Correct</div>
         </div>
-        <div className="bg-error-tint p-3 rounded-xl flex flex-col justify-center border border-error-DEFAULT/20">
+        <div className="bg-error-DEFAULT/10 p-3 rounded-xl flex flex-col justify-center border border-error-DEFAULT/20">
           <div className="font-mono text-2xl font-bold text-error-DEFAULT">{incorrectCount}</div>
           <div className="text-[10px] font-bold text-error-DEFAULT uppercase mt-1">Incorrect</div>
         </div>
@@ -142,7 +142,7 @@ export const SessionSummary: React.FC = () => {
             onClick={() => {
               navigate(`/history/${state.sessionId}`);
             }}
-            className="w-full py-3.5 rounded-xl bg-surface-light dark:bg-surface-dark border-2 border-accent text-accent font-semibold hover:bg-accent hover:text-white transition-colors"
+            className="w-full py-3.5 rounded-xl bg-surface-light dark:bg-surface-dark border-2 border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark font-semibold hover:bg-surface-hover-light dark:hover:bg-surface-hover-dark transition-colors"
           >
             View Detailed Review
           </button>
@@ -152,7 +152,7 @@ export const SessionSummary: React.FC = () => {
             resetQuiz();
             navigate('/');
           }}
-          className="w-full py-3.5 rounded-xl bg-accent text-white font-semibold hover:bg-accent/90 transition-colors"
+          className="w-full py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold hover:opacity-90 shadow-md shadow-emerald-500/20 hover:-translate-y-0.5 transition-all"
         >
           Practice More
         </button>
