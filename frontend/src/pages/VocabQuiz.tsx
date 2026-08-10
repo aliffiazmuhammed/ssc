@@ -50,17 +50,22 @@ const VocabQuiz: React.FC = () => {
   };
 
   const handleAnswer = (option: string) => {
-    setAnswers(prev => ({ ...prev, [questions[currentIndex].wordId]: option }));
+    const q = questions[currentIndex];
+    const id = q.wordId || q._id;
+    setAnswers(prev => ({ ...prev, [id]: option }));
   };
 
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      const formattedAnswers = questions.map(q => ({
-        wordId: q.wordId,
-        selectedOption: answers[q.wordId] || '',
-        correctAnswer: q.correctAnswer
-      }));
+      const formattedAnswers = questions.map(q => {
+        const id = q.wordId || q._id;
+        return {
+          wordId: id,
+          selectedOption: answers[id] || '',
+          correctAnswer: q.correctAnswer
+        };
+      });
 
       const res = await api.post('/vocab/quiz/submit', {
         vocabType,
@@ -202,7 +207,8 @@ const VocabQuiz: React.FC = () => {
 
             <div className="grid grid-cols-1 gap-4 max-w-2xl mx-auto w-full">
               {q.options.map((opt: string, i: number) => {
-                const isSelected = answers[q.wordId] === opt;
+                const id = q.wordId || q._id;
+                const isSelected = answers[id] === opt;
                 return (
                   <button
                     key={i}

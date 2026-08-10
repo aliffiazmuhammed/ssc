@@ -22,12 +22,14 @@ import QuestionBank from './pages/QuestionBank';
 import VocabHome from './pages/VocabHome';
 import VocabBrowser from './pages/VocabBrowser';
 import VocabQuiz from './pages/VocabQuiz';
+import GlobalHomeButton from './components/GlobalHomeButton';
 
 function App() {
   return (
     <ThemeProvider>
       <AuthProvider>
         <BrowserRouter>
+          <GlobalHomeButton />
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />

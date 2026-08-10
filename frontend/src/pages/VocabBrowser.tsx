@@ -19,7 +19,7 @@ const VocabBrowser: React.FC = () => {
   
   const [words, setWords] = useState<any[]>([]);
   const [stats, setStats] = useState({ total: 0, studied: 0 });
-  const [pagination, setPagination] = useState({ page: 1, totalPages: 1 });
+  const [pagination, setPagination] = useState({ page: 1, pages: 1 });
   
   const [tier, setTier] = useState<'all' | 'top200'>('all');
   const [search, setSearch] = useState('');
@@ -232,7 +232,7 @@ const VocabBrowser: React.FC = () => {
         </div>
 
         {/* Pagination */}
-        {!loading && pagination.totalPages > 1 && (
+        {!loading && pagination.pages > 1 && (
           <div className="flex items-center justify-between pt-6 border-t border-divider-light dark:border-divider-dark">
             <button
               onClick={() => setPage(p => Math.max(1, p - 1))}
@@ -242,11 +242,11 @@ const VocabBrowser: React.FC = () => {
               <ChevronLeft size={16} /> Prev
             </button>
             <span className="text-sm font-bold text-secondary-light dark:text-secondary-dark">
-              Page {page} of {pagination.totalPages}
+              Page {page} of {pagination.pages}
             </span>
             <button
-              onClick={() => setPage(p => Math.min(pagination.totalPages, p + 1))}
-              disabled={page === pagination.totalPages}
+              onClick={() => setPage(p => Math.min(pagination.pages, p + 1))}
+              disabled={page === pagination.pages}
               className="flex items-center gap-1 px-4 py-2 rounded-xl font-bold text-sm bg-surface-light dark:bg-surface-dark border border-divider-light dark:border-divider-dark text-primary-light dark:text-primary-dark disabled:opacity-50 transition-colors hover:border-accent/40"
             >
               Next <ChevronRight size={16} />

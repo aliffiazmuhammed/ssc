@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../store/AuthContext';
-import { LogOut, Target, Zap, Calculator, BookOpen, Library } from 'lucide-react';
+import { LogOut, Target, Calculator, BookOpen, Library } from 'lucide-react';
 import DailyWordsSection from '../components/vocab/DailyWordsSection';
 import ThemeToggle from '../components/ThemeToggle';
 
@@ -94,9 +94,6 @@ const StudentHome: React.FC = () => {
               <p className="text-sm font-medium text-secondary-light dark:text-secondary-dark leading-relaxed">
                 Squares, cubes, tables &amp; arithmetic.
               </p>
-              <span className="absolute top-5 right-5 bg-gradient-to-r from-blue-500 to-cyan-500 text-white text-xs px-2.5 py-1 rounded-lg font-bold shadow-sm">
-                New
-              </span>
             </button>
 
             {/* Vocab Card */}
@@ -112,9 +109,6 @@ const StudentHome: React.FC = () => {
               <p className="text-sm font-medium text-secondary-light dark:text-secondary-dark leading-relaxed">
                 Master OWS, Synonyms, Antonyms.
               </p>
-              <span className="absolute top-5 right-5 bg-gradient-to-r from-fuchsia-500 to-pink-500 text-white text-xs px-2.5 py-1 rounded-lg font-bold shadow-sm">
-                New
-              </span>
             </button>
 
             {/* Question Bank Card */}
@@ -132,22 +126,7 @@ const StudentHome: React.FC = () => {
               </p>
             </button>
 
-            {/* Rapid Card */}
-            <button
-              disabled
-              className="relative flex flex-col items-start p-6 rounded-3xl bg-surface-light dark:bg-surface-dark border border-transparent shadow-sm opacity-60 cursor-not-allowed text-left overflow-hidden"
-            >
-              <div className="bg-warning-DEFAULT/10 p-3.5 rounded-2xl mb-5 text-warning-DEFAULT">
-                <Zap size={28} />
-              </div>
-              <h3 className="font-extrabold text-xl mb-2 text-primary-light dark:text-primary-dark">Rapid Fire</h3>
-              <p className="text-sm font-medium text-secondary-light dark:text-secondary-dark leading-relaxed">
-                Speed drills against the clock.
-              </p>
-              <span className="absolute top-5 right-5 bg-divider-light dark:bg-divider-dark text-xs px-2.5 py-1 rounded-lg font-bold text-secondary-light dark:text-secondary-dark">
-                Coming Soon
-              </span>
-            </button>
+
           </div>
         </section>
 
