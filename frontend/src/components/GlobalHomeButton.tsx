@@ -8,9 +8,13 @@ const GlobalHomeButton: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  const hiddenRoutes = ['/', '/login', '/register', '/admin', '/quiz'];
+  const hiddenRoutes = ['/', '/login', '/register', '/admin'];
 
-  if (hiddenRoutes.includes(location.pathname)) {
+  if (
+    hiddenRoutes.includes(location.pathname) || 
+    location.pathname.includes('/quiz') || 
+    location.pathname.includes('/history')
+  ) {
     return null;
   }
 

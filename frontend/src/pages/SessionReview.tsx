@@ -140,11 +140,11 @@ const SessionReview: React.FC = () => {
                       Unanswered
                     </div>
                   ) : isCorrect ? (
-                    <div className="flex items-center gap-1 text-success-DEFAULT bg-success-tint px-3 py-1 rounded-lg text-sm font-medium">
+                    <div className="flex items-center gap-1 text-success-DEFAULT bg-success-DEFAULT/10 px-3 py-1 rounded-lg text-sm font-medium">
                       <Check size={16} /> Correct
                     </div>
                   ) : (
-                    <div className="flex items-center gap-1 text-error-DEFAULT bg-error-tint px-3 py-1 rounded-lg text-sm font-medium">
+                    <div className="flex items-center gap-1 text-error-DEFAULT bg-error-DEFAULT/10 px-3 py-1 rounded-lg text-sm font-medium">
                       <X size={16} /> Incorrect
                     </div>
                   )}
@@ -177,11 +177,11 @@ const SessionReview: React.FC = () => {
                     let icon = null;
 
                     if (isActualAnswer) {
-                      bgClass = "bg-success-tint border-success-DEFAULT border-2 shadow-sm";
+                      bgClass = "bg-success-DEFAULT/10 border-success-DEFAULT border-2 shadow-sm";
                       textClass = "text-success-DEFAULT font-bold";
                       icon = <Check size={18} className="text-success-DEFAULT" />;
                     } else if (isSelected && !isActualAnswer) {
-                      bgClass = "bg-error-tint border-error-DEFAULT border-2";
+                      bgClass = "bg-error-DEFAULT/10 border-error-DEFAULT border-2";
                       textClass = "text-error-DEFAULT font-medium";
                       icon = <X size={18} className="text-error-DEFAULT" />;
                     }
