@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import api from '../services/api';
-import { Loader2, ArrowLeft, Check, X, Bookmark } from 'lucide-react';
+import { Loader2, ArrowLeft, Check, X, Bookmark, Home } from 'lucide-react';
 import clsx from 'clsx';
 import type { Question } from '../store/QuizContext';
 import renderMathInText from '../utils/renderMathInText';
@@ -99,6 +99,9 @@ const SessionReview: React.FC = () => {
               >
                 <ArrowLeft size={24} />
               </Link>
+              <button onClick={() => window.location.href = '/'} className="p-2 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/20 text-white transition-all shadow-sm flex items-center justify-center" title="Go Home">
+                <Home size={24} />
+              </button>
               <div>
                 <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-1">
                   Session Review

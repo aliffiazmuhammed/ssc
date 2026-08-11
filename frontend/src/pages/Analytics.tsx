@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
-import { Loader2, ArrowLeft, TrendingUp, Target, AlertTriangle } from 'lucide-react';
+import { Loader2, ArrowLeft, TrendingUp, Target, AlertTriangle, Home } from 'lucide-react';
 import clsx from 'clsx';
 import {
   LineChart,
@@ -112,6 +112,9 @@ const Analytics: React.FC = () => {
             >
               <ArrowLeft size={24} />
             </Link>
+              <button onClick={() => window.location.href = '/'} className="p-2 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/20 text-white transition-all shadow-sm flex items-center justify-center" title="Go Home">
+                <Home size={24} />
+              </button>
             <div>
               <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-1">
                 Performance Analytics

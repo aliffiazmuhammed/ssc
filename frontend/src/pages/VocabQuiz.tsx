@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Loader2, CheckCircle2, XCircle, Bookmark } from 'lucide-react';
+import { ArrowLeft, Loader2, CheckCircle2, XCircle, Bookmark, Home } from 'lucide-react';
 import api from '../services/api';
 import clsx from 'clsx';
 
@@ -124,9 +124,12 @@ const VocabQuiz: React.FC = () => {
             <div className="relative z-10 flex items-center gap-4">
               <button
                 onClick={() => navigate('/vocab')}
-                className="p-2 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/20 text-white transition-all shadow-sm"
+                className="p-2 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/20 text-white transition-all shadow-sm flex items-center justify-center"
               >
                 <ArrowLeft size={24} />
+              </button>
+              <button onClick={() => navigate('/')} className="p-2 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/20 text-white transition-all shadow-sm flex items-center justify-center" title="Go Home">
+                <Home size={24} />
               </button>
               <h1 className="text-3xl font-extrabold text-white tracking-tight">
                 Quiz: {title}

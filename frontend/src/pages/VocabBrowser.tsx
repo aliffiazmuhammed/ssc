@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Search, X, Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowLeft, Search, X, Loader2, ChevronLeft, ChevronRight, Home } from 'lucide-react';
 import api from '../services/api';
 import clsx from 'clsx';
 import AlphabetStrip from '../components/vocab/AlphabetStrip';
@@ -137,9 +137,12 @@ const VocabBrowser: React.FC = () => {
             <div className="flex items-center gap-4">
               <button
                 onClick={() => navigate('/vocab')}
-                className="p-2 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/20 text-white transition-all shadow-sm"
+                className="p-2 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/20 text-white transition-all shadow-sm flex items-center justify-center"
               >
                 <ArrowLeft size={24} />
+              </button>
+              <button onClick={() => navigate('/')} className="p-2 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/20 text-white transition-all shadow-sm flex items-center justify-center" title="Go Home">
+                <Home size={24} />
               </button>
               <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
                 {title}
