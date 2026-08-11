@@ -72,7 +72,7 @@ const CustomPractice: React.FC = () => {
         });
         setAttemptedStats(stats);
       })
-      .catch(() => {});
+      .catch((err) => console.error('Failed to fetch attempted stats:', err));
     
     const fetchTopics = async () => {
       setTopicsLoading(true);

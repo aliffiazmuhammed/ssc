@@ -460,7 +460,7 @@ export const getAttemptedStats = async (req: AuthRequest, res: Response): Promis
 
     res.status(200).json({
       status: 'success',
-      data: stats,
+      data: { stats },
     });
   } catch (error: any) {
     res.status(500).json({ status: 'error', message: error.message });
